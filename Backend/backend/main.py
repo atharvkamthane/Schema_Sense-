@@ -8,6 +8,7 @@ import quality
 import llm
 import sql_runner
 import ingest_handler
+import semantic_metadata
 from auth import get_current_user
 from typing import Any, Dict, List, Optional
 import os
@@ -1032,6 +1033,39 @@ def get_table_analysis(table_name: str, include_llm: bool = True):
     }
     
     return data
+
+
+class SemanticGenerateRequest(BaseModel):
+    use_llm: Optional[bool] = True
+
+
+@app.post("/semantic/generate")
+def generate_semantic_metadata(payload: Optional[SemanticGenerateRequest] = None):
+    """Explicitly generate/regenerate structured semantic metadata for active database."""
+    try:
+        use_llm = payload.use_llm if payload is not None and payload.use_llm is not None else True
+        result = semantic_metadata.generate_all_metadata(use_llm=use_llm)
+        return {
+            "status": "success",
+            "message": f"Semantic metadata generated successfully for {result.get('table_count', 0)} tables.",
+            "version": result.get("version"),
+            "generated_at": result.get("generated_at"),
+            "table_count": result.get("table_count", 0),
+            "tables": list(result.get("tables", {}).keys()),
+            "diagnostics": result.get("diagnostics", {}),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Semantic metadata generation failed: {str(e)}")
+
+
+@app.get("/semantic/status")
+def get_semantic_metadata_status():
+    """Report semantic metadata state, staleness, and database fingerprint."""
+    try:
+        return semantic_metadata.get_semantic_status()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get semantic status: {str(e)}")
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
