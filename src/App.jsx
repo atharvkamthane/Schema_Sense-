@@ -10,6 +10,7 @@ import DictionaryScreen from "./screens/DictionaryScreen"
 import QualityScreen from "./screens/QualityScreen"
 import Visualization3D from "./screens/Visualization3D"
 import AnalysisScreen from "./screens/AnalysisScreen"
+import ChatScreen from "./screens/ChatScreen"
 import SignInScreen from "./screens/SignInScreen"
 import SignUpScreen from "./screens/SignUpScreen"
 import LandingPage from "./screens/LandingPage"
@@ -24,10 +25,12 @@ import {
   Settings,
   ShieldCheck,
   UploadCloud,
+  Sparkles,
 } from "lucide-react"
 
 const SIDEBAR_ITEMS = [
   { label: "Dashboard", to: "/dashboard", icon: Home },
+  { label: "NL-to-SQL", to: "/query", icon: Sparkles },
   { label: "Upload", to: "/upload", icon: UploadCloud },
   { label: "Dictionary", to: "/dictionary", icon: BookOpen },
   { label: "Visualization", to: "/visualization", icon: GitBranch },
@@ -171,6 +174,8 @@ function AppRoutes() {
 
       {/* Protected UI Routes */}
       <Route path="/dashboard" element={<ProtectedRoute><DashboardScreen /></ProtectedRoute>} />
+      <Route path="/query" element={<ProtectedRoute><ChatScreen /></ProtectedRoute>} />
+      <Route path="/chat" element={<ProtectedRoute><ChatScreen /></ProtectedRoute>} />
       <Route path="/upload" element={<ProtectedRoute><UploadScreen onContinue={() => navigate('/dashboard')} /></ProtectedRoute>} />
       <Route path="/dictionary" element={<ProtectedRoute><DictionaryScreen /></ProtectedRoute>} />
       <Route path="/visualization" element={<ProtectedRoute><Visualization3D /></ProtectedRoute>} />

@@ -176,6 +176,16 @@ export const postQueryPayload = (payload = {}, config = {}) =>
 
 export const postQuery = (query, config = {}) => postQueryPayload({ query }, config)
 export const analyzeTableWithAI = (prompt, config = {}) => postQuery(prompt, config)
+
+export const postNL2SQLQuery = (payload = {}, config = {}) =>
+  API.post("/nl2sql/query", payload, {
+    timeout: 120_000,
+    ...config,
+  })
+
+export const nl2sqlQuery = (question, maxRetries = 2, topK = 8, config = {}) =>
+  postNL2SQLQuery({ question, max_retries: maxRetries, top_k: topK }, config)
+
 export const postColumnChat = (payload) => API.post("/column-chat", payload)
 export const clearDatabase = () =>
   API.post("/ingest/clear", undefined, {

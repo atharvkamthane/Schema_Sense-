@@ -1,0 +1,786 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-08-17T05:44:55.293569+00:00",
+  "generator": "semantic_metadata.py",
+  "model": "deterministic_fallback",
+  "database_file": "database.sqlite",
+  "database_fingerprint": {
+    "mtime": 1786214868.5549822,
+    "size_bytes": 13430784,
+    "table_count": 3,
+    "tables": [
+      "Answer",
+      "Question",
+      "Survey"
+    ]
+  },
+  "table_count": 3,
+  "tables": {
+    "Answer": {
+      "observed": {
+        "table_name": "Answer",
+        "row_count": 236898,
+        "column_count": 4,
+        "columns": {
+          "AnswerText": {
+            "name": "AnswerText",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 1.8,
+            "unique_count": 4215,
+            "sample_values": [
+              "37",
+              "44",
+              "32",
+              "31",
+              "31"
+            ],
+            "top_values": [
+              {
+                "value": "-1",
+                "count": 56598
+              },
+              {
+                "value": "No",
+                "count": 26899
+              },
+              {
+                "value": "Yes",
+                "count": 18232
+              },
+              {
+                "value": "1",
+                "count": 15308
+              },
+              {
+                "value": "0",
+                "count": 15247
+              }
+            ],
+            "fk_reference": null
+          },
+          "SurveyID": {
+            "name": "SurveyID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": true,
+            "null_percentage": 0.0,
+            "uniqueness": 0.0,
+            "unique_count": 5,
+            "sample_values": [
+              "2014",
+              "2014",
+              "2014",
+              "2014",
+              "2014"
+            ],
+            "top_values": [
+              {
+                "value": "2016",
+                "count": 88238
+              },
+              {
+                "value": "2017",
+                "count": 57456
+              },
+              {
+                "value": "2014",
+                "count": 32760
+              },
+              {
+                "value": "2018",
+                "count": 31692
+              },
+              {
+                "value": "2019",
+                "count": 26752
+              }
+            ],
+            "fk_reference": "Survey.SurveyID"
+          },
+          "UserID": {
+            "name": "UserID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 1.8,
+            "unique_count": 4218,
+            "sample_values": [
+              "1",
+              "1",
+              "1",
+              "1",
+              "1"
+            ],
+            "top_values": [
+              {
+                "value": "2694",
+                "count": 76
+              },
+              {
+                "value": "2695",
+                "count": 76
+              },
+              {
+                "value": "2696",
+                "count": 76
+              },
+              {
+                "value": "2697",
+                "count": 76
+              },
+              {
+                "value": "2698",
+                "count": 76
+              }
+            ],
+            "fk_reference": null
+          },
+          "QuestionID": {
+            "name": "QuestionID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": true,
+            "null_percentage": 0.0,
+            "uniqueness": 0.0,
+            "unique_count": 105,
+            "sample_values": [
+              "1",
+              "1",
+              "1",
+              "1",
+              "1"
+            ],
+            "top_values": [
+              {
+                "value": "1",
+                "count": 4218
+              },
+              {
+                "value": "2",
+                "count": 4218
+              },
+              {
+                "value": "3",
+                "count": 4218
+              },
+              {
+                "value": "4",
+                "count": 4218
+              },
+              {
+                "value": "5",
+                "count": 4218
+              }
+            ],
+            "fk_reference": "Question.questionid"
+          }
+        },
+        "relationships": [
+          {
+            "id": "Answer.SurveyID->Survey.SurveyID",
+            "source": "Answer",
+            "target": "Survey",
+            "source_table": "Answer",
+            "target_table": "Survey",
+            "source_col": "SurveyID",
+            "target_col": "SurveyID",
+            "source_display": "Answer",
+            "target_display": "Survey",
+            "label": "SurveyID",
+            "type": "inferred",
+            "confidence": 0.97,
+            "cardinality": "one_to_many",
+            "inference_method": "intelligent_reference_subset"
+          },
+          {
+            "id": "Answer.QuestionID->Question.questionid",
+            "source": "Answer",
+            "target": "Question",
+            "source_table": "Answer",
+            "target_table": "Question",
+            "source_col": "QuestionID",
+            "target_col": "questionid",
+            "source_display": "Answer",
+            "target_display": "Question",
+            "label": "QuestionID",
+            "type": "inferred",
+            "confidence": 0.97,
+            "cardinality": "one_to_many",
+            "inference_method": "intelligent_reference_subset"
+          }
+        ],
+        "quality": {
+          "health_score": 100,
+          "completeness": 100,
+          "freshness": null,
+          "freshness_latest_date": null,
+          "consistency": 100,
+          "orphan_issues": []
+        },
+        "statistics": {
+          "numeric_stats": [
+            {
+              "column": "SurveyID",
+              "mean": 2016.57,
+              "median": 2016.0,
+              "std": 1.42,
+              "variance": 2.02,
+              "min": 2014.0,
+              "max": 2019.0,
+              "q1": 2016.0,
+              "q3": 2017.0,
+              "iqr": 1.0,
+              "skewness": -0.14,
+              "kurtosis": -0.41,
+              "iqr_outlier_count": 59512,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "UserID",
+              "mean": 2514.52,
+              "median": 2652.0,
+              "std": 1099.46,
+              "variance": 1208818.33,
+              "min": 1.0,
+              "max": 4218.0,
+              "q1": 1691.0,
+              "q3": 3439.0,
+              "iqr": 1748.0,
+              "skewness": -0.39,
+              "kurtosis": -0.8,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "QuestionID",
+              "mean": 48.66,
+              "median": 48.0,
+              "std": 36.13,
+              "variance": 1305.1,
+              "min": 1.0,
+              "max": 118.0,
+              "q1": 15.0,
+              "q3": 80.0,
+              "iqr": 65.0,
+              "skewness": 0.37,
+              "kurtosis": -1.21,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            }
+          ],
+          "categorical_stats": [
+            {
+              "column": "AnswerText",
+              "cardinality": 4215,
+              "top_values": [
+                {
+                  "value": "-1",
+                  "count": 56598
+                },
+                {
+                  "value": "No",
+                  "count": 26899
+                },
+                {
+                  "value": "Yes",
+                  "count": 18232
+                },
+                {
+                  "value": "1",
+                  "count": 15308
+                },
+                {
+                  "value": "0",
+                  "count": 15247
+                }
+              ],
+              "entropy": 5.18
+            }
+          ],
+          "date_stats": [],
+          "correlation_pairs": [
+            {
+              "col_a": "SurveyID",
+              "col_b": "UserID",
+              "r": 0.95
+            },
+            {
+              "col_a": "UserID",
+              "col_b": "QuestionID",
+              "r": -0.08
+            },
+            {
+              "col_a": "SurveyID",
+              "col_b": "QuestionID",
+              "r": -0.08
+            }
+          ]
+        }
+      },
+      "generated": {
+        "table_description": "Answer contains 236,898 records across 4 columns (keyed by UserID, QuestionID with foreign links via SurveyID, QuestionID).",
+        "business_domain": "surveys",
+        "semantic_aliases": [
+          "Answer",
+          "answer",
+          "Answers"
+        ],
+        "columns": {
+          "AnswerText": {
+            "description": "AnswerText stores TEXT data representing the AnswerText (e.g. 37, 44, 32).",
+            "semantic_aliases": [
+              "AnswerText",
+              "answertext"
+            ],
+            "business_role": "text_content"
+          },
+          "SurveyID": {
+            "description": "SurveyID stores INTEGER data representing the SurveyID (e.g. 2014, 2014, 2014).",
+            "semantic_aliases": [
+              "SurveyID",
+              "surveyid"
+            ],
+            "business_role": "foreign_key"
+          },
+          "UserID": {
+            "description": "UserID stores INTEGER data representing the UserID (e.g. 1, 1, 1).",
+            "semantic_aliases": [
+              "UserID",
+              "userid"
+            ],
+            "business_role": "primary_key"
+          },
+          "QuestionID": {
+            "description": "QuestionID stores INTEGER data representing the QuestionID (e.g. 1, 1, 1).",
+            "semantic_aliases": [
+              "QuestionID",
+              "questionid"
+            ],
+            "business_role": "primary_key"
+          }
+        },
+        "common_questions": [
+          "How many records are in Answer?",
+          "What is the distribution of AnswerText in Answer?",
+          "Find details for a specific UserID in Answer"
+        ],
+        "generated_at": "2026-08-17T05:44:55.257571+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
+      }
+    },
+    "Question": {
+      "observed": {
+        "table_name": "Question",
+        "row_count": 105,
+        "column_count": 2,
+        "columns": {
+          "questiontext": {
+            "name": "questiontext",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 105,
+            "sample_values": [
+              "What is your age?",
+              "What is your gender?",
+              "What country do you live in?",
+              "If you live in the United States, which state or territory do you live in?",
+              "Are you self-employed?"
+            ],
+            "top_values": [
+              {
+                "value": "Would you have felt more comfortable talking to your previous employer about your physical health or your mental health?",
+                "count": 1
+              },
+              {
+                "value": "Would you have been willing to discuss your mental health with your direct supervisor(s)?",
+                "count": 1
+              },
+              {
+                "value": "Would you have been willing to discuss a mental health issue with your previous co-workers?",
+                "count": 1
+              },
+              {
+                "value": "Would you feel more comfortable talking to your coworkers about your physical health or your mental health?",
+                "count": 1
+              },
+              {
+                "value": "Would you feel comfortable discussing a mental health issue with your direct supervisor(s)?",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "questionid": {
+            "name": "questionid",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 105,
+            "sample_values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "top_values": [
+              {
+                "value": "1",
+                "count": 1
+              },
+              {
+                "value": "2",
+                "count": 1
+              },
+              {
+                "value": "3",
+                "count": 1
+              },
+              {
+                "value": "4",
+                "count": 1
+              },
+              {
+                "value": "5",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          }
+        },
+        "relationships": [
+          {
+            "id": "Answer.QuestionID->Question.questionid",
+            "source": "Answer",
+            "target": "Question",
+            "source_table": "Answer",
+            "target_table": "Question",
+            "source_col": "QuestionID",
+            "target_col": "questionid",
+            "source_display": "Answer",
+            "target_display": "Question",
+            "label": "QuestionID",
+            "type": "inferred",
+            "confidence": 0.97,
+            "cardinality": "one_to_many",
+            "inference_method": "intelligent_reference_subset"
+          }
+        ],
+        "quality": {
+          "health_score": 100,
+          "completeness": 100,
+          "freshness": null,
+          "freshness_latest_date": null,
+          "consistency": 100,
+          "orphan_issues": []
+        },
+        "statistics": {
+          "numeric_stats": [
+            {
+              "column": "questionid",
+              "mean": 61.79,
+              "median": 66.0,
+              "std": 35.59,
+              "variance": 1266.61,
+              "min": 1.0,
+              "max": 118.0,
+              "q1": 27.0,
+              "q3": 92.0,
+              "iqr": 65.0,
+              "skewness": -0.18,
+              "kurtosis": -1.26,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            }
+          ],
+          "categorical_stats": [
+            {
+              "column": "questiontext",
+              "cardinality": 105,
+              "top_values": [
+                {
+                  "value": "What is your age?",
+                  "count": 1
+                },
+                {
+                  "value": "If you have revealed a mental health disorder to a coworker or employee, how has this impacted you or the relationship?",
+                  "count": 1
+                },
+                {
+                  "value": "Do you feel that your employer takes mental health as seriously as physical health?",
+                  "count": 1
+                },
+                {
+                  "value": "Do you think that discussing a physical health issue with your employer would have negative consequences?",
+                  "count": 1
+                },
+                {
+                  "value": "What is your race?",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.71
+            }
+          ],
+          "date_stats": [],
+          "correlation_pairs": []
+        }
+      },
+      "generated": {
+        "table_description": "Question contains 105 records across 2 columns (keyed by questionid ).",
+        "business_domain": "surveys",
+        "semantic_aliases": [
+          "Question",
+          "question",
+          "Questions"
+        ],
+        "columns": {
+          "questiontext": {
+            "description": "questiontext stores TEXT data representing the questiontext (e.g. What is your age?, What is your gender?, What country do you live in?).",
+            "semantic_aliases": [
+              "questiontext"
+            ],
+            "business_role": "text_content"
+          },
+          "questionid": {
+            "description": "questionid stores INTEGER data representing the questionid (e.g. 1, 2, 3).",
+            "semantic_aliases": [
+              "questionid"
+            ],
+            "business_role": "primary_key"
+          }
+        },
+        "common_questions": [
+          "How many records are in Question?",
+          "What is the distribution of questiontext in Question?",
+          "Find details for a specific questionid in Question"
+        ],
+        "generated_at": "2026-08-17T05:44:55.274565+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
+      }
+    },
+    "Survey": {
+      "observed": {
+        "table_name": "Survey",
+        "row_count": 5,
+        "column_count": 2,
+        "columns": {
+          "SurveyID": {
+            "name": "SurveyID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 5,
+            "sample_values": [
+              "2014",
+              "2016",
+              "2017",
+              "2018",
+              "2019"
+            ],
+            "top_values": [
+              {
+                "value": "2014",
+                "count": 1
+              },
+              {
+                "value": "2016",
+                "count": 1
+              },
+              {
+                "value": "2017",
+                "count": 1
+              },
+              {
+                "value": "2018",
+                "count": 1
+              },
+              {
+                "value": "2019",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Description": {
+            "name": "Description",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 5,
+            "sample_values": [
+              "mental health survey for 2014",
+              "mental health survey for 2016",
+              "mental health survey for 2017",
+              "mental health survey for 2018",
+              "mental health survey for 2019"
+            ],
+            "top_values": [
+              {
+                "value": "mental health survey for 2019",
+                "count": 1
+              },
+              {
+                "value": "mental health survey for 2018",
+                "count": 1
+              },
+              {
+                "value": "mental health survey for 2017",
+                "count": 1
+              },
+              {
+                "value": "mental health survey for 2016",
+                "count": 1
+              },
+              {
+                "value": "mental health survey for 2014",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          }
+        },
+        "relationships": [
+          {
+            "id": "Answer.SurveyID->Survey.SurveyID",
+            "source": "Answer",
+            "target": "Survey",
+            "source_table": "Answer",
+            "target_table": "Survey",
+            "source_col": "SurveyID",
+            "target_col": "SurveyID",
+            "source_display": "Answer",
+            "target_display": "Survey",
+            "label": "SurveyID",
+            "type": "inferred",
+            "confidence": 0.97,
+            "cardinality": "one_to_many",
+            "inference_method": "intelligent_reference_subset"
+          }
+        ],
+        "quality": {
+          "health_score": 100,
+          "completeness": 100,
+          "freshness": null,
+          "freshness_latest_date": null,
+          "consistency": 100,
+          "orphan_issues": []
+        },
+        "statistics": {
+          "numeric_stats": [
+            {
+              "column": "SurveyID",
+              "mean": 2016.8,
+              "median": 2017.0,
+              "std": 1.92,
+              "variance": 3.7,
+              "min": 2014.0,
+              "max": 2019.0,
+              "q1": 2016.0,
+              "q3": 2018.0,
+              "iqr": 2.0,
+              "skewness": -0.59,
+              "kurtosis": -0.02,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            }
+          ],
+          "categorical_stats": [
+            {
+              "column": "Description",
+              "cardinality": 5,
+              "top_values": [
+                {
+                  "value": "mental health survey for 2014",
+                  "count": 1
+                },
+                {
+                  "value": "mental health survey for 2016",
+                  "count": 1
+                },
+                {
+                  "value": "mental health survey for 2017",
+                  "count": 1
+                },
+                {
+                  "value": "mental health survey for 2018",
+                  "count": 1
+                },
+                {
+                  "value": "mental health survey for 2019",
+                  "count": 1
+                }
+              ],
+              "entropy": 2.32
+            }
+          ],
+          "date_stats": [],
+          "correlation_pairs": []
+        }
+      },
+      "generated": {
+        "table_description": "Survey contains 5 records across 2 columns (keyed by SurveyID ).",
+        "business_domain": "surveys",
+        "semantic_aliases": [
+          "Survey",
+          "survey",
+          "Surveys"
+        ],
+        "columns": {
+          "SurveyID": {
+            "description": "SurveyID stores INTEGER data representing the SurveyID (e.g. 2014, 2016, 2017).",
+            "semantic_aliases": [
+              "SurveyID",
+              "surveyid"
+            ],
+            "business_role": "primary_key"
+          },
+          "Description": {
+            "description": "Description stores TEXT data representing the Description (e.g. mental health survey for 2014, mental health survey for 2016, mental health survey for 2017).",
+            "semantic_aliases": [
+              "Description",
+              "description"
+            ],
+            "business_role": "text_content"
+          }
+        },
+        "common_questions": [
+          "How many records are in Survey?",
+          "What is the distribution of SurveyID in Survey?",
+          "Find details for a specific SurveyID in Survey"
+        ],
+        "generated_at": "2026-08-17T05:44:55.293569+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
+      }
+    }
+  },
+  "diagnostics": {
+    "duration_seconds": 2.01,
+    "use_llm": false,
+    "errors": {}
+  }
+}

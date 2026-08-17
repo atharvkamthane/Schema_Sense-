@@ -8,6 +8,9 @@ import quality
 import llm
 import sql_runner
 import ingest_handler
+import semantic_metadata
+import semantic_embeddings
+import nl2sql
 from auth import get_current_user
 from typing import Any, Dict, List, Optional
 import os
@@ -1032,6 +1035,97 @@ def get_table_analysis(table_name: str, include_llm: bool = True):
     }
     
     return data
+
+
+class SemanticGenerateRequest(BaseModel):
+    use_llm: Optional[bool] = True
+
+
+@app.post("/semantic/generate")
+def generate_semantic_metadata(payload: Optional[SemanticGenerateRequest] = None):
+    """Explicitly generate/regenerate structured semantic metadata and FAISS index for active database."""
+    try:
+        use_llm = payload.use_llm if payload is not None and payload.use_llm is not None else True
+        result = semantic_metadata.generate_all_metadata(use_llm=use_llm)
+        
+        # Rebuild FAISS index from the newly written metadata
+        index_status = {}
+        try:
+            index_status = semantic_embeddings.rebuild_index()
+        except Exception as idx_err:
+            index_status = {"status": "warning", "error": f"Index rebuild failed: {str(idx_err)}"}
+
+        return {
+            "status": "success",
+            "message": f"Semantic metadata generated successfully for {result.get('table_count', 0)} tables.",
+            "version": result.get("version"),
+            "generated_at": result.get("generated_at"),
+            "table_count": result.get("table_count", 0),
+            "tables": list(result.get("tables", {}).keys()),
+            "index": index_status,
+            "diagnostics": result.get("diagnostics", {}),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Semantic metadata generation failed: {str(e)}")
+
+
+@app.get("/semantic/status")
+def get_semantic_metadata_status():
+    """Report semantic metadata state, staleness, database fingerprint, and FAISS index status."""
+    try:
+        status = semantic_metadata.get_semantic_status()
+        status["index"] = semantic_embeddings.get_index_status()
+        return status
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get semantic status: {str(e)}")
+
+
+class NL2SQLGenerateRequest(BaseModel):
+    question: str
+    top_k: Optional[int] = 8
+
+
+@app.post("/nl2sql/generate")
+def generate_nl2sql(payload: NL2SQLGenerateRequest):
+    """Context-aware NL-to-SQL generation endpoint.
+    Retrieves semantic schema via FAISS, reconstructs context, and queries Qwen3.5:4b.
+    NOTE: Generates SQL only; does NOT execute the SQL statement.
+    """
+    if not payload.question or not str(payload.question).strip():
+        raise HTTPException(status_code=400, detail="Question field cannot be empty.")
+    try:
+        top_k = payload.top_k or 8
+        result = nl2sql.generate_sql(payload.question, top_k=top_k)
+        return result
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"NL-to-SQL generation failed: {str(e)}")
+
+
+class NL2SQLQueryRequest(BaseModel):
+    question: str
+    max_retries: Optional[int] = 2
+    top_k: Optional[int] = 8
+
+
+@app.post("/nl2sql/query")
+def query_nl2sql(payload: NL2SQLQueryRequest):
+    """Context-aware NL-to-SQL execution endpoint with SQLGlot validation and bounded self-correction.
+    Retrieves schema -> Generates candidate -> Validates AST -> Self-corrects if invalid -> Executes on SQLite -> Returns results + explanation.
+    """
+    if not payload.question or not str(payload.question).strip():
+        raise HTTPException(status_code=400, detail="Question field cannot be empty.")
+    try:
+        top_k = payload.top_k or 8
+        max_retries = payload.max_retries if payload.max_retries is not None else 2
+        result = nl2sql.query(payload.question, max_retries=max_retries, top_k=top_k)
+        return result
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"NL-to-SQL query pipeline failed: {str(e)}")
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
