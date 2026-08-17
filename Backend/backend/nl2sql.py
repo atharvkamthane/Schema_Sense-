@@ -1,21 +1,24 @@
 """
-Context-Aware NL-to-SQL Generation Layer for SchemaSense AI.
+Context-Aware NL-to-SQL Generation, Validation, and Bounded Self-Correction Pipeline.
 
-Translates natural language database queries into SQLite SQL by:
-1. Retrieving semantically relevant schema metadata using FAISS (all-MiniLM-L6-v2).
-2. Performing 1-hop relationship expansion for join inference.
-3. Constructing bounded, grounded SQLite prompt context.
-4. Generating SQL via Qwen3.5:4b (Ollama).
-5. Extracting and returning structured SQL candidates without executing them.
+Provides:
+1. FAISS-retrieved semantic schema context reconstruction (all-MiniLM-L6-v2 + IndexFlatIP).
+2. Grounded SQLite SQL generation via Qwen3.5:4b.
+3. Strict AST-based SQLGlot validation before database execution.
+4. Bounded self-correction loop (MAX_RETRIES = 2) for validation and runtime errors.
+5. Safe read-only SQLite execution with result serialization.
+6. Grounded natural-language interpretation of executed results.
 """
 
 import os
+import re
 import json
 import time
 import logging
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import llm
+import sql_runner
 import semantic_metadata
 import semantic_embeddings
 import sql_validator
@@ -23,6 +26,7 @@ import sql_validator
 logger = logging.getLogger(__name__)
 
 DEFAULT_TOP_K = 8
+MAX_RETRIES = 2
 
 
 def build_sql_context(
@@ -125,7 +129,6 @@ def build_sql_context(
             cgen = cols_gen.get(cname, {})
             c_desc = cgen.get("description", "")
             c_role = cgen.get("business_role", "")
-            c_aliases = cgen.get("semantic_aliases", [])
             
             role_tag = f", role: {c_role}" if c_role else ""
             desc_tag = f" — {c_desc}" if c_desc else ""
@@ -188,10 +191,53 @@ Generate the JSON response containing the SQLite SQL query now:<|end|>
 <|assistant|>"""
 
 
+def build_correction_prompt(
+    question: str,
+    failed_sql: str,
+    error_msg: str,
+    context_text: str
+) -> str:
+    """
+    Constructs a targeted self-correction prompt for Qwen3.5:4b when validation or execution fails.
+    """
+    return f"""<|system|>
+You are an expert SQLite SQL repair specialist.
+Your previous SQL query failed validation or execution against SQLite.
+Your task is to fix the query to correctly answer the user question based strictly on the SCHEMA CONTEXT.
+
+CRITICAL RULES:
+1. Output MUST be valid SQLite syntax only.
+2. Use ONLY table and column names present in the SCHEMA CONTEXT below.
+3. Do NOT invent tables, columns, or relationships.
+4. Generate read-only queries only (SELECT or CTEs using WITH).
+5. Never generate DDL or DML (INSERT, UPDATE, DELETE, DROP, ALTER, PRAGMA, etc.).
+6. Return your corrected query as a valid JSON object with the exact keys:
+{{
+  "sql": "SELECT ...;",
+  "reasoning": "Brief explanation of how the error was corrected."
+}}
+7. Do NOT include markdown code fences or conversational text outside the JSON object.<|end|>
+<|user|>
+SCHEMA CONTEXT:
+{context_text}
+
+ORIGINAL QUESTION:
+{question}
+
+PREVIOUS FAILED SQL:
+{failed_sql}
+
+ERROR DETAILS:
+{error_msg}
+
+Please generate the corrected JSON response containing the valid SQLite query now:<|end|>
+<|assistant|>"""
+
+
 def parse_sql_response(raw_response: str) -> str:
     """
     Extracts and sanitizes the SQL statement from the model's response.
-    Prefers structured JSON parsing with robust regex and fallback extraction.
+    Prefers structured JSON parsing without silently stripping multi-statements.
     """
     if not raw_response or not raw_response.strip():
         return ""
@@ -200,9 +246,10 @@ def parse_sql_response(raw_response: str) -> str:
     parsed_json = llm.extract_json_object(raw_response)
     if parsed_json and isinstance(parsed_json, dict) and "sql" in parsed_json:
         candidate_sql = str(parsed_json["sql"]).strip()
-        cleaned = llm.extract_sql_clean(candidate_sql)
-        if cleaned:
-            return cleaned
+        # Strip enclosing markdown code block if present
+        candidate_sql = re.sub(r"^```(?:sql)?\s*", "", candidate_sql, flags=re.IGNORECASE)
+        candidate_sql = re.sub(r"\s*```$", "", candidate_sql)
+        return candidate_sql.strip()
 
     # 2. Fallback to extracting SQL from raw text
     cleaned_fallback = llm.extract_sql_clean(raw_response)
@@ -210,6 +257,46 @@ def parse_sql_response(raw_response: str) -> str:
         return cleaned_fallback
 
     return raw_response.strip()
+
+
+def execute_validated_sql(
+    sql: str,
+    db_path: str = sql_validator.DEFAULT_DB_PATH,
+    max_rows: int = 200
+) -> Dict[str, Any]:
+    """
+    Executes an SQL query against SQLite ONLY after SQLGlot validation confirms it is valid and read-only.
+    Reuses existing safe execution logic from sql_runner.
+    """
+    start_time = time.time()
+    
+    # Mandatory Pre-Execution Validation Check
+    validation_report = sql_validator.validate_sql(sql, db_path=db_path)
+    if not validation_report.get("valid"):
+        err_msg = "; ".join(e["message"] for e in validation_report.get("errors", []))
+        return {
+            "success": False,
+            "rows": [],
+            "columns": [],
+            "row_count": 0,
+            "truncated": False,
+            "execution_time_ms": int((time.time() - start_time) * 1000),
+            "error": f"Pre-execution validation failed: {err_msg}",
+        }
+
+    # Safe Read-Only Execution via sql_runner
+    exec_result = sql_runner.execute_read_only_sql(sql, max_rows=max_rows)
+    exec_time_ms = int((time.time() - start_time) * 1000)
+
+    return {
+        "success": bool(exec_result.get("ok")),
+        "rows": exec_result.get("rows", []),
+        "columns": exec_result.get("columns", []),
+        "row_count": exec_result.get("row_count", 0),
+        "truncated": exec_result.get("truncated", False),
+        "execution_time_ms": exec_time_ms,
+        "error": exec_result.get("error"),
+    }
 
 
 def generate_sql(
@@ -220,9 +307,7 @@ def generate_sql(
     use_llm: bool = True,
 ) -> Dict[str, Any]:
     """
-    End-to-end context-aware NL-to-SQL generator:
-    question -> FAISS retrieval -> context reconstruction -> prompt -> Qwen3.5:4b -> SQL.
-    NOTE: Does NOT execute the generated SQL.
+    End-to-end context-aware NL-to-SQL candidate generator without execution.
     """
     if not question or not str(question).strip():
         raise ValueError("Question cannot be empty.")
@@ -302,4 +387,197 @@ def generate_sql(
         },
         "context": context_summary,
         "latency_ms": latency_ms,
+    }
+
+
+def query(
+    question: str,
+    max_retries: int = MAX_RETRIES,
+    top_k: int = DEFAULT_TOP_K,
+    metadata_path: str = semantic_metadata.METADATA_PATH,
+    db_path: str = sql_validator.DEFAULT_DB_PATH,
+    use_llm: bool = True,
+) -> Dict[str, Any]:
+    """
+    End-to-end validated NL-to-SQL execution pipeline with bounded self-correction.
+    Flow:
+      Question -> FAISS Retrieval -> Context Reconstruction ->
+      Loop (Attempt 0 .. max_retries):
+         Qwen (Generate/Repair) -> Parse -> SQLGlot Validate ->
+         If Invalid -> Next Attempt (Self-Correction)
+         If Valid -> Safe SQLite Execute ->
+            If Runtime Error -> Next Attempt (Self-Correction)
+            If Success -> Generate Natural Language Explanation -> Return
+    """
+    if not question or not str(question).strip():
+        raise ValueError("Question cannot be empty.")
+
+    start_time = time.time()
+    clean_question = str(question).strip()
+    
+    # Bounded retries: ensure max_retries is between 0 and 5
+    bounded_retries = max(0, min(int(max_retries), 5))
+
+    # 1. Semantic Retrieval via FAISS
+    retrieved_items = semantic_embeddings.retrieve(
+        query_text=clean_question,
+        top_k=top_k,
+        metadata_path=metadata_path,
+    )
+
+    # 2. Reconstruct schema context with 1-hop relationship expansion
+    context_text, context_summary = build_sql_context(
+        retrieved_items=retrieved_items,
+        metadata_path=metadata_path,
+        expand_relationships=True,
+    )
+
+    meta = semantic_metadata.load_metadata(metadata_path)
+    active_schema = None
+    if meta and "tables" in meta and meta["tables"]:
+        active_schema = {
+            t: set(t_data.get("observed", {}).get("columns", {}).keys())
+            for t, t_data in meta["tables"].items()
+        }
+
+    attempts: List[Dict[str, Any]] = []
+    last_error: str = ""
+    failed_sql: str = ""
+    candidate_sql: str = ""
+
+    for attempt_idx in range(bounded_retries + 1):
+        if attempt_idx == 0:
+            prompt = build_sql_prompt(clean_question, context_text)
+            task_type = "sql"
+        else:
+            prompt = build_correction_prompt(clean_question, failed_sql, last_error, context_text)
+            task_type = "fix_sql"
+
+        # Call LLM
+        if use_llm:
+            try:
+                raw_response = llm.ask_llm(prompt, task=task_type)
+            except Exception as e:
+                raw_response = ""
+                last_error = f"LLM generation failed: {str(e)}"
+        else:
+            first_table = context_summary["tables"][0] if context_summary.get("tables") else "sqlite_master"
+            raw_response = json.dumps({
+                "sql": f"SELECT COUNT(*) FROM {first_table};",
+                "reasoning": f"Count records in {first_table}"
+            })
+
+        candidate_sql = parse_sql_response(raw_response)
+
+        # Pre-Execution SQLGlot Validation
+        validation_report = sql_validator.validate_sql(
+            candidate_sql,
+            db_path=db_path,
+            active_schema=active_schema
+        )
+
+        attempt_record: Dict[str, Any] = {
+            "attempt": attempt_idx,
+            "sql": candidate_sql,
+            "validation": validation_report,
+            "execution": None,
+        }
+
+        if not validation_report.get("valid"):
+            # Validation failure: collect errors and proceed to correction loop
+            err_msgs = [e.get("message", "Validation error") for e in validation_report.get("errors", [])]
+            last_error = "; ".join(err_msgs) if err_msgs else "Query failed SQLGlot validation."
+            failed_sql = candidate_sql
+            attempts.append(attempt_record)
+            continue
+
+        # Validation Passed -> Execute on SQLite
+        exec_result = execute_validated_sql(candidate_sql, db_path=db_path)
+        attempt_record["execution"] = exec_result
+        attempts.append(attempt_record)
+
+        if exec_result.get("success"):
+            # Successful Execution -> Generate Natural-Language Explanation
+            rows = exec_result.get("rows", [])
+            cols = exec_result.get("columns", [])
+            row_cnt = exec_result.get("row_count", 0)
+
+            explanation = ""
+            if use_llm:
+                try:
+                    interpret_prompt = llm.prompt_interpret_results(
+                        question=clean_question,
+                        sql=candidate_sql,
+                        columns=cols,
+                        rows=rows,
+                        row_count=row_cnt,
+                    )
+                    explanation = llm.ask_llm(interpret_prompt, task="interpret")
+                except Exception:
+                    explanation = f"Query executed successfully and returned {row_cnt} record(s)."
+            else:
+                explanation = f"Query executed successfully and returned {row_cnt} record(s)."
+
+            total_latency_ms = int((time.time() - start_time) * 1000)
+
+            return {
+                "status": "success",
+                "question": clean_question,
+                "sql": candidate_sql,
+                "results": rows,
+                "columns": cols,
+                "row_count": row_cnt,
+                "truncated": exec_result.get("truncated", False),
+                "explanation": explanation.strip() if explanation else f"Found {row_cnt} matching record(s).",
+                "retrieval": {
+                    "top_k": top_k,
+                    "items": [
+                        {
+                            "type": item.get("type"),
+                            "table": item.get("table"),
+                            "column": item.get("column"),
+                            "score": item.get("score"),
+                        }
+                        for item in retrieved_items
+                    ],
+                },
+                "context": context_summary,
+                "validation": validation_report,
+                "execution": exec_result,
+                "attempts": attempts,
+                "retry_count": attempt_idx,
+                "total_latency_ms": total_latency_ms,
+            }
+        else:
+            # Execution failure: collect SQLite error and proceed to correction loop
+            last_error = f"SQLite runtime error: {exec_result.get('error')}"
+            failed_sql = candidate_sql
+
+    # If all attempts exhausted without success:
+    total_latency_ms = int((time.time() - start_time) * 1000)
+    return {
+        "status": "failed",
+        "question": clean_question,
+        "sql": candidate_sql or failed_sql,
+        "results": [],
+        "columns": [],
+        "row_count": 0,
+        "explanation": None,
+        "error": last_error or "Maximum retry attempts exceeded without producing valid executable SQL.",
+        "retrieval": {
+            "top_k": top_k,
+            "items": [
+                {
+                    "type": item.get("type"),
+                    "table": item.get("table"),
+                    "column": item.get("column"),
+                    "score": item.get("score"),
+                }
+                for item in retrieved_items
+            ],
+        },
+        "context": context_summary,
+        "attempts": attempts,
+        "retry_count": len(attempts) - 1,
+        "total_latency_ms": total_latency_ms,
     }

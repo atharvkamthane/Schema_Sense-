@@ -1103,5 +1103,29 @@ def generate_nl2sql(payload: NL2SQLGenerateRequest):
         raise HTTPException(status_code=500, detail=f"NL-to-SQL generation failed: {str(e)}")
 
 
+class NL2SQLQueryRequest(BaseModel):
+    question: str
+    max_retries: Optional[int] = 2
+    top_k: Optional[int] = 8
+
+
+@app.post("/nl2sql/query")
+def query_nl2sql(payload: NL2SQLQueryRequest):
+    """Context-aware NL-to-SQL execution endpoint with SQLGlot validation and bounded self-correction.
+    Retrieves schema -> Generates candidate -> Validates AST -> Self-corrects if invalid -> Executes on SQLite -> Returns results + explanation.
+    """
+    if not payload.question or not str(payload.question).strip():
+        raise HTTPException(status_code=400, detail="Question field cannot be empty.")
+    try:
+        top_k = payload.top_k or 8
+        max_retries = payload.max_retries if payload.max_retries is not None else 2
+        result = nl2sql.query(payload.question, max_retries=max_retries, top_k=top_k)
+        return result
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"NL-to-SQL query pipeline failed: {str(e)}")
+
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
