@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-08-16T11:17:36.405169+00:00",
+  "generated_at": "2026-08-17T05:27:01.743349+00:00",
   "generator": "semantic_metadata.py",
-  "model": "qwen3.5:4b",
+  "model": "deterministic_fallback",
   "database_file": "database.sqlite",
   "database_fingerprint": {
     "mtime": 1786214868.5549822,
@@ -326,60 +326,55 @@
         }
       },
       "generated": {
-        "table_description": "Stores individual user responses to survey questions, linking specific answers to their corresponding survey and question identifiers.",
+        "table_description": "Answer contains 236,898 records across 4 columns (keyed by UserID, QuestionID with foreign links via SurveyID, QuestionID).",
         "business_domain": "surveys",
         "semantic_aliases": [
-          "response_log",
-          "feedback_record",
-          "survey_entry"
+          "Answer",
+          "answer",
+          "Answers"
         ],
         "columns": {
           "AnswerText": {
-            "description": "Captures the textual content of the user's response, serving as the primary analytical measure for qualitative feedback.",
+            "description": "AnswerText stores TEXT data representing the AnswerText (e.g. 37, 44, 32).",
             "semantic_aliases": [
-              "response_content",
-              "user_input",
-              "feedback_text",
-              "AnswerText"
+              "AnswerText",
+              "answertext"
             ],
-            "business_role": "measure"
+            "business_role": "text_content"
           },
           "SurveyID": {
-            "description": "Identifies the specific survey instance to which the answer belongs, enabling aggregation across different surveys.",
+            "description": "SurveyID stores INTEGER data representing the SurveyID (e.g. 2014, 2014, 2014).",
             "semantic_aliases": [
-              "survey_identifier",
-              "survey_code",
-              "SurveyID"
+              "SurveyID",
+              "surveyid"
             ],
             "business_role": "foreign_key"
           },
           "UserID": {
-            "description": "Uniquely identifies the respondent for each answer, allowing for tracking of individual user behavior patterns.",
+            "description": "UserID stores INTEGER data representing the UserID (e.g. 1, 1, 1).",
             "semantic_aliases": [
-              "respondent_id",
-              "user_identifier",
-              "UserID"
+              "UserID",
+              "userid"
             ],
             "business_role": "primary_key"
           },
           "QuestionID": {
-            "description": "Links the answer to its specific question within the survey schema, facilitating question-level analysis.",
+            "description": "QuestionID stores INTEGER data representing the QuestionID (e.g. 1, 1, 1).",
             "semantic_aliases": [
-              "question_reference",
-              "query_id",
-              "QuestionID"
+              "QuestionID",
+              "questionid"
             ],
             "business_role": "primary_key"
           }
         },
         "common_questions": [
-          "What is the average response length across different survey years?",
-          "Which users have provided answers to the most questions?",
-          "How does answer distribution vary by survey ID?"
+          "How many records are in Answer?",
+          "What is the distribution of AnswerText in Answer?",
+          "Find details for a specific UserID in Answer"
         ],
-        "generated_at": "2026-08-16T11:17:19.634950+00:00",
-        "model": "qwen3.5:4b",
-        "source": "llm"
+        "generated_at": "2026-08-17T05:27:01.733908+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
       }
     },
     "Question": {
@@ -548,43 +543,37 @@
         }
       },
       "generated": {
-        "table_description": "This table stores the text content and unique identifiers for survey questions, serving as the core reference for the Question-Answer relationship.",
+        "table_description": "Question contains 105 records across 2 columns (keyed by questionid ).",
         "business_domain": "surveys",
         "semantic_aliases": [
-          "survey_questions",
-          "questionnaire_items",
-          "inquiry_texts"
+          "Question",
+          "question",
+          "Questions"
         ],
         "columns": {
           "questiontext": {
-            "description": "The full text of the survey question, containing the actual inquiry posed to respondents.",
+            "description": "questiontext stores TEXT data representing the questiontext (e.g. What is your age?, What is your gender?, What country do you live in?).",
             "semantic_aliases": [
-              "question_content",
-              "question_string",
-              "inquiry_text",
               "questiontext"
             ],
-            "business_role": "measure"
+            "business_role": "text_content"
           },
           "questionid": {
-            "description": "A unique integer identifier for each question, used to link question text to its corresponding answers.",
+            "description": "questionid stores INTEGER data representing the questionid (e.g. 1, 2, 3).",
             "semantic_aliases": [
-              "question_number",
-              "question_reference",
-              "q_id",
               "questionid"
             ],
             "business_role": "primary_key"
           }
         },
         "common_questions": [
-          "What is the exact wording of the question with ID 10?",
-          "How many unique questions are currently in the survey?",
-          "Which question ID corresponds to the question asking about age?"
+          "How many records are in Question?",
+          "What is the distribution of questiontext in Question?",
+          "Find details for a specific questionid in Question"
         ],
-        "generated_at": "2026-08-16T11:17:28.641142+00:00",
-        "model": "qwen3.5:4b",
-        "source": "llm"
+        "generated_at": "2026-08-17T05:27:01.739243+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
       }
     },
     "Survey": {
@@ -753,46 +742,45 @@
         }
       },
       "generated": {
-        "table_description": "This table stores metadata for mental health surveys conducted between 2014 and 2019, serving as the parent entity for survey responses.",
+        "table_description": "Survey contains 5 records across 2 columns (keyed by SurveyID ).",
         "business_domain": "surveys",
         "semantic_aliases": [
-          "survey metadata",
-          "survey catalog"
+          "Survey",
+          "survey",
+          "Surveys"
         ],
         "columns": {
           "SurveyID": {
-            "description": "A unique integer identifier for each survey, representing the year of data collection.",
+            "description": "SurveyID stores INTEGER data representing the SurveyID (e.g. 2014, 2016, 2017).",
             "semantic_aliases": [
-              "survey year",
-              "unique survey key",
-              "SurveyID"
+              "SurveyID",
+              "surveyid"
             ],
             "business_role": "primary_key"
           },
           "Description": {
-            "description": "A text field containing the specific topic and year of the mental health survey.",
+            "description": "Description stores TEXT data representing the Description (e.g. mental health survey for 2014, mental health survey for 2016, mental health survey for 2017).",
             "semantic_aliases": [
-              "survey topic",
-              "survey summary",
-              "Description"
+              "Description",
+              "description"
             ],
-            "business_role": "attribute"
+            "business_role": "text_content"
           }
         },
         "common_questions": [
-          "What are the unique years for which mental health surveys were conducted?",
-          "How many distinct survey descriptions exist in the dataset?",
-          "What was the description of the survey conducted in 2016?"
+          "How many records are in Survey?",
+          "What is the distribution of SurveyID in Survey?",
+          "Find details for a specific SurveyID in Survey"
         ],
-        "generated_at": "2026-08-16T11:17:36.405169+00:00",
-        "model": "qwen3.5:4b",
-        "source": "llm"
+        "generated_at": "2026-08-17T05:27:01.743349+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
       }
     }
   },
   "diagnostics": {
-    "duration_seconds": 39.18,
-    "use_llm": true,
+    "duration_seconds": 1.12,
+    "use_llm": false,
     "errors": {}
   }
 }

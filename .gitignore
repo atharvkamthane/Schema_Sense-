@@ -53,6 +53,15 @@ __pycache__/
 .coverage
 htmlcov/
 
+# Semantic metadata and vector index artifacts
+*.faiss
+metadata_index.faiss
+metadata_mapping.json
+metadata_index_meta.json
+metadata_store.json
+Backend/backend/*.faiss
+Backend/backend/metadata_*.json
+
 # Misc generated files used by the project
 Backend/SchemaSense_SRS_v2*.pdf
 Backend/*.docx
