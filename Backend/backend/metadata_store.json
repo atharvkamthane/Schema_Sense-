@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-08-17T05:27:01.743349+00:00",
+  "generated_at": "2026-08-17T05:33:33.025453+00:00",
   "generator": "semantic_metadata.py",
   "model": "deterministic_fallback",
   "database_file": "database.sqlite",
@@ -372,7 +372,7 @@
           "What is the distribution of AnswerText in Answer?",
           "Find details for a specific UserID in Answer"
         ],
-        "generated_at": "2026-08-17T05:27:01.733908+00:00",
+        "generated_at": "2026-08-17T05:33:32.999451+00:00",
         "model": "deterministic_fallback",
         "source": "fallback"
       }
@@ -571,7 +571,7 @@
           "What is the distribution of questiontext in Question?",
           "Find details for a specific questionid in Question"
         ],
-        "generated_at": "2026-08-17T05:27:01.739243+00:00",
+        "generated_at": "2026-08-17T05:33:33.014453+00:00",
         "model": "deterministic_fallback",
         "source": "fallback"
       }
@@ -772,14 +772,14 @@
           "What is the distribution of SurveyID in Survey?",
           "Find details for a specific SurveyID in Survey"
         ],
-        "generated_at": "2026-08-17T05:27:01.743349+00:00",
+        "generated_at": "2026-08-17T05:33:33.025453+00:00",
         "model": "deterministic_fallback",
         "source": "fallback"
       }
     }
   },
   "diagnostics": {
-    "duration_seconds": 1.12,
+    "duration_seconds": 1.99,
     "use_llm": false,
     "errors": {}
   }

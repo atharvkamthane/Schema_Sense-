@@ -18,6 +18,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 import llm
 import semantic_metadata
 import semantic_embeddings
+import sql_validator
 
 logger = logging.getLogger(__name__)
 
@@ -215,6 +216,7 @@ def generate_sql(
     question: str,
     top_k: int = DEFAULT_TOP_K,
     metadata_path: str = semantic_metadata.METADATA_PATH,
+    db_path: str = sql_validator.DEFAULT_DB_PATH,
     use_llm: bool = True,
 ) -> Dict[str, Any]:
     """
@@ -262,12 +264,28 @@ def generate_sql(
     # 5. Parse and sanitize SQL
     sql_candidate = parse_sql_response(raw_response)
 
+    # 6. Validate candidate SQL via SQLGlot AST against active schema
+    meta = semantic_metadata.load_metadata(metadata_path)
+    active_schema = None
+    if meta and "tables" in meta and meta["tables"]:
+        active_schema = {
+            t: set(t_data.get("observed", {}).get("columns", {}).keys())
+            for t, t_data in meta["tables"].items()
+        }
+
+    validation_report = sql_validator.validate_sql(
+        sql_candidate,
+        db_path=db_path,
+        active_schema=active_schema
+    )
+
     latency_ms = int((time.time() - start_time) * 1000)
 
     return {
-        "status": "success",
+        "status": "success" if validation_report.get("valid") else "invalid_candidate",
         "question": clean_question,
         "sql": sql_candidate,
+        "validation": validation_report,
         "model": llm.MODEL_NAME if use_llm else "mock_generator",
         "retrieval": {
             "top_k": top_k,
