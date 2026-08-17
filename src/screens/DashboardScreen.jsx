@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import {
   Database, ShieldCheck, BarChart2, GitBranch,
   AlertTriangle, CheckCircle2, TrendingUp, FileText,
-  Zap, ArrowRight, Eye, Download
+  Zap, ArrowRight, Eye, Download, Sparkles
 } from 'lucide-react';
 import PDFExportModal from '../components/PDFExportModal';
 import { useAppStore } from '../store/useAppStore';
@@ -280,8 +280,9 @@ export default function DashboardScreen() {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
+            { icon: Sparkles, title: 'Semantic NL-to-SQL', desc: 'Ask questions in English with self-correcting SQL', route: '/query', color: 'text-[var(--accent-bright)]', bg: 'bg-[var(--accent-dim)]' },
             { icon: Database, title: 'Data Dictionary', desc: 'Schema, types, PK/FK, AI descriptions', route: '/dictionary', color: 'text-[var(--accent-bright)]', bg: 'bg-[var(--accent-dim)]' },
             { icon: BarChart2, title: 'Statistical Analysis', desc: 'Distributions, outliers, correlations', route: '/analysis', color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/10' },
             { icon: ShieldCheck, title: 'Quality Report', desc: 'Completeness, freshness, consistency', route: '/quality', color: 'text-[var(--success)]', bg: 'bg-[var(--success)]/10' },
