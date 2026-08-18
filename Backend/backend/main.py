@@ -17,6 +17,9 @@ import os
 import shutil
 import threading
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="SchemaSense AI API", version="1.0.0")
 
@@ -832,22 +835,36 @@ def generate_summary(payload: GenerateSummaryRequest):
 
 @app.post("/ingest/clear")
 def clear_database():
-    """Explicitly wipe the database for a new upload session."""
+    """Explicitly wipe the database and semantic layer for a new upload session."""
     if os.path.exists("database.sqlite"):
         try:
             os.remove("database.sqlite")
         except Exception:
             pass
-    return {"status": "cleared", "message": "Database wiped for new session."}
+            
+    # Invalidate and wipe semantic metadata & FAISS index
+    try:
+        semantic_metadata.remove_metadata_artifacts()
+        semantic_embeddings.remove_index_artifacts()
+    except Exception as e:
+        logger.warning(f"Failed to clear semantic artifacts: {e}")
+
+    return {"status": "cleared", "message": "Database and semantic layer wiped for new session."}
 
 @app.post("/ingest/file")
 async def ingest_file(file: UploadFile = File(...), clear: bool = False):
     """Upload endpoint for CSV/SQLite files; loads user data into database.sqlite
     Use ?clear=true query param to wipe the DB before the first file in a session.
     """
-    if clear and os.path.exists("database.sqlite"):
+    if clear:
+        if os.path.exists("database.sqlite"):
+            try:
+                os.remove("database.sqlite")
+            except Exception:
+                pass
         try:
-            os.remove("database.sqlite")
+            semantic_metadata.remove_metadata_artifacts()
+            semantic_embeddings.remove_index_artifacts()
         except Exception:
             pass
             
@@ -864,36 +881,42 @@ async def ingest_file(file: UploadFile = File(...), clear: bool = False):
     if ext == ".csv":
         # CSV: Parse and load into database.sqlite
         result = ingest_handler.create_table_from_csv(saved_path)
+        semantic_sync = _sync_semantic_layer_after_ingest(result.get("success", False))
         return {
             "status": "uploaded",
             "file_type": "CSV",
             "filename": file.filename,
             "saved_path": saved_path,
             **result,  # Includes success, table_name, row_count, error, etc.
+            "semantic_sync": semantic_sync,
             "next": f"Call GET /schema to verify table '{result['table_name']}' is now active." if result['success'] else "CSV parsing failed; check error message."
         }
     
     elif ext in {".sqlite", ".db"}:
         # SQLite: Copy directly to database.sqlite
         result = ingest_handler.copy_sqlite_database(saved_path)
+        semantic_sync = _sync_semantic_layer_after_ingest(result.get("success", False))
         return {
             "status": "uploaded",
             "file_type": "SQLite",
             "filename": file.filename,
             "saved_path": saved_path,
             **result,  # Includes success, table_count, tables, error
+            "semantic_sync": semantic_sync,
             "next": f"Call GET /schema to verify {result['table_count']} tables are now active." if result['success'] else "Database copy failed; check error message."
         }
         
     elif ext == ".zip":
         # ZIP: Extract and load all CSVs
         result = ingest_handler.process_zip_file(saved_path)
+        semantic_sync = _sync_semantic_layer_after_ingest(result.get("success", False))
         return {
             "status": "uploaded",
             "file_type": "ZIP",
             "filename": file.filename,
             "saved_path": saved_path,
             **result,  # Includes success, table_count, tables, error
+            "semantic_sync": semantic_sync,
             "next": f"Call GET /schema to verify {result.get('table_count', 0)} tables are now active." if result.get('success') else "ZIP processing failed."
         }
     
@@ -903,6 +926,31 @@ async def ingest_file(file: UploadFile = File(...), clear: bool = False):
             "filename": file.filename,
             "error": f"Unsupported file type: {ext}. Only .csv, .zip, .sqlite, and .db are supported.",
             "next": "Please upload a CSV, ZIP containing CSVs, or SQLite database file."
+        }
+
+
+def _sync_semantic_layer_after_ingest(ingest_success: bool) -> Dict[str, Any]:
+    """Helper to safely synchronize metadata_store.json and FAISS index after database modification."""
+    if not ingest_success or not os.path.exists("database.sqlite"):
+        return {"status": "skipped", "reason": "Ingest did not succeed or database does not exist."}
+
+    try:
+        semantic_embeddings.invalidate_semantic_cache()
+        fresh_meta = semantic_metadata.generate_all_metadata(use_llm=False)
+        _, _, idx_meta = semantic_embeddings.build_index(fresh_meta)
+        logger.info(f"Semantic layer synchronized successfully with {len(fresh_meta.get('tables', {}))} tables.")
+        return {
+            "status": "synchronized",
+            "table_count": len(fresh_meta.get("tables", {})),
+            "tables": list(fresh_meta.get("tables", {}).keys()),
+            "vector_count": idx_meta.get("vector_count", 0),
+        }
+    except Exception as e:
+        logger.error(f"Semantic synchronization failed after ingest: {e}")
+        semantic_embeddings.remove_index_artifacts()
+        return {
+            "status": "error",
+            "error": str(e),
         }
 
 

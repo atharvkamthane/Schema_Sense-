@@ -325,17 +325,27 @@ def test_join_and_aggregation_results(monkeypatch):
 
 def test_api_nl2sql_query_endpoint(monkeypatch):
     """Test 19: POST /nl2sql/query endpoint integration."""
+    active_tables = []
+    if os.path.exists("database.sqlite"):
+        import sqlite3
+        conn = sqlite3.connect("database.sqlite")
+        cur = conn.cursor()
+        cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
+        active_tables = [r[0] for r in cur.fetchall()]
+        conn.close()
+    
+    table_name = active_tables[0] if active_tables else "Survey"
     monkeypatch.setattr(sql_runner, "DB_PATH", "database.sqlite")
     client = TestClient(main.app)
 
     # Mock ask_llm for the API call
     monkeypatch.setattr(llm, "ask_llm", lambda prompt, task="sql": (
-        json.dumps({"sql": "SELECT COUNT(*) AS survey_count FROM Survey;"})
-        if task in ("sql", "fix_sql") else "There are 5 surveys."
+        json.dumps({"sql": f"SELECT COUNT(*) AS total_count FROM {table_name};"})
+        if task in ("sql", "fix_sql") else f"There are records in {table_name}."
     ))
 
     # 1. Success request
-    resp = client.post("/nl2sql/query", json={"question": "How many surveys are there?", "max_retries": 2})
+    resp = client.post("/nl2sql/query", json={"question": f"How many {table_name} records are there?", "max_retries": 2})
     assert resp.status_code == 200
     data = resp.json()
     assert data["status"] == "success"

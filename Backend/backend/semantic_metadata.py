@@ -10,6 +10,7 @@ import os
 import json
 import time
 import sqlite3
+import logging
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
@@ -17,6 +18,8 @@ import schema
 import quality
 import analysis
 import llm
+
+logger = logging.getLogger(__name__)
 
 DB_PATH = "database.sqlite"
 METADATA_PATH = "metadata_store.json"
@@ -73,6 +76,22 @@ def get_metadata_age(metadata_path: str = METADATA_PATH) -> Optional[float]:
         return max(0.0, time.time() - os.path.getmtime(metadata_path))
     except Exception:
         return None
+
+
+def invalidate_metadata_cache() -> None:
+    """Invalidates any metadata in-memory state."""
+    logger.info("Semantic metadata in-memory cache invalidated.")
+
+
+def remove_metadata_artifacts(metadata_path: str = METADATA_PATH) -> None:
+    """Removes metadata_store.json from disk and invalidates cache."""
+    invalidate_metadata_cache()
+    if os.path.exists(metadata_path):
+        try:
+            os.remove(metadata_path)
+            logger.info(f"Removed metadata artifact: {metadata_path}")
+        except Exception as e:
+            logger.warning(f"Could not remove metadata artifact {metadata_path}: {e}")
 
 
 def is_metadata_stale(metadata_path: str = METADATA_PATH, db_path: str = DB_PATH) -> bool:
@@ -594,13 +613,16 @@ def generate_all_metadata(
                 # Fatal table failure
                 raise RuntimeError(f"Failed to generate metadata for table '{table_name}': {str(e2)}") from e2
 
+    # Capture final post-processing fingerprint to ensure exact mtime & size match
+    final_fingerprint = get_database_fingerprint(db_path) or fingerprint
+
     metadata_document = {
         "version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "generator": "semantic_metadata.py",
         "model": llm.MODEL_NAME if use_llm else "deterministic_fallback",
         "database_file": os.path.basename(db_path),
-        "database_fingerprint": fingerprint,
+        "database_fingerprint": final_fingerprint,
         "table_count": len(tables_metadata),
         "tables": tables_metadata,
         "diagnostics": {

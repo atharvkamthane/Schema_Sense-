@@ -1,222 +1,194 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-08-17T05:44:55.293569+00:00",
+  "generated_at": "2026-08-18T06:46:28.477206+00:00",
   "generator": "semantic_metadata.py",
   "model": "deterministic_fallback",
   "database_file": "database.sqlite",
   "database_fingerprint": {
-    "mtime": 1786214868.5549822,
-    "size_bytes": 13430784,
-    "table_count": 3,
+    "mtime": 1787035588.456596,
+    "size_bytes": 12288,
+    "table_count": 1,
     "tables": [
-      "Answer",
-      "Question",
-      "Survey"
+      "ENJOYSPORT"
     ]
   },
-  "table_count": 3,
+  "table_count": 1,
   "tables": {
-    "Answer": {
+    "ENJOYSPORT": {
       "observed": {
-        "table_name": "Answer",
-        "row_count": 236898,
-        "column_count": 4,
+        "table_name": "ENJOYSPORT",
+        "row_count": 2,
+        "column_count": 7,
         "columns": {
-          "AnswerText": {
-            "name": "AnswerText",
+          "Sky": {
+            "name": "Sky",
             "type": "TEXT",
             "nullable": true,
             "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
-            "uniqueness": 1.8,
-            "unique_count": 4215,
+            "uniqueness": 100.0,
+            "unique_count": 2,
             "sample_values": [
-              "37",
-              "44",
-              "32",
-              "31",
-              "31"
+              "Sunny",
+              "Rainy"
             ],
             "top_values": [
               {
-                "value": "-1",
-                "count": 56598
+                "value": "Sunny",
+                "count": 1
+              },
+              {
+                "value": "Rainy",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "AirTemp": {
+            "name": "AirTemp",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 2,
+            "sample_values": [
+              "Warm",
+              "Cold"
+            ],
+            "top_values": [
+              {
+                "value": "Warm",
+                "count": 1
+              },
+              {
+                "value": "Cold",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Humidity": {
+            "name": "Humidity",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 2,
+            "sample_values": [
+              "High",
+              "Normal"
+            ],
+            "top_values": [
+              {
+                "value": "High",
+                "count": 1
+              },
+              {
+                "value": "Normal",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Wind": {
+            "name": "Wind",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 50.0,
+            "unique_count": 1,
+            "sample_values": [
+              "Strong",
+              "Strong"
+            ],
+            "top_values": [
+              {
+                "value": "Strong",
+                "count": 2
+              }
+            ],
+            "fk_reference": null
+          },
+          "Water": {
+            "name": "Water",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 50.0,
+            "unique_count": 1,
+            "sample_values": [
+              "Warm",
+              "Warm"
+            ],
+            "top_values": [
+              {
+                "value": "Warm",
+                "count": 2
+              }
+            ],
+            "fk_reference": null
+          },
+          "Forecast": {
+            "name": "Forecast",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 2,
+            "sample_values": [
+              "Same",
+              "Change"
+            ],
+            "top_values": [
+              {
+                "value": "Same",
+                "count": 1
+              },
+              {
+                "value": "Change",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "EnjoySport": {
+            "name": "EnjoySport",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 2,
+            "sample_values": [
+              "Yes",
+              "No"
+            ],
+            "top_values": [
+              {
+                "value": "Yes",
+                "count": 1
               },
               {
                 "value": "No",
-                "count": 26899
-              },
-              {
-                "value": "Yes",
-                "count": 18232
-              },
-              {
-                "value": "1",
-                "count": 15308
-              },
-              {
-                "value": "0",
-                "count": 15247
+                "count": 1
               }
             ],
             "fk_reference": null
-          },
-          "SurveyID": {
-            "name": "SurveyID",
-            "type": "INTEGER",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": true,
-            "null_percentage": 0.0,
-            "uniqueness": 0.0,
-            "unique_count": 5,
-            "sample_values": [
-              "2014",
-              "2014",
-              "2014",
-              "2014",
-              "2014"
-            ],
-            "top_values": [
-              {
-                "value": "2016",
-                "count": 88238
-              },
-              {
-                "value": "2017",
-                "count": 57456
-              },
-              {
-                "value": "2014",
-                "count": 32760
-              },
-              {
-                "value": "2018",
-                "count": 31692
-              },
-              {
-                "value": "2019",
-                "count": 26752
-              }
-            ],
-            "fk_reference": "Survey.SurveyID"
-          },
-          "UserID": {
-            "name": "UserID",
-            "type": "INTEGER",
-            "nullable": true,
-            "is_pk": true,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 1.8,
-            "unique_count": 4218,
-            "sample_values": [
-              "1",
-              "1",
-              "1",
-              "1",
-              "1"
-            ],
-            "top_values": [
-              {
-                "value": "2694",
-                "count": 76
-              },
-              {
-                "value": "2695",
-                "count": 76
-              },
-              {
-                "value": "2696",
-                "count": 76
-              },
-              {
-                "value": "2697",
-                "count": 76
-              },
-              {
-                "value": "2698",
-                "count": 76
-              }
-            ],
-            "fk_reference": null
-          },
-          "QuestionID": {
-            "name": "QuestionID",
-            "type": "INTEGER",
-            "nullable": true,
-            "is_pk": true,
-            "is_fk": true,
-            "null_percentage": 0.0,
-            "uniqueness": 0.0,
-            "unique_count": 105,
-            "sample_values": [
-              "1",
-              "1",
-              "1",
-              "1",
-              "1"
-            ],
-            "top_values": [
-              {
-                "value": "1",
-                "count": 4218
-              },
-              {
-                "value": "2",
-                "count": 4218
-              },
-              {
-                "value": "3",
-                "count": 4218
-              },
-              {
-                "value": "4",
-                "count": 4218
-              },
-              {
-                "value": "5",
-                "count": 4218
-              }
-            ],
-            "fk_reference": "Question.questionid"
           }
         },
-        "relationships": [
-          {
-            "id": "Answer.SurveyID->Survey.SurveyID",
-            "source": "Answer",
-            "target": "Survey",
-            "source_table": "Answer",
-            "target_table": "Survey",
-            "source_col": "SurveyID",
-            "target_col": "SurveyID",
-            "source_display": "Answer",
-            "target_display": "Survey",
-            "label": "SurveyID",
-            "type": "inferred",
-            "confidence": 0.97,
-            "cardinality": "one_to_many",
-            "inference_method": "intelligent_reference_subset"
-          },
-          {
-            "id": "Answer.QuestionID->Question.questionid",
-            "source": "Answer",
-            "target": "Question",
-            "source_table": "Answer",
-            "target_table": "Question",
-            "source_col": "QuestionID",
-            "target_col": "questionid",
-            "source_display": "Answer",
-            "target_display": "Question",
-            "label": "QuestionID",
-            "type": "inferred",
-            "confidence": 0.97,
-            "cardinality": "one_to_many",
-            "inference_method": "intelligent_reference_subset"
-          }
-        ],
+        "relationships": [],
         "quality": {
           "health_score": 100,
           "completeness": 100,
@@ -226,316 +198,104 @@
           "orphan_issues": []
         },
         "statistics": {
-          "numeric_stats": [
-            {
-              "column": "SurveyID",
-              "mean": 2016.57,
-              "median": 2016.0,
-              "std": 1.42,
-              "variance": 2.02,
-              "min": 2014.0,
-              "max": 2019.0,
-              "q1": 2016.0,
-              "q3": 2017.0,
-              "iqr": 1.0,
-              "skewness": -0.14,
-              "kurtosis": -0.41,
-              "iqr_outlier_count": 59512,
-              "zscore_outlier_count": 0
-            },
-            {
-              "column": "UserID",
-              "mean": 2514.52,
-              "median": 2652.0,
-              "std": 1099.46,
-              "variance": 1208818.33,
-              "min": 1.0,
-              "max": 4218.0,
-              "q1": 1691.0,
-              "q3": 3439.0,
-              "iqr": 1748.0,
-              "skewness": -0.39,
-              "kurtosis": -0.8,
-              "iqr_outlier_count": 0,
-              "zscore_outlier_count": 0
-            },
-            {
-              "column": "QuestionID",
-              "mean": 48.66,
-              "median": 48.0,
-              "std": 36.13,
-              "variance": 1305.1,
-              "min": 1.0,
-              "max": 118.0,
-              "q1": 15.0,
-              "q3": 80.0,
-              "iqr": 65.0,
-              "skewness": 0.37,
-              "kurtosis": -1.21,
-              "iqr_outlier_count": 0,
-              "zscore_outlier_count": 0
-            }
-          ],
+          "numeric_stats": [],
           "categorical_stats": [
             {
-              "column": "AnswerText",
-              "cardinality": 4215,
+              "column": "Sky",
+              "cardinality": 2,
               "top_values": [
                 {
-                  "value": "-1",
-                  "count": 56598
+                  "value": "Sunny",
+                  "count": 1
+                },
+                {
+                  "value": "Rainy",
+                  "count": 1
+                }
+              ],
+              "entropy": 1.0
+            },
+            {
+              "column": "AirTemp",
+              "cardinality": 2,
+              "top_values": [
+                {
+                  "value": "Warm",
+                  "count": 1
+                },
+                {
+                  "value": "Cold",
+                  "count": 1
+                }
+              ],
+              "entropy": 1.0
+            },
+            {
+              "column": "Humidity",
+              "cardinality": 2,
+              "top_values": [
+                {
+                  "value": "Normal",
+                  "count": 1
+                },
+                {
+                  "value": "High",
+                  "count": 1
+                }
+              ],
+              "entropy": 1.0
+            },
+            {
+              "column": "Wind",
+              "cardinality": 1,
+              "top_values": [
+                {
+                  "value": "Strong",
+                  "count": 2
+                }
+              ],
+              "entropy": -0.0
+            },
+            {
+              "column": "Water",
+              "cardinality": 1,
+              "top_values": [
+                {
+                  "value": "Warm",
+                  "count": 2
+                }
+              ],
+              "entropy": -0.0
+            },
+            {
+              "column": "Forecast",
+              "cardinality": 2,
+              "top_values": [
+                {
+                  "value": "Same",
+                  "count": 1
+                },
+                {
+                  "value": "Change",
+                  "count": 1
+                }
+              ],
+              "entropy": 1.0
+            },
+            {
+              "column": "EnjoySport",
+              "cardinality": 2,
+              "top_values": [
+                {
+                  "value": "Yes",
+                  "count": 1
                 },
                 {
                   "value": "No",
-                  "count": 26899
-                },
-                {
-                  "value": "Yes",
-                  "count": 18232
-                },
-                {
-                  "value": "1",
-                  "count": 15308
-                },
-                {
-                  "value": "0",
-                  "count": 15247
-                }
-              ],
-              "entropy": 5.18
-            }
-          ],
-          "date_stats": [],
-          "correlation_pairs": [
-            {
-              "col_a": "SurveyID",
-              "col_b": "UserID",
-              "r": 0.95
-            },
-            {
-              "col_a": "UserID",
-              "col_b": "QuestionID",
-              "r": -0.08
-            },
-            {
-              "col_a": "SurveyID",
-              "col_b": "QuestionID",
-              "r": -0.08
-            }
-          ]
-        }
-      },
-      "generated": {
-        "table_description": "Answer contains 236,898 records across 4 columns (keyed by UserID, QuestionID with foreign links via SurveyID, QuestionID).",
-        "business_domain": "surveys",
-        "semantic_aliases": [
-          "Answer",
-          "answer",
-          "Answers"
-        ],
-        "columns": {
-          "AnswerText": {
-            "description": "AnswerText stores TEXT data representing the AnswerText (e.g. 37, 44, 32).",
-            "semantic_aliases": [
-              "AnswerText",
-              "answertext"
-            ],
-            "business_role": "text_content"
-          },
-          "SurveyID": {
-            "description": "SurveyID stores INTEGER data representing the SurveyID (e.g. 2014, 2014, 2014).",
-            "semantic_aliases": [
-              "SurveyID",
-              "surveyid"
-            ],
-            "business_role": "foreign_key"
-          },
-          "UserID": {
-            "description": "UserID stores INTEGER data representing the UserID (e.g. 1, 1, 1).",
-            "semantic_aliases": [
-              "UserID",
-              "userid"
-            ],
-            "business_role": "primary_key"
-          },
-          "QuestionID": {
-            "description": "QuestionID stores INTEGER data representing the QuestionID (e.g. 1, 1, 1).",
-            "semantic_aliases": [
-              "QuestionID",
-              "questionid"
-            ],
-            "business_role": "primary_key"
-          }
-        },
-        "common_questions": [
-          "How many records are in Answer?",
-          "What is the distribution of AnswerText in Answer?",
-          "Find details for a specific UserID in Answer"
-        ],
-        "generated_at": "2026-08-17T05:44:55.257571+00:00",
-        "model": "deterministic_fallback",
-        "source": "fallback"
-      }
-    },
-    "Question": {
-      "observed": {
-        "table_name": "Question",
-        "row_count": 105,
-        "column_count": 2,
-        "columns": {
-          "questiontext": {
-            "name": "questiontext",
-            "type": "TEXT",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 100.0,
-            "unique_count": 105,
-            "sample_values": [
-              "What is your age?",
-              "What is your gender?",
-              "What country do you live in?",
-              "If you live in the United States, which state or territory do you live in?",
-              "Are you self-employed?"
-            ],
-            "top_values": [
-              {
-                "value": "Would you have felt more comfortable talking to your previous employer about your physical health or your mental health?",
-                "count": 1
-              },
-              {
-                "value": "Would you have been willing to discuss your mental health with your direct supervisor(s)?",
-                "count": 1
-              },
-              {
-                "value": "Would you have been willing to discuss a mental health issue with your previous co-workers?",
-                "count": 1
-              },
-              {
-                "value": "Would you feel more comfortable talking to your coworkers about your physical health or your mental health?",
-                "count": 1
-              },
-              {
-                "value": "Would you feel comfortable discussing a mental health issue with your direct supervisor(s)?",
-                "count": 1
-              }
-            ],
-            "fk_reference": null
-          },
-          "questionid": {
-            "name": "questionid",
-            "type": "INTEGER",
-            "nullable": true,
-            "is_pk": true,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 100.0,
-            "unique_count": 105,
-            "sample_values": [
-              "1",
-              "2",
-              "3",
-              "4",
-              "5"
-            ],
-            "top_values": [
-              {
-                "value": "1",
-                "count": 1
-              },
-              {
-                "value": "2",
-                "count": 1
-              },
-              {
-                "value": "3",
-                "count": 1
-              },
-              {
-                "value": "4",
-                "count": 1
-              },
-              {
-                "value": "5",
-                "count": 1
-              }
-            ],
-            "fk_reference": null
-          }
-        },
-        "relationships": [
-          {
-            "id": "Answer.QuestionID->Question.questionid",
-            "source": "Answer",
-            "target": "Question",
-            "source_table": "Answer",
-            "target_table": "Question",
-            "source_col": "QuestionID",
-            "target_col": "questionid",
-            "source_display": "Answer",
-            "target_display": "Question",
-            "label": "QuestionID",
-            "type": "inferred",
-            "confidence": 0.97,
-            "cardinality": "one_to_many",
-            "inference_method": "intelligent_reference_subset"
-          }
-        ],
-        "quality": {
-          "health_score": 100,
-          "completeness": 100,
-          "freshness": null,
-          "freshness_latest_date": null,
-          "consistency": 100,
-          "orphan_issues": []
-        },
-        "statistics": {
-          "numeric_stats": [
-            {
-              "column": "questionid",
-              "mean": 61.79,
-              "median": 66.0,
-              "std": 35.59,
-              "variance": 1266.61,
-              "min": 1.0,
-              "max": 118.0,
-              "q1": 27.0,
-              "q3": 92.0,
-              "iqr": 65.0,
-              "skewness": -0.18,
-              "kurtosis": -1.26,
-              "iqr_outlier_count": 0,
-              "zscore_outlier_count": 0
-            }
-          ],
-          "categorical_stats": [
-            {
-              "column": "questiontext",
-              "cardinality": 105,
-              "top_values": [
-                {
-                  "value": "What is your age?",
-                  "count": 1
-                },
-                {
-                  "value": "If you have revealed a mental health disorder to a coworker or employee, how has this impacted you or the relationship?",
-                  "count": 1
-                },
-                {
-                  "value": "Do you feel that your employer takes mental health as seriously as physical health?",
-                  "count": 1
-                },
-                {
-                  "value": "Do you think that discussing a physical health issue with your employer would have negative consequences?",
-                  "count": 1
-                },
-                {
-                  "value": "What is your race?",
                   "count": 1
                 }
               ],
-              "entropy": 6.71
+              "entropy": 1.0
             }
           ],
           "date_stats": [],
@@ -543,243 +303,84 @@
         }
       },
       "generated": {
-        "table_description": "Question contains 105 records across 2 columns (keyed by questionid ).",
-        "business_domain": "surveys",
+        "table_description": "ENJOYSPORT contains 2 records across 7 columns (keyed by Humidity ).",
+        "business_domain": "general_analytics",
         "semantic_aliases": [
-          "Question",
-          "question",
-          "Questions"
+          "ENJOYSPORT",
+          "enjoysport",
+          "ENJOYSPORTs"
         ],
         "columns": {
-          "questiontext": {
-            "description": "questiontext stores TEXT data representing the questiontext (e.g. What is your age?, What is your gender?, What country do you live in?).",
+          "Sky": {
+            "description": "Sky stores TEXT data representing the Sky (e.g. Sunny, Rainy).",
             "semantic_aliases": [
-              "questiontext"
+              "Sky",
+              "sky"
             ],
-            "business_role": "text_content"
+            "business_role": "attribute"
           },
-          "questionid": {
-            "description": "questionid stores INTEGER data representing the questionid (e.g. 1, 2, 3).",
+          "AirTemp": {
+            "description": "AirTemp stores TEXT data representing the AirTemp (e.g. Warm, Cold).",
             "semantic_aliases": [
-              "questionid"
+              "AirTemp",
+              "airtemp"
             ],
-            "business_role": "primary_key"
-          }
-        },
-        "common_questions": [
-          "How many records are in Question?",
-          "What is the distribution of questiontext in Question?",
-          "Find details for a specific questionid in Question"
-        ],
-        "generated_at": "2026-08-17T05:44:55.274565+00:00",
-        "model": "deterministic_fallback",
-        "source": "fallback"
-      }
-    },
-    "Survey": {
-      "observed": {
-        "table_name": "Survey",
-        "row_count": 5,
-        "column_count": 2,
-        "columns": {
-          "SurveyID": {
-            "name": "SurveyID",
-            "type": "INTEGER",
-            "nullable": true,
-            "is_pk": true,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 100.0,
-            "unique_count": 5,
-            "sample_values": [
-              "2014",
-              "2016",
-              "2017",
-              "2018",
-              "2019"
-            ],
-            "top_values": [
-              {
-                "value": "2014",
-                "count": 1
-              },
-              {
-                "value": "2016",
-                "count": 1
-              },
-              {
-                "value": "2017",
-                "count": 1
-              },
-              {
-                "value": "2018",
-                "count": 1
-              },
-              {
-                "value": "2019",
-                "count": 1
-              }
-            ],
-            "fk_reference": null
+            "business_role": "attribute"
           },
-          "Description": {
-            "name": "Description",
-            "type": "TEXT",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 100.0,
-            "unique_count": 5,
-            "sample_values": [
-              "mental health survey for 2014",
-              "mental health survey for 2016",
-              "mental health survey for 2017",
-              "mental health survey for 2018",
-              "mental health survey for 2019"
-            ],
-            "top_values": [
-              {
-                "value": "mental health survey for 2019",
-                "count": 1
-              },
-              {
-                "value": "mental health survey for 2018",
-                "count": 1
-              },
-              {
-                "value": "mental health survey for 2017",
-                "count": 1
-              },
-              {
-                "value": "mental health survey for 2016",
-                "count": 1
-              },
-              {
-                "value": "mental health survey for 2014",
-                "count": 1
-              }
-            ],
-            "fk_reference": null
-          }
-        },
-        "relationships": [
-          {
-            "id": "Answer.SurveyID->Survey.SurveyID",
-            "source": "Answer",
-            "target": "Survey",
-            "source_table": "Answer",
-            "target_table": "Survey",
-            "source_col": "SurveyID",
-            "target_col": "SurveyID",
-            "source_display": "Answer",
-            "target_display": "Survey",
-            "label": "SurveyID",
-            "type": "inferred",
-            "confidence": 0.97,
-            "cardinality": "one_to_many",
-            "inference_method": "intelligent_reference_subset"
-          }
-        ],
-        "quality": {
-          "health_score": 100,
-          "completeness": 100,
-          "freshness": null,
-          "freshness_latest_date": null,
-          "consistency": 100,
-          "orphan_issues": []
-        },
-        "statistics": {
-          "numeric_stats": [
-            {
-              "column": "SurveyID",
-              "mean": 2016.8,
-              "median": 2017.0,
-              "std": 1.92,
-              "variance": 3.7,
-              "min": 2014.0,
-              "max": 2019.0,
-              "q1": 2016.0,
-              "q3": 2018.0,
-              "iqr": 2.0,
-              "skewness": -0.59,
-              "kurtosis": -0.02,
-              "iqr_outlier_count": 0,
-              "zscore_outlier_count": 0
-            }
-          ],
-          "categorical_stats": [
-            {
-              "column": "Description",
-              "cardinality": 5,
-              "top_values": [
-                {
-                  "value": "mental health survey for 2014",
-                  "count": 1
-                },
-                {
-                  "value": "mental health survey for 2016",
-                  "count": 1
-                },
-                {
-                  "value": "mental health survey for 2017",
-                  "count": 1
-                },
-                {
-                  "value": "mental health survey for 2018",
-                  "count": 1
-                },
-                {
-                  "value": "mental health survey for 2019",
-                  "count": 1
-                }
-              ],
-              "entropy": 2.32
-            }
-          ],
-          "date_stats": [],
-          "correlation_pairs": []
-        }
-      },
-      "generated": {
-        "table_description": "Survey contains 5 records across 2 columns (keyed by SurveyID ).",
-        "business_domain": "surveys",
-        "semantic_aliases": [
-          "Survey",
-          "survey",
-          "Surveys"
-        ],
-        "columns": {
-          "SurveyID": {
-            "description": "SurveyID stores INTEGER data representing the SurveyID (e.g. 2014, 2016, 2017).",
+          "Humidity": {
+            "description": "Humidity stores TEXT data representing the Humidity (e.g. High, Normal).",
             "semantic_aliases": [
-              "SurveyID",
-              "surveyid"
+              "Humidity",
+              "humidity"
             ],
             "business_role": "primary_key"
           },
-          "Description": {
-            "description": "Description stores TEXT data representing the Description (e.g. mental health survey for 2014, mental health survey for 2016, mental health survey for 2017).",
+          "Wind": {
+            "description": "Wind stores TEXT data representing the Wind (e.g. Strong, Strong).",
             "semantic_aliases": [
-              "Description",
-              "description"
+              "Wind",
+              "wind"
             ],
-            "business_role": "text_content"
+            "business_role": "attribute"
+          },
+          "Water": {
+            "description": "Water stores TEXT data representing the Water (e.g. Warm, Warm).",
+            "semantic_aliases": [
+              "Water",
+              "water"
+            ],
+            "business_role": "attribute"
+          },
+          "Forecast": {
+            "description": "Forecast stores TEXT data representing the Forecast (e.g. Same, Change).",
+            "semantic_aliases": [
+              "Forecast",
+              "forecast"
+            ],
+            "business_role": "attribute"
+          },
+          "EnjoySport": {
+            "description": "EnjoySport stores TEXT data representing the EnjoySport (e.g. Yes, No).",
+            "semantic_aliases": [
+              "EnjoySport",
+              "enjoysport"
+            ],
+            "business_role": "attribute"
           }
         },
         "common_questions": [
-          "How many records are in Survey?",
-          "What is the distribution of SurveyID in Survey?",
-          "Find details for a specific SurveyID in Survey"
+          "How many records are in ENJOYSPORT?",
+          "What is the distribution of Sky in ENJOYSPORT?",
+          "Find details for a specific Humidity in ENJOYSPORT"
         ],
-        "generated_at": "2026-08-17T05:44:55.293569+00:00",
+        "generated_at": "2026-08-18T06:46:28.476206+00:00",
         "model": "deterministic_fallback",
         "source": "fallback"
       }
     }
   },
   "diagnostics": {
-    "duration_seconds": 2.01,
+    "duration_seconds": 0.03,
     "use_llm": false,
     "errors": {}
   }

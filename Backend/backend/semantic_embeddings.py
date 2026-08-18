@@ -283,15 +283,50 @@ def _save_index_artifacts(
         raise IOError(f"Failed to atomically persist FAISS index artifacts: {str(e)}") from e
 
 
+def invalidate_semantic_cache() -> None:
+    """Invalidates the in-memory FAISS index and vector mapping cache."""
+    global _CACHED_INDEX, _CACHED_MAPPING, _CACHED_META
+    _CACHED_INDEX = None
+    _CACHED_MAPPING = None
+    _CACHED_META = None
+    logger.info("Semantic FAISS in-memory cache invalidated.")
+
+
+def remove_index_artifacts(
+    index_path: str = DEFAULT_INDEX_PATH,
+    mapping_path: str = DEFAULT_MAPPING_PATH,
+    meta_path: str = DEFAULT_META_PATH,
+) -> None:
+    """Deletes FAISS index, mapping, and meta files from disk and invalidates in-memory cache."""
+    invalidate_semantic_cache()
+    for p in [index_path, mapping_path, meta_path]:
+        if os.path.exists(p):
+            try:
+                os.remove(p)
+                logger.info(f"Removed index artifact: {p}")
+            except Exception as e:
+                logger.warning(f"Could not remove index artifact {p}: {e}")
+
+
 def is_index_stale(
     index_path: str = DEFAULT_INDEX_PATH,
     mapping_path: str = DEFAULT_MAPPING_PATH,
     meta_path: str = DEFAULT_META_PATH,
     metadata_path: str = DEFAULT_METADATA_PATH,
+    db_path: str = "database.sqlite",
 ) -> bool:
     """
-    Checks if the FAISS index files exist and match the current metadata_store.json.
+    Checks if the FAISS index files exist and match the current metadata_store.json,
+    and cascadingly verifies that metadata_store.json matches the active database.sqlite.
     """
+    # 1. Cascading check: Is the metadata store itself stale or missing relative to the active database?
+    # Only check active SQLite DB when using the default production store or when an explicit non-default DB path is specified
+    is_default_store = os.path.abspath(metadata_path) == os.path.abspath(DEFAULT_METADATA_PATH)
+    if is_default_store or db_path != "database.sqlite":
+        if os.path.exists(db_path) and semantic_metadata.is_metadata_stale(metadata_path, db_path):
+            return True
+
+    # 2. Check if all index artifacts exist on disk
     if not (os.path.exists(index_path) and os.path.exists(mapping_path) and os.path.exists(meta_path)):
         return True
 
@@ -332,6 +367,7 @@ def load_index(
     mapping_path: str = DEFAULT_MAPPING_PATH,
     meta_path: str = DEFAULT_META_PATH,
     metadata_path: str = DEFAULT_METADATA_PATH,
+    db_path: str = "database.sqlite",
     force: bool = False,
 ) -> Optional[Tuple[faiss.IndexFlatIP, List[Dict[str, Any]], Dict[str, Any]]]:
     """
@@ -340,7 +376,7 @@ def load_index(
     """
     global _CACHED_INDEX, _CACHED_MAPPING, _CACHED_META
 
-    if not force and is_index_stale(index_path, mapping_path, meta_path, metadata_path):
+    if not force and is_index_stale(index_path, mapping_path, meta_path, metadata_path, db_path=db_path):
         return None
 
     try:
@@ -370,25 +406,36 @@ def get_or_build_index(
     index_path: str = DEFAULT_INDEX_PATH,
     mapping_path: str = DEFAULT_MAPPING_PATH,
     meta_path: str = DEFAULT_META_PATH,
+    db_path: str = "database.sqlite",
 ) -> Tuple[faiss.IndexFlatIP, List[Dict[str, Any]], Dict[str, Any]]:
     """
     Returns the active FAISS index and mapping, loading from disk or rebuilding automatically if stale.
+    Performs full cascading check against database.sqlite and metadata_store.json.
     """
     global _CACHED_INDEX, _CACHED_MAPPING, _CACHED_META
 
+    # Cascading synchronization: Ensure metadata_store.json matches active SQLite DB
+    is_default_store = os.path.abspath(metadata_path) == os.path.abspath(DEFAULT_METADATA_PATH)
+    if is_default_store or db_path != "database.sqlite":
+        if os.path.exists(db_path) and semantic_metadata.is_metadata_stale(metadata_path, db_path):
+            logger.info("Metadata is stale relative to database; regenerating metadata before retrieval.")
+            invalidate_semantic_cache()
+            metadata = semantic_metadata.generate_all_metadata(db_path=db_path, metadata_path=metadata_path, use_llm=False)
+            return build_index(metadata, index_path, mapping_path, meta_path)
+
     # Return cached if valid and not stale
-    if _CACHED_INDEX is not None and _CACHED_MAPPING is not None and not is_index_stale(index_path, mapping_path, meta_path, metadata_path):
+    if _CACHED_INDEX is not None and _CACHED_MAPPING is not None and not is_index_stale(index_path, mapping_path, meta_path, metadata_path, db_path=db_path):
         return _CACHED_INDEX, _CACHED_MAPPING, _CACHED_META or {}
 
-    loaded = load_index(index_path, mapping_path, meta_path, metadata_path)
+    loaded = load_index(index_path, mapping_path, meta_path, metadata_path, db_path=db_path)
     if loaded is not None:
         return loaded
 
     # Rebuild from metadata_store.json
     metadata = semantic_metadata.load_metadata(metadata_path)
-    if not metadata:
-        # If metadata_store.json does not exist yet, generate it first
-        metadata = semantic_metadata.generate_all_metadata(metadata_path=metadata_path, use_llm=False)
+    if not metadata or ((is_default_store or db_path != "database.sqlite") and os.path.exists(db_path) and semantic_metadata.is_metadata_stale(metadata_path, db_path)):
+        # If metadata_store.json does not exist yet or is stale, generate it first
+        metadata = semantic_metadata.generate_all_metadata(db_path=db_path, metadata_path=metadata_path, use_llm=False)
 
     return build_index(metadata, index_path, mapping_path, meta_path)
 
@@ -425,6 +472,7 @@ def retrieve(
     index_path: str = DEFAULT_INDEX_PATH,
     mapping_path: str = DEFAULT_MAPPING_PATH,
     meta_path: str = DEFAULT_META_PATH,
+    db_path: str = "database.sqlite",
     threshold: Optional[float] = None,
 ) -> List[Dict[str, Any]]:
     """
@@ -435,7 +483,7 @@ def retrieve(
         return []
 
     try:
-        index, mapping, _ = get_or_build_index(metadata_path, index_path, mapping_path, meta_path)
+        index, mapping, _ = get_or_build_index(metadata_path, index_path, mapping_path, meta_path, db_path=db_path)
     except Exception as e:
         logger.error(f"Failed to obtain FAISS index for retrieval: {e}")
         return []
@@ -511,9 +559,10 @@ def get_index_status(
     index_path: str = DEFAULT_INDEX_PATH,
     mapping_path: str = DEFAULT_MAPPING_PATH,
     meta_path: str = DEFAULT_META_PATH,
+    db_path: str = "database.sqlite",
 ) -> Dict[str, Any]:
     """Returns the current state and diagnostics of the FAISS vector index."""
-    stale = is_index_stale(index_path, mapping_path, meta_path, metadata_path)
+    stale = is_index_stale(index_path, mapping_path, meta_path, metadata_path, db_path=db_path)
     meta_doc = None
     if os.path.exists(meta_path):
         try:

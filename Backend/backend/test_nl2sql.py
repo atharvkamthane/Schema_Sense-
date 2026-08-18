@@ -437,13 +437,23 @@ def test_llm_failure_handling(monkeypatch):
 
 def test_api_nl2sql_endpoint(monkeypatch):
     """Verifies POST /nl2sql/generate endpoint via TestClient."""
-    mock_sql = "SELECT COUNT(*) FROM Survey;"
-    monkeypatch.setattr(llm, "ask_llm", lambda prompt, task="sql": json.dumps({"sql": mock_sql, "reasoning": "Count survey table"}))
+    active_tables = []
+    if os.path.exists("database.sqlite"):
+        import sqlite3
+        conn = sqlite3.connect("database.sqlite")
+        cur = conn.cursor()
+        cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
+        active_tables = [r[0] for r in cur.fetchall()]
+        conn.close()
+    
+    table_name = active_tables[0] if active_tables else "Survey"
+    mock_sql = f"SELECT COUNT(*) FROM {table_name};"
+    monkeypatch.setattr(llm, "ask_llm", lambda prompt, task="sql": json.dumps({"sql": mock_sql, "reasoning": f"Count {table_name} table"}))
 
     client = TestClient(main.app)
 
     # 1. Success request
-    resp = client.post("/nl2sql/generate", json={"question": "How many surveys are there?", "top_k": 5})
+    resp = client.post("/nl2sql/generate", json={"question": f"How many {table_name} records are there?", "top_k": 5})
     assert resp.status_code == 200
     data = resp.json()
     assert data["status"] == "success"
