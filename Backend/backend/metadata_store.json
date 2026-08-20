@@ -1,12 +1,12 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-08-18T06:46:28.477206+00:00",
+  "generated_at": "2026-08-18T08:22:30.272820+00:00",
   "generator": "semantic_metadata.py",
   "model": "deterministic_fallback",
   "database_file": "database.sqlite",
   "database_fingerprint": {
-    "mtime": 1787035588.456596,
-    "size_bytes": 12288,
+    "mtime": 1787041350.2047231,
+    "size_bytes": 8192,
     "table_count": 1,
     "tables": [
       "ENJOYSPORT"
@@ -17,7 +17,7 @@
     "ENJOYSPORT": {
       "observed": {
         "table_name": "ENJOYSPORT",
-        "row_count": 2,
+        "row_count": 4,
         "column_count": 7,
         "columns": {
           "Sky": {
@@ -27,16 +27,18 @@
             "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
-            "uniqueness": 100.0,
+            "uniqueness": 50.0,
             "unique_count": 2,
             "sample_values": [
               "Sunny",
-              "Rainy"
+              "Sunny",
+              "Rainy",
+              "Sunny"
             ],
             "top_values": [
               {
                 "value": "Sunny",
-                "count": 1
+                "count": 3
               },
               {
                 "value": "Rainy",
@@ -52,16 +54,18 @@
             "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
-            "uniqueness": 100.0,
+            "uniqueness": 50.0,
             "unique_count": 2,
             "sample_values": [
               "Warm",
-              "Cold"
+              "Warm",
+              "Cold",
+              "Warm"
             ],
             "top_values": [
               {
                 "value": "Warm",
-                "count": 1
+                "count": 3
               },
               {
                 "value": "Cold",
@@ -74,19 +78,21 @@
             "name": "Humidity",
             "type": "TEXT",
             "nullable": true,
-            "is_pk": true,
+            "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
-            "uniqueness": 100.0,
+            "uniqueness": 50.0,
             "unique_count": 2,
             "sample_values": [
+              "Normal",
               "High",
-              "Normal"
+              "High",
+              "High"
             ],
             "top_values": [
               {
                 "value": "High",
-                "count": 1
+                "count": 3
               },
               {
                 "value": "Normal",
@@ -102,16 +108,18 @@
             "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
-            "uniqueness": 50.0,
+            "uniqueness": 25.0,
             "unique_count": 1,
             "sample_values": [
+              "Strong",
+              "Strong",
               "Strong",
               "Strong"
             ],
             "top_values": [
               {
                 "value": "Strong",
-                "count": 2
+                "count": 4
               }
             ],
             "fk_reference": null
@@ -124,15 +132,21 @@
             "is_fk": false,
             "null_percentage": 0.0,
             "uniqueness": 50.0,
-            "unique_count": 1,
+            "unique_count": 2,
             "sample_values": [
               "Warm",
-              "Warm"
+              "Warm",
+              "Warm",
+              "Cool"
             ],
             "top_values": [
               {
                 "value": "Warm",
-                "count": 2
+                "count": 3
+              },
+              {
+                "value": "Cool",
+                "count": 1
               }
             ],
             "fk_reference": null
@@ -144,44 +158,48 @@
             "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
-            "uniqueness": 100.0,
+            "uniqueness": 50.0,
             "unique_count": 2,
             "sample_values": [
               "Same",
+              "Same",
+              "Change",
               "Change"
             ],
             "top_values": [
               {
                 "value": "Same",
-                "count": 1
+                "count": 2
               },
               {
                 "value": "Change",
-                "count": 1
+                "count": 2
               }
             ],
             "fk_reference": null
           },
           "EnjoySport": {
             "name": "EnjoySport",
-            "type": "TEXT",
+            "type": "INTEGER",
             "nullable": true,
             "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
-            "uniqueness": 100.0,
+            "uniqueness": 50.0,
             "unique_count": 2,
             "sample_values": [
-              "Yes",
-              "No"
+              "1",
+              "1",
+              "0",
+              "1"
             ],
             "top_values": [
               {
-                "value": "Yes",
-                "count": 1
+                "value": "1",
+                "count": 3
               },
               {
-                "value": "No",
+                "value": "0",
                 "count": 1
               }
             ],
@@ -198,7 +216,24 @@
           "orphan_issues": []
         },
         "statistics": {
-          "numeric_stats": [],
+          "numeric_stats": [
+            {
+              "column": "EnjoySport",
+              "mean": 0.75,
+              "median": 1.0,
+              "std": 0.5,
+              "variance": 0.25,
+              "min": 0.0,
+              "max": 1.0,
+              "q1": 0.75,
+              "q3": 1.0,
+              "iqr": 0.25,
+              "skewness": -2.0,
+              "kurtosis": 4.0,
+              "iqr_outlier_count": 1,
+              "zscore_outlier_count": 0
+            }
+          ],
           "categorical_stats": [
             {
               "column": "Sky",
@@ -206,14 +241,14 @@
               "top_values": [
                 {
                   "value": "Sunny",
-                  "count": 1
+                  "count": 3
                 },
                 {
                   "value": "Rainy",
                   "count": 1
                 }
               ],
-              "entropy": 1.0
+              "entropy": 0.81
             },
             {
               "column": "AirTemp",
@@ -221,29 +256,29 @@
               "top_values": [
                 {
                   "value": "Warm",
-                  "count": 1
+                  "count": 3
                 },
                 {
                   "value": "Cold",
                   "count": 1
                 }
               ],
-              "entropy": 1.0
+              "entropy": 0.81
             },
             {
               "column": "Humidity",
               "cardinality": 2,
               "top_values": [
                 {
-                  "value": "Normal",
-                  "count": 1
+                  "value": "High",
+                  "count": 3
                 },
                 {
-                  "value": "High",
+                  "value": "Normal",
                   "count": 1
                 }
               ],
-              "entropy": 1.0
+              "entropy": 0.81
             },
             {
               "column": "Wind",
@@ -251,21 +286,25 @@
               "top_values": [
                 {
                   "value": "Strong",
-                  "count": 2
+                  "count": 4
                 }
               ],
               "entropy": -0.0
             },
             {
               "column": "Water",
-              "cardinality": 1,
+              "cardinality": 2,
               "top_values": [
                 {
                   "value": "Warm",
-                  "count": 2
+                  "count": 3
+                },
+                {
+                  "value": "Cool",
+                  "count": 1
                 }
               ],
-              "entropy": -0.0
+              "entropy": 0.81
             },
             {
               "column": "Forecast",
@@ -273,26 +312,11 @@
               "top_values": [
                 {
                   "value": "Same",
-                  "count": 1
+                  "count": 2
                 },
                 {
                   "value": "Change",
-                  "count": 1
-                }
-              ],
-              "entropy": 1.0
-            },
-            {
-              "column": "EnjoySport",
-              "cardinality": 2,
-              "top_values": [
-                {
-                  "value": "Yes",
-                  "count": 1
-                },
-                {
-                  "value": "No",
-                  "count": 1
+                  "count": 2
                 }
               ],
               "entropy": 1.0
@@ -303,7 +327,7 @@
         }
       },
       "generated": {
-        "table_description": "ENJOYSPORT contains 2 records across 7 columns (keyed by Humidity ).",
+        "table_description": "ENJOYSPORT contains 4 records across 7 columns (without explicit primary key ).",
         "business_domain": "general_analytics",
         "semantic_aliases": [
           "ENJOYSPORT",
@@ -312,7 +336,7 @@
         ],
         "columns": {
           "Sky": {
-            "description": "Sky stores TEXT data representing the Sky (e.g. Sunny, Rainy).",
+            "description": "Sky stores TEXT data representing the Sky (e.g. Sunny, Sunny, Rainy).",
             "semantic_aliases": [
               "Sky",
               "sky"
@@ -320,7 +344,7 @@
             "business_role": "attribute"
           },
           "AirTemp": {
-            "description": "AirTemp stores TEXT data representing the AirTemp (e.g. Warm, Cold).",
+            "description": "AirTemp stores TEXT data representing the AirTemp (e.g. Warm, Warm, Cold).",
             "semantic_aliases": [
               "AirTemp",
               "airtemp"
@@ -328,15 +352,15 @@
             "business_role": "attribute"
           },
           "Humidity": {
-            "description": "Humidity stores TEXT data representing the Humidity (e.g. High, Normal).",
+            "description": "Humidity stores TEXT data representing the Humidity (e.g. Normal, High, High).",
             "semantic_aliases": [
               "Humidity",
               "humidity"
             ],
-            "business_role": "primary_key"
+            "business_role": "attribute"
           },
           "Wind": {
-            "description": "Wind stores TEXT data representing the Wind (e.g. Strong, Strong).",
+            "description": "Wind stores TEXT data representing the Wind (e.g. Strong, Strong, Strong).",
             "semantic_aliases": [
               "Wind",
               "wind"
@@ -344,7 +368,7 @@
             "business_role": "attribute"
           },
           "Water": {
-            "description": "Water stores TEXT data representing the Water (e.g. Warm, Warm).",
+            "description": "Water stores TEXT data representing the Water (e.g. Warm, Warm, Warm).",
             "semantic_aliases": [
               "Water",
               "water"
@@ -352,7 +376,7 @@
             "business_role": "attribute"
           },
           "Forecast": {
-            "description": "Forecast stores TEXT data representing the Forecast (e.g. Same, Change).",
+            "description": "Forecast stores TEXT data representing the Forecast (e.g. Same, Same, Change).",
             "semantic_aliases": [
               "Forecast",
               "forecast"
@@ -360,27 +384,26 @@
             "business_role": "attribute"
           },
           "EnjoySport": {
-            "description": "EnjoySport stores TEXT data representing the EnjoySport (e.g. Yes, No).",
+            "description": "EnjoySport stores INTEGER data representing the EnjoySport (e.g. 1, 1, 0).",
             "semantic_aliases": [
               "EnjoySport",
               "enjoysport"
             ],
-            "business_role": "attribute"
+            "business_role": "measure"
           }
         },
         "common_questions": [
           "How many records are in ENJOYSPORT?",
-          "What is the distribution of Sky in ENJOYSPORT?",
-          "Find details for a specific Humidity in ENJOYSPORT"
+          "What is the distribution of Sky in ENJOYSPORT?"
         ],
-        "generated_at": "2026-08-18T06:46:28.476206+00:00",
+        "generated_at": "2026-08-18T08:22:30.271715+00:00",
         "model": "deterministic_fallback",
         "source": "fallback"
       }
     }
   },
   "diagnostics": {
-    "duration_seconds": 0.03,
+    "duration_seconds": 0.07,
     "use_llm": false,
     "errors": {}
   }
