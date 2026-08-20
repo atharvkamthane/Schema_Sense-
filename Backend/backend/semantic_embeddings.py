@@ -268,10 +268,18 @@ def _save_index_artifacts(
         with open(tmp_meta, "w", encoding="utf-8") as f:
             json.dump(meta_doc, f, indent=2, ensure_ascii=False)
 
-        # Atomic replacements
-        os.replace(tmp_index, index_path)
-        os.replace(tmp_mapping, mapping_path)
-        os.replace(tmp_meta, meta_path)
+        # Atomic replacements with Windows retry
+        for src, dst in [(tmp_index, index_path), (tmp_mapping, mapping_path), (tmp_meta, meta_path)]:
+            replaced = False
+            for _ in range(5):
+                try:
+                    os.replace(src, dst)
+                    replaced = True
+                    break
+                except (PermissionError, OSError):
+                    time.sleep(0.05)
+            if not replaced:
+                os.replace(src, dst)
 
     except Exception as e:
         for p in [tmp_index, tmp_mapping, tmp_meta]:
@@ -301,11 +309,17 @@ def remove_index_artifacts(
     invalidate_semantic_cache()
     for p in [index_path, mapping_path, meta_path]:
         if os.path.exists(p):
-            try:
-                os.remove(p)
-                logger.info(f"Removed index artifact: {p}")
-            except Exception as e:
-                logger.warning(f"Could not remove index artifact {p}: {e}")
+            removed = False
+            for _ in range(5):
+                try:
+                    os.remove(p)
+                    removed = True
+                    logger.info(f"Removed index artifact: {p}")
+                    break
+                except (PermissionError, OSError):
+                    time.sleep(0.05)
+            if not removed:
+                logger.warning(f"Could not remove index artifact {p}")
 
 
 def is_index_stale(
@@ -581,3 +595,62 @@ def get_index_status(
         "column_vector_count": meta_doc.get("column_vector_count", 0) if meta_doc else 0,
         "built_at": meta_doc.get("built_at") if meta_doc else None,
     }
+
+
+def sync_semantic_state(
+    db_path: str = "database.sqlite",
+    metadata_path: str = DEFAULT_METADATA_PATH,
+    index_path: str = DEFAULT_INDEX_PATH,
+    mapping_path: str = DEFAULT_MAPPING_PATH,
+    meta_path: str = DEFAULT_META_PATH,
+    use_llm: bool = False,
+) -> Dict[str, Any]:
+    """
+    Synchronizes the complete semantic layer (metadata + FAISS index + mapping) with the active database.
+    Invalidates in-memory caches, generates fresh metadata, and builds a fresh FAISS vector index.
+    If generation or indexing fails, removes stale index artifacts so stale context is never served.
+    """
+    if not os.path.exists(db_path):
+        remove_index_artifacts(index_path, mapping_path, meta_path)
+        semantic_metadata.remove_metadata_artifacts(metadata_path)
+        return {"status": "skipped", "reason": f"Database file '{db_path}' does not exist."}
+
+    try:
+        invalidate_semantic_cache()
+        semantic_metadata.invalidate_metadata_cache()
+        fresh_meta = semantic_metadata.generate_all_metadata(db_path=db_path, metadata_path=metadata_path, use_llm=use_llm)
+        _, _, idx_meta = build_index(
+            metadata=fresh_meta,
+            index_path=index_path,
+            mapping_path=mapping_path,
+            meta_path=meta_path,
+        )
+        logger.info(f"Semantic state synchronized successfully with {len(fresh_meta.get('tables', {}))} tables.")
+        return {
+            "status": "synchronized",
+            "table_count": len(fresh_meta.get("tables", {})),
+            "tables": list(fresh_meta.get("tables", {}).keys()),
+            "vector_count": idx_meta.get("vector_count", 0),
+        }
+    except Exception as e:
+        logger.error(f"Semantic synchronization failed: {e}")
+        remove_index_artifacts(index_path, mapping_path, meta_path)
+        semantic_metadata.remove_metadata_artifacts(metadata_path)
+        return {
+            "status": "error",
+            "error": str(e),
+        }
+
+
+def clear_semantic_state(
+    metadata_path: str = DEFAULT_METADATA_PATH,
+    index_path: str = DEFAULT_INDEX_PATH,
+    mapping_path: str = DEFAULT_MAPPING_PATH,
+    meta_path: str = DEFAULT_META_PATH,
+) -> None:
+    """
+    Cleanses all semantic caches, metadata files, and FAISS index artifacts from memory and disk.
+    """
+    remove_index_artifacts(index_path, mapping_path, meta_path)
+    semantic_metadata.remove_metadata_artifacts(metadata_path)
+

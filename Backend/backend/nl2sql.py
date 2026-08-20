@@ -320,6 +320,7 @@ def generate_sql(
         query_text=clean_question,
         top_k=top_k,
         metadata_path=metadata_path,
+        db_path=db_path,
     )
 
     # 2. Reconstruct schema context with 1-hop relationship expansion
@@ -423,6 +424,7 @@ def query(
         query_text=clean_question,
         top_k=top_k,
         metadata_path=metadata_path,
+        db_path=db_path,
     )
 
     # 2. Reconstruct schema context with 1-hop relationship expansion

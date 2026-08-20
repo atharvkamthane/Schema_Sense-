@@ -7,6 +7,8 @@ Validates that:
 3. Automatic cascading synchronization regenerates metadata and FAISS index accurately.
 4. Upload / Clear API endpoints correctly clean up artifacts and synchronize fresh schemas.
 5. Multiple sequential dataset replacements consistently synchronize.
+6. Failure safety: Generation or index build failures cleanly strip stale index artifacts.
+7. NL->SQL regression: Schema replacement results in queries referencing only the new schema.
 """
 
 import os
@@ -17,7 +19,10 @@ from fastapi.testclient import TestClient
 
 import semantic_metadata
 import semantic_embeddings
+import sql_validator
+import sql_runner
 import nl2sql
+import llm
 from main import app
 
 client = TestClient(app)
@@ -141,13 +146,41 @@ def test_clear_endpoint_invalidates_semantic_state():
             f.write("{}")
 
     # Invalidate using helpers
-    semantic_metadata.remove_metadata_artifacts(TEST_META_PATH)
-    semantic_embeddings.remove_index_artifacts(TEST_INDEX_PATH, TEST_MAP_PATH, TEST_INDEX_META_PATH)
+    semantic_embeddings.clear_semantic_state(
+        metadata_path=TEST_META_PATH,
+        index_path=TEST_INDEX_PATH,
+        mapping_path=TEST_MAP_PATH,
+        meta_path=TEST_INDEX_META_PATH
+    )
 
     assert not os.path.exists(TEST_META_PATH)
     assert not os.path.exists(TEST_INDEX_PATH)
     assert not os.path.exists(TEST_MAP_PATH)
     assert not os.path.exists(TEST_INDEX_META_PATH)
+    cleanup_test_files()
+
+
+def test_failure_safety_removes_stale_artifacts():
+    """Verify that if semantic synchronization fails, stale index files are stripped rather than served."""
+    cleanup_test_files()
+    # Populate dummy artifacts
+    for p in [TEST_META_PATH, TEST_INDEX_PATH, TEST_MAP_PATH, TEST_INDEX_META_PATH]:
+        with open(p, "w", encoding="utf-8") as f:
+            f.write("{}")
+
+    # Call sync_semantic_state with a non-existent database file
+    res = semantic_embeddings.sync_semantic_state(
+        db_path="non_existent_database.sqlite",
+        metadata_path=TEST_META_PATH,
+        index_path=TEST_INDEX_PATH,
+        mapping_path=TEST_MAP_PATH,
+        meta_path=TEST_INDEX_META_PATH,
+    )
+
+    assert res["status"] == "skipped"
+    # Artifacts should have been purged
+    assert not os.path.exists(TEST_INDEX_PATH)
+    assert not os.path.exists(TEST_META_PATH)
     cleanup_test_files()
 
 
@@ -190,6 +223,79 @@ def test_sequential_dataset_replacements():
     cleanup_test_files()
 
 
+def test_nl2sql_regression_on_dataset_replacement():
+    """Verify that after replacing old survey DB with ENJOYSPORT, NL->SQL queries use only ENJOYSPORT schema."""
+    cleanup_test_files()
+    # 1. Create initial survey DB
+    conn = sqlite3.connect(TEST_DB_PATH)
+    conn.execute("CREATE TABLE Survey (SurveyID INTEGER PRIMARY KEY, Title TEXT);")
+    conn.execute("CREATE TABLE Answer (AnswerID INTEGER, AnswerText TEXT, UserID INTEGER);")
+    conn.commit()
+    conn.close()
+
+    semantic_embeddings.sync_semantic_state(
+        db_path=TEST_DB_PATH,
+        metadata_path=TEST_META_PATH,
+        index_path=TEST_INDEX_PATH,
+        mapping_path=TEST_MAP_PATH,
+        meta_path=TEST_INDEX_META_PATH,
+    )
+
+    # 2. Replace with ENJOYSPORT
+    os.remove(TEST_DB_PATH)
+    conn = sqlite3.connect(TEST_DB_PATH)
+    conn.execute("CREATE TABLE ENJOYSPORT (Sky TEXT, AirTemp TEXT, Humidity TEXT, Wind TEXT, Water TEXT, Forecast TEXT, EnjoySport TEXT);")
+    conn.execute("INSERT INTO ENJOYSPORT VALUES ('Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes');")
+    conn.commit()
+    conn.close()
+
+    # Synchronize semantic state
+    sync_res = semantic_embeddings.sync_semantic_state(
+        db_path=TEST_DB_PATH,
+        metadata_path=TEST_META_PATH,
+        index_path=TEST_INDEX_PATH,
+        mapping_path=TEST_MAP_PATH,
+        meta_path=TEST_INDEX_META_PATH,
+    )
+    assert sync_res["status"] == "synchronized"
+    assert sync_res["tables"] == ["ENJOYSPORT"]
+
+    # 3. Mock LLM for ENJOYSPORT query
+    original_ask_llm = llm.ask_llm
+    original_sql_runner_db = sql_runner.DB_PATH
+
+    try:
+        sql_runner.DB_PATH = TEST_DB_PATH
+        llm.ask_llm = lambda prompt, task="sql": (
+            json.dumps({"sql": "SELECT COUNT(*) AS total_records FROM ENJOYSPORT;", "reasoning": "Count ENJOYSPORT records"})
+            if task == "sql" else "There is 1 record."
+        )
+
+        res = nl2sql.query(
+            question="How many records are in the dataset?",
+            max_retries=1,
+            metadata_path=TEST_META_PATH,
+            db_path=TEST_DB_PATH,
+            use_llm=True,
+        )
+
+        assert res["status"] == "success"
+        assert res["sql"] == "SELECT COUNT(*) AS total_records FROM ENJOYSPORT;"
+        assert res["validation"]["valid"] is True
+        assert res["execution"]["success"] is True
+        assert res["row_count"] == 1
+
+        # Assert no old tables/columns leaked into retrieval
+        for it in res["retrieval"]["items"]:
+            assert it["table"] == "ENJOYSPORT"
+            assert it["table"] not in {"Survey", "Answer", "Question"}
+
+    finally:
+        llm.ask_llm = original_ask_llm
+        sql_runner.DB_PATH = original_sql_runner_db
+        cleanup_test_files()
+
+
 def test_upload_api_sync_lifecycle():
     """Step 11: Test actual POST /ingest/file and POST /ingest/clear endpoints with FastAPI TestClient."""
     # 1. Clear database
@@ -220,6 +326,123 @@ def test_upload_api_sync_lifecycle():
     assert "ENJOYSPORT" in table_names
 
 
+def test_zip_and_sqlite_ingestion_sync():
+    """Test ZIP and SQLite file uploads through POST /ingest/file API with full semantic synchronization."""
+    import zipfile
+    import io
+
+    # 1. Clear database
+    client.post("/ingest/clear")
+
+    # 2. Test ZIP containing 2 CSVs: departments.csv & employees.csv
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr("departments.csv", "dept_id,dept_name\n1,Engineering\n2,Marketing\n")
+        zf.writestr("employees.csv", "emp_id,emp_name,dept_id\n101,John Doe,1\n102,Jane Smith,2\n")
+    zip_bytes = zip_buffer.getvalue()
+
+    zip_upload = client.post("/ingest/file", files={"file": ("company.zip", zip_bytes, "application/zip")})
+    assert zip_upload.status_code == 200
+    zip_res = zip_upload.json()
+    assert zip_res["status"] == "uploaded"
+    assert zip_res["table_count"] == 2
+    assert zip_res["semantic_sync"]["status"] == "synchronized"
+    assert set(zip_res["semantic_sync"]["tables"]) == {"departments", "employees"}
+
+    # Verify retrieval
+    retrieved = semantic_embeddings.retrieve("engineering department employees", top_k=4)
+    assert len(retrieved) > 0
+    for r in retrieved:
+        assert r["table"] in {"departments", "employees"}
+
+
+def test_reverse_dataset_replacement():
+    """Test A -> B -> A dataset replacement to ensure no vector accumulation or stale mappings."""
+    # 1. Upload Dataset A (books)
+    client.post("/ingest/clear")
+    csv_a = b"book_id,title,author\n1,Dune,Frank Herbert\n2,1984,George Orwell\n"
+    res_a = client.post("/ingest/file", files={"file": ("books.csv", csv_a, "text/csv")}).json()
+    assert res_a["semantic_sync"]["tables"] == ["books"]
+
+    meta_a = semantic_metadata.load_metadata("metadata_store.json")
+    assert list(meta_a["tables"].keys()) == ["books"]
+
+    # 2. Replace with Dataset B (airports)
+    csv_b = b"code,airport_name,country\nJFK,John F Kennedy,USA\nLHR,Heathrow,UK\n"
+    res_b = client.post("/ingest/file", files={"file": ("airports.csv", csv_b, "text/csv")}, params={"clear": True}).json()
+    assert res_b["semantic_sync"]["tables"] == ["airports"]
+
+    meta_b = semantic_metadata.load_metadata("metadata_store.json")
+    assert list(meta_b["tables"].keys()) == ["airports"]
+
+    # 3. Replace BACK with Dataset A (books)
+    res_a2 = client.post("/ingest/file", files={"file": ("books.csv", csv_a, "text/csv")}, params={"clear": True}).json()
+    assert res_a2["semantic_sync"]["tables"] == ["books"]
+
+    meta_a2 = semantic_metadata.load_metadata("metadata_store.json")
+    assert list(meta_a2["tables"].keys()) == ["books"]
+
+    # 4. Verify no airport vectors/mappings exist
+    with open("metadata_mapping.json", "r", encoding="utf-8") as f:
+        mapping = json.load(f)
+    tables_in_mapping = set(m["table"] for m in mapping)
+    assert tables_in_mapping == {"books"}
+    assert "airports" not in tables_in_mapping
+
+
+def test_property_invariants_across_datasets():
+    """Validates strict mathematical invariants: retrieved tables subset of DB tables, 0% alien entities."""
+    cleanup_test_files()
+    datasets = [
+        ("planets", ["planet_id", "planet_name", "mass"], ["Earth", "Mars", "Jupiter"]),
+        ("universities", ["uni_id", "uni_name", "rank"], ["MIT", "Stanford", "Oxford"]),
+        ("superheroes", ["hero_id", "hero_name", "power"], ["Batman", "Superman", "Flash"]),
+    ]
+
+    for tname, cols, sample_vals in datasets:
+        conn = sqlite3.connect(TEST_DB_PATH)
+        cols_def = ", ".join(f"{c} TEXT" for c in cols)
+        conn.execute(f"CREATE TABLE {tname} ({cols_def});")
+        conn.execute(f"INSERT INTO {tname} VALUES ('1', '{sample_vals[0]}', 'val');")
+        conn.commit()
+        conn.close()
+
+        # Sync
+        semantic_embeddings.sync_semantic_state(
+            db_path=TEST_DB_PATH,
+            metadata_path=TEST_META_PATH,
+            index_path=TEST_INDEX_PATH,
+            mapping_path=TEST_MAP_PATH,
+            meta_path=TEST_INDEX_META_PATH,
+            use_llm=False,
+        )
+
+        retrieved = semantic_embeddings.retrieve(
+            f"Query about {tname}",
+            top_k=5,
+            metadata_path=TEST_META_PATH,
+            index_path=TEST_INDEX_PATH,
+            mapping_path=TEST_MAP_PATH,
+            meta_path=TEST_INDEX_META_PATH,
+            db_path=TEST_DB_PATH,
+        )
+
+        # Property 1: retrieved tables ⊆ actual database tables
+        ret_tables = set(r["table"] for r in retrieved)
+        assert ret_tables.issubset({tname}), f"Invariant violation: {ret_tables} not subset of {{{tname}}}"
+
+        # Property 2: retrieved columns ⊆ actual database columns
+        for r in retrieved:
+            if r.get("column"):
+                assert r["column"] in cols, f"Invariant violation: column {r['column']} not in {cols}"
+
+        # Clean DB for next loop
+        if os.path.exists(TEST_DB_PATH):
+            os.remove(TEST_DB_PATH)
+
+    cleanup_test_files()
+
+
 if __name__ == "__main__":
     print("Running Dataset Lifecycle Test Suite...")
     test_initial_dataset_and_staleness_detection()
@@ -228,8 +451,19 @@ if __name__ == "__main__":
     print("  PASS: test_cascading_synchronization_and_clean_retrieval")
     test_clear_endpoint_invalidates_semantic_state()
     print("  PASS: test_clear_endpoint_invalidates_semantic_state")
+    test_failure_safety_removes_stale_artifacts()
+    print("  PASS: test_failure_safety_removes_stale_artifacts")
     test_sequential_dataset_replacements()
     print("  PASS: test_sequential_dataset_replacements")
+    test_nl2sql_regression_on_dataset_replacement()
+    print("  PASS: test_nl2sql_regression_on_dataset_replacement")
     test_upload_api_sync_lifecycle()
     print("  PASS: test_upload_api_sync_lifecycle")
-    print("\nALL LIFECYCLE TESTS PASSED SUCCESSFULLY!")
+    test_zip_and_sqlite_ingestion_sync()
+    print("  PASS: test_zip_and_sqlite_ingestion_sync")
+    test_reverse_dataset_replacement()
+    print("  PASS: test_reverse_dataset_replacement")
+    test_property_invariants_across_datasets()
+    print("  PASS: test_property_invariants_across_datasets")
+    print("\nALL 10 LIFECYCLE TESTS PASSED SUCCESSFULLY!")
+

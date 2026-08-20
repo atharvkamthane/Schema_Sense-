@@ -638,8 +638,17 @@ def generate_all_metadata(
         with open(tmp_path, "w", encoding="utf-8") as f:
             json.dump(metadata_document, f, indent=2, ensure_ascii=False)
         
-        # Atomic replacement
-        os.replace(tmp_path, metadata_path)
+        # Atomic replacement with Windows retry
+        replaced = False
+        for _ in range(5):
+            try:
+                os.replace(tmp_path, metadata_path)
+                replaced = True
+                break
+            except (PermissionError, OSError):
+                time.sleep(0.05)
+        if not replaced:
+            os.replace(tmp_path, metadata_path)
     except Exception as e:
         if os.path.exists(tmp_path):
             try:

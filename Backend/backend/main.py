@@ -844,8 +844,7 @@ def clear_database():
             
     # Invalidate and wipe semantic metadata & FAISS index
     try:
-        semantic_metadata.remove_metadata_artifacts()
-        semantic_embeddings.remove_index_artifacts()
+        semantic_embeddings.clear_semantic_state()
     except Exception as e:
         logger.warning(f"Failed to clear semantic artifacts: {e}")
 
@@ -863,8 +862,7 @@ async def ingest_file(file: UploadFile = File(...), clear: bool = False):
             except Exception:
                 pass
         try:
-            semantic_metadata.remove_metadata_artifacts()
-            semantic_embeddings.remove_index_artifacts()
+            semantic_embeddings.clear_semantic_state()
         except Exception:
             pass
             
@@ -933,25 +931,7 @@ def _sync_semantic_layer_after_ingest(ingest_success: bool) -> Dict[str, Any]:
     """Helper to safely synchronize metadata_store.json and FAISS index after database modification."""
     if not ingest_success or not os.path.exists("database.sqlite"):
         return {"status": "skipped", "reason": "Ingest did not succeed or database does not exist."}
-
-    try:
-        semantic_embeddings.invalidate_semantic_cache()
-        fresh_meta = semantic_metadata.generate_all_metadata(use_llm=False)
-        _, _, idx_meta = semantic_embeddings.build_index(fresh_meta)
-        logger.info(f"Semantic layer synchronized successfully with {len(fresh_meta.get('tables', {}))} tables.")
-        return {
-            "status": "synchronized",
-            "table_count": len(fresh_meta.get("tables", {})),
-            "tables": list(fresh_meta.get("tables", {}).keys()),
-            "vector_count": idx_meta.get("vector_count", 0),
-        }
-    except Exception as e:
-        logger.error(f"Semantic synchronization failed after ingest: {e}")
-        semantic_embeddings.remove_index_artifacts()
-        return {
-            "status": "error",
-            "error": str(e),
-        }
+    return semantic_embeddings.sync_semantic_state(db_path="database.sqlite", use_llm=False)
 
 
 def _fmt_num(value: Any, digits: int = 2) -> str:

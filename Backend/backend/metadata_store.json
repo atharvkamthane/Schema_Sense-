@@ -1,205 +1,95 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-08-18T08:22:30.272820+00:00",
+  "generated_at": "2026-08-20T05:01:50.273978+00:00",
   "generator": "semantic_metadata.py",
   "model": "deterministic_fallback",
   "database_file": "database.sqlite",
   "database_fingerprint": {
-    "mtime": 1787041350.2047231,
-    "size_bytes": 8192,
+    "mtime": 1787202110.2539785,
+    "size_bytes": 12288,
     "table_count": 1,
     "tables": [
-      "ENJOYSPORT"
+      "students"
     ]
   },
   "table_count": 1,
   "tables": {
-    "ENJOYSPORT": {
+    "students": {
       "observed": {
-        "table_name": "ENJOYSPORT",
-        "row_count": 4,
-        "column_count": 7,
+        "table_name": "students",
+        "row_count": 2,
+        "column_count": 3,
         "columns": {
-          "Sky": {
-            "name": "Sky",
-            "type": "TEXT",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 50.0,
-            "unique_count": 2,
-            "sample_values": [
-              "Sunny",
-              "Sunny",
-              "Rainy",
-              "Sunny"
-            ],
-            "top_values": [
-              {
-                "value": "Sunny",
-                "count": 3
-              },
-              {
-                "value": "Rainy",
-                "count": 1
-              }
-            ],
-            "fk_reference": null
-          },
-          "AirTemp": {
-            "name": "AirTemp",
-            "type": "TEXT",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 50.0,
-            "unique_count": 2,
-            "sample_values": [
-              "Warm",
-              "Warm",
-              "Cold",
-              "Warm"
-            ],
-            "top_values": [
-              {
-                "value": "Warm",
-                "count": 3
-              },
-              {
-                "value": "Cold",
-                "count": 1
-              }
-            ],
-            "fk_reference": null
-          },
-          "Humidity": {
-            "name": "Humidity",
-            "type": "TEXT",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 50.0,
-            "unique_count": 2,
-            "sample_values": [
-              "Normal",
-              "High",
-              "High",
-              "High"
-            ],
-            "top_values": [
-              {
-                "value": "High",
-                "count": 3
-              },
-              {
-                "value": "Normal",
-                "count": 1
-              }
-            ],
-            "fk_reference": null
-          },
-          "Wind": {
-            "name": "Wind",
-            "type": "TEXT",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 25.0,
-            "unique_count": 1,
-            "sample_values": [
-              "Strong",
-              "Strong",
-              "Strong",
-              "Strong"
-            ],
-            "top_values": [
-              {
-                "value": "Strong",
-                "count": 4
-              }
-            ],
-            "fk_reference": null
-          },
-          "Water": {
-            "name": "Water",
-            "type": "TEXT",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 50.0,
-            "unique_count": 2,
-            "sample_values": [
-              "Warm",
-              "Warm",
-              "Warm",
-              "Cool"
-            ],
-            "top_values": [
-              {
-                "value": "Warm",
-                "count": 3
-              },
-              {
-                "value": "Cool",
-                "count": 1
-              }
-            ],
-            "fk_reference": null
-          },
-          "Forecast": {
-            "name": "Forecast",
-            "type": "TEXT",
-            "nullable": true,
-            "is_pk": false,
-            "is_fk": false,
-            "null_percentage": 0.0,
-            "uniqueness": 50.0,
-            "unique_count": 2,
-            "sample_values": [
-              "Same",
-              "Same",
-              "Change",
-              "Change"
-            ],
-            "top_values": [
-              {
-                "value": "Same",
-                "count": 2
-              },
-              {
-                "value": "Change",
-                "count": 2
-              }
-            ],
-            "fk_reference": null
-          },
-          "EnjoySport": {
-            "name": "EnjoySport",
+          "student_id": {
+            "name": "student_id",
             "type": "INTEGER",
             "nullable": true,
-            "is_pk": false,
+            "is_pk": true,
             "is_fk": false,
             "null_percentage": 0.0,
-            "uniqueness": 50.0,
+            "uniqueness": 100.0,
             "unique_count": 2,
             "sample_values": [
-              "1",
-              "1",
-              "0",
-              "1"
+              "101",
+              "102"
             ],
             "top_values": [
               {
-                "value": "1",
-                "count": 3
+                "value": "101",
+                "count": 1
               },
               {
-                "value": "0",
+                "value": "102",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "first_name": {
+            "name": "first_name",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 2,
+            "sample_values": [
+              "Maya",
+              "Liam"
+            ],
+            "top_values": [
+              {
+                "value": "Maya",
+                "count": 1
+              },
+              {
+                "value": "Liam",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "gpa": {
+            "name": "gpa",
+            "type": "FLOAT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 2,
+            "sample_values": [
+              "3.9",
+              "3.8"
+            ],
+            "top_values": [
+              {
+                "value": "3.9",
+                "count": 1
+              },
+              {
+                "value": "3.8",
                 "count": 1
               }
             ],
@@ -218,192 +108,110 @@
         "statistics": {
           "numeric_stats": [
             {
-              "column": "EnjoySport",
-              "mean": 0.75,
-              "median": 1.0,
-              "std": 0.5,
-              "variance": 0.25,
-              "min": 0.0,
-              "max": 1.0,
-              "q1": 0.75,
-              "q3": 1.0,
-              "iqr": 0.25,
-              "skewness": -2.0,
-              "kurtosis": 4.0,
-              "iqr_outlier_count": 1,
+              "column": "student_id",
+              "mean": 101.5,
+              "median": 101.5,
+              "std": 0.71,
+              "variance": 0.5,
+              "min": 101.0,
+              "max": 102.0,
+              "q1": 101.25,
+              "q3": 101.75,
+              "iqr": 0.5,
+              "skewness": null,
+              "kurtosis": null,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "gpa",
+              "mean": 3.85,
+              "median": 3.85,
+              "std": 0.07,
+              "variance": 0.01,
+              "min": 3.8,
+              "max": 3.9,
+              "q1": 3.82,
+              "q3": 3.88,
+              "iqr": 0.05,
+              "skewness": null,
+              "kurtosis": null,
+              "iqr_outlier_count": 0,
               "zscore_outlier_count": 0
             }
           ],
           "categorical_stats": [
             {
-              "column": "Sky",
+              "column": "first_name",
               "cardinality": 2,
               "top_values": [
                 {
-                  "value": "Sunny",
-                  "count": 3
-                },
-                {
-                  "value": "Rainy",
+                  "value": "Maya",
                   "count": 1
-                }
-              ],
-              "entropy": 0.81
-            },
-            {
-              "column": "AirTemp",
-              "cardinality": 2,
-              "top_values": [
-                {
-                  "value": "Warm",
-                  "count": 3
                 },
                 {
-                  "value": "Cold",
+                  "value": "Liam",
                   "count": 1
-                }
-              ],
-              "entropy": 0.81
-            },
-            {
-              "column": "Humidity",
-              "cardinality": 2,
-              "top_values": [
-                {
-                  "value": "High",
-                  "count": 3
-                },
-                {
-                  "value": "Normal",
-                  "count": 1
-                }
-              ],
-              "entropy": 0.81
-            },
-            {
-              "column": "Wind",
-              "cardinality": 1,
-              "top_values": [
-                {
-                  "value": "Strong",
-                  "count": 4
-                }
-              ],
-              "entropy": -0.0
-            },
-            {
-              "column": "Water",
-              "cardinality": 2,
-              "top_values": [
-                {
-                  "value": "Warm",
-                  "count": 3
-                },
-                {
-                  "value": "Cool",
-                  "count": 1
-                }
-              ],
-              "entropy": 0.81
-            },
-            {
-              "column": "Forecast",
-              "cardinality": 2,
-              "top_values": [
-                {
-                  "value": "Same",
-                  "count": 2
-                },
-                {
-                  "value": "Change",
-                  "count": 2
                 }
               ],
               "entropy": 1.0
             }
           ],
           "date_stats": [],
-          "correlation_pairs": []
+          "correlation_pairs": [
+            {
+              "col_a": "student_id",
+              "col_b": "gpa",
+              "r": -1.0
+            }
+          ]
         }
       },
       "generated": {
-        "table_description": "ENJOYSPORT contains 4 records across 7 columns (without explicit primary key ).",
+        "table_description": "students contains 2 records across 3 columns (keyed by student_id ).",
         "business_domain": "general_analytics",
         "semantic_aliases": [
-          "ENJOYSPORT",
-          "enjoysport",
-          "ENJOYSPORTs"
+          "students",
+          "student"
         ],
         "columns": {
-          "Sky": {
-            "description": "Sky stores TEXT data representing the Sky (e.g. Sunny, Sunny, Rainy).",
+          "student_id": {
+            "description": "student_id stores INTEGER data representing the student id (e.g. 101, 102).",
             "semantic_aliases": [
-              "Sky",
-              "sky"
+              "student id",
+              "student_id"
             ],
-            "business_role": "attribute"
+            "business_role": "primary_key"
           },
-          "AirTemp": {
-            "description": "AirTemp stores TEXT data representing the AirTemp (e.g. Warm, Warm, Cold).",
+          "first_name": {
+            "description": "first_name stores TEXT data representing the first name (e.g. Maya, Liam).",
             "semantic_aliases": [
-              "AirTemp",
-              "airtemp"
+              "first name",
+              "first_name"
             ],
-            "business_role": "attribute"
+            "business_role": "dimension"
           },
-          "Humidity": {
-            "description": "Humidity stores TEXT data representing the Humidity (e.g. Normal, High, High).",
+          "gpa": {
+            "description": "gpa stores FLOAT data representing the gpa (e.g. 3.9, 3.8).",
             "semantic_aliases": [
-              "Humidity",
-              "humidity"
-            ],
-            "business_role": "attribute"
-          },
-          "Wind": {
-            "description": "Wind stores TEXT data representing the Wind (e.g. Strong, Strong, Strong).",
-            "semantic_aliases": [
-              "Wind",
-              "wind"
-            ],
-            "business_role": "attribute"
-          },
-          "Water": {
-            "description": "Water stores TEXT data representing the Water (e.g. Warm, Warm, Warm).",
-            "semantic_aliases": [
-              "Water",
-              "water"
-            ],
-            "business_role": "attribute"
-          },
-          "Forecast": {
-            "description": "Forecast stores TEXT data representing the Forecast (e.g. Same, Same, Change).",
-            "semantic_aliases": [
-              "Forecast",
-              "forecast"
-            ],
-            "business_role": "attribute"
-          },
-          "EnjoySport": {
-            "description": "EnjoySport stores INTEGER data representing the EnjoySport (e.g. 1, 1, 0).",
-            "semantic_aliases": [
-              "EnjoySport",
-              "enjoysport"
+              "gpa"
             ],
             "business_role": "measure"
           }
         },
         "common_questions": [
-          "How many records are in ENJOYSPORT?",
-          "What is the distribution of Sky in ENJOYSPORT?"
+          "How many records are in students?",
+          "What is the distribution of student_id in students?",
+          "Find details for a specific student_id in students"
         ],
-        "generated_at": "2026-08-18T08:22:30.271715+00:00",
+        "generated_at": "2026-08-20T05:01:50.272978+00:00",
         "model": "deterministic_fallback",
         "source": "fallback"
       }
     }
   },
   "diagnostics": {
-    "duration_seconds": 0.07,
+    "duration_seconds": 0.03,
     "use_llm": false,
     "errors": {}
   }
