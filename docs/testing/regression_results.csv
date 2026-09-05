@@ -1,0 +1,11 @@
+Test Suite,Tests,Passed,Failed,Status,Notes
+Semantic Metadata Extraction,9,9,0,PASSED,Profiles tables nulls PKs FKs; deterministic fallback; LLM JSON parsing & resilience; atomic file IO; DB staleness
+FAISS Vector Embeddings,7,7,0,PASSED,all-MiniLM-L6-v2 384-d dense embeddings; IndexFlatIP cosine similarity; ranking; edge cases; atomic index rebuild
+NL2SQL Context Retrieval,10,10,0,PASSED,Top-k semantic retrieval; schema expansion; prompt formulation; response cleaning; aggregation/join prompts; API endpoint
+SQLGlot AST Safety Validation,16,16,0,PASSED,Valid analytical queries; table/column whitelisting; blocks DROP DELETE UPDATE INSERT ALTER CREATE PRAGMA VACUUM; comment obfuscation
+Validated Execution & Self-Correction,7,7,0,PASSED,Read-only SQLite sandbox; bounded self-correction loop (max 2 retries); pre-exec & runtime repair; query API endpoint
+Dataset Lifecycle & Synchronization,10,10,0,PASSED,In-place dataset replacement; cascading sync; clear endpoint; failure safety; sequential replacements; invariant checks
+Cross-Dataset Independence,5,5,0,PASSED,ENJOYSPORT E-Commerce HR schemas; zero cross-dataset leakage; sequential replacement; security attack rejection
+Multi-Dataset Ground Truth Evaluation,17,17,0,PASSED,Ground truth verification across 4 distinct domains (E-Commerce HR Movies Weather) plus fault injection repair
+Full Dataset Lifecycle & Invariants,8,8,0,PASSED,Phases B through K lifecycle verification; staleness matrix; retry limits; API endpoints; native FAISS environment
+Live HTTP End-to-End Switching Flow,6,6,0,PASSED,Live sequence: Books -> Airports -> Planets -> Books -> Clear -> Students via HTTP without server restart
