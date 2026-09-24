@@ -32,10 +32,12 @@ Stack: **React + Vite frontend**, **FastAPI backend**, **SQLite** working databa
 |------|----------------|
 | **Ingest** | Upload `.csv`, `.sqlite` / `.db`, or ZIP archives → loaded into `database.sqlite` |
 | **Schema / dictionary** | Tables, columns, PK/FK heuristics, business + developer summaries |
+| **Semantic Metadata** | Statistical metrics, business domains, column roles, and semantic aliases in `metadata_store.json` |
+| **Vector Retrieval** | Dense embeddings (`all-MiniLM-L6-v2`) and FAISS `IndexFlatIP` vector index for semantic context search |
 | **Relationships** | Explicit FKs + inferred links; Mermaid + graph payloads for UI |
 | **Quality** | Completeness, freshness, consistency, orphan checks, health scores |
 | **Analysis** | Per-table statistical / AI-assisted analysis |
-| **NL → SQL chat** | Local LLM generates SQL, runner executes read-only queries, explains results |
+| **Semantic NL-to-SQL** | Grounded schema retrieval via FAISS (`all-MiniLM-L6-v2`), Qwen3.5:4b generation, SQLGlot AST validation, and bounded self-healing SQLite execution |
 | **Visualization** | 2D ER diagram + 3D force-graph (`react-force-graph-3d` / Three.js) |
 | **Reports** | PDF export (jsPDF) with model metadata |
 | **Auth** | Optional Clerk JWT; local DEV mode if no publishable key is set |
@@ -149,15 +151,21 @@ Schema_Sense-/
     │   ├── quality.py        ← quality scoring
     │   ├── llm.py            ← Ollama client, prompts, health_check
     │   ├── new_llm_funcs.py  ← table analysis prompts
+    │   ├── nl2sql.py         ← semantic retrieval, prompt builder, self-correction
+    │   ├── semantic_metadata.py ← profiling, domains, column roles, metadata_store.json
+    │   ├── semantic_embeddings.py ← sentence-transformers + FAISS vector index
+    │   ├── sql_validator.py  ← SQLGlot AST validation, syntax & security checks
     │   ├── sql_runner.py     ← read-only SQL guard + execute
     │   ├── analysis.py       ← table analysis helpers
     │   ├── auth.py           ← Clerk JWT or local mock user
     │   ├── requirements.txt
     │   ├── .env              ← OLLAMA_MODEL, etc.
     │   ├── database.sqlite   ← working DB (created/updated by ingest)
+    │   ├── metadata_store.json ← structured semantic schema metadata
+    │   ├── metadata_index.faiss ← FAISS vector index for schema embeddings
     │   ├── uploads/          ← saved upload files
     │   ├── .venv/            ← Python virtualenv (local)
-    │   └── test_*.py         ← API / ingest / schema tests
+    │   └── test_*.py         ← regression & unit test suites
     │
     ├── 3D_diagram/           ← standalone/experimental 3D viz app (Vite+TS)
     ├── self-hosted-ai-starter-kit/  ← optional n8n / Docker AI kit (reference)
@@ -178,6 +186,10 @@ Schema_Sense-/
 | `intelligent_schema.py` | Heuristic PK/FK, null/uniqueness profiling |
 | `quality.py` | Per-table / global quality metrics |
 | `llm.py` | Prompts, `ask_llm` / `ask_llm_stream`, SQL/JSON cleaners |
+| `nl2sql.py` | Grounded context retrieval, prompt construction, SQLGlot AST validation & bounded self-correction loop |
+| `semantic_metadata.py` | Statistical profiling, column roles, domain tagging, and metadata persistence |
+| `semantic_embeddings.py` | Dense embeddings via `all-MiniLM-L6-v2` & FAISS `IndexFlatIP` vector index lifecycle |
+| `sql_validator.py` | SQLGlot AST parsing, read-only SQL enforcement, dialect translation & security checks |
 | `sql_runner.py` | Validate & run SELECT-style queries safely |
 | `analysis.py` | Numeric/categorical/date stats for analysis endpoints |
 | `auth.py` | Optional Clerk issuer validation |
@@ -332,6 +344,8 @@ npm run preview
 | `/visualization` | 2D/3D graph | `/relationships`, `/graph-data` |
 | `/quality` | Quality | `GET /quality` |
 | `/analysis` | Analysis | `GET /analysis/{table}` |
+| `/query` | Semantic NL-to-SQL | Grounded query engine with SQLGlot AST validation & self-healing execution |
+| `/chat` | Conversational Chat | Interactive conversational Q&A assistant |
 
 Protected routes wrap `MainLayout` (sidebar). If `VITE_CLERK_PUBLISHABLE_KEY` is missing, protection is skipped for local development.
 
@@ -347,6 +361,7 @@ Protected routes wrap `MainLayout` (sidebar). If `VITE_CLERK_PUBLISHABLE_KEY` is
 | `getTableAnalysis` | `GET /analysis/{table}` |
 | `getSummaryNarrative` | `POST /api/generate-summary` |
 | `getGraphData` | `POST /graph-data` |
+| `nl2sqlQuery` / `postNL2SQLQuery` | `POST /nl2sql/query` |
 | `postQuery` / `postQueryPayload` | `POST /query` |
 | `postColumnChat` | `POST /column-chat` |
 | `streamColumnChat` | `POST /query/stream` (SSE) |
@@ -391,10 +406,19 @@ Interactive docs (FastAPI): http://127.0.0.1:8000/docs
 | `POST` | `/ingest/file` | Multipart upload (CSV / SQLite / ZIP) |
 | `POST` | `/ingest/clear` | Clear working database |
 
+### Semantic Metadata & Vector Index
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/semantic/status` | Semantic metadata state, database fingerprint, and FAISS index status |
+| `POST` | `/semantic/generate` | Generate/regenerate structured semantic metadata and rebuild FAISS index |
+
 ### Query / LLM
 
 | Method | Path | Purpose |
 |--------|------|---------|
+| `POST` | `/nl2sql/query` | Grounded NL-to-SQL execution with SQLGlot AST validation & bounded self-correction |
+| `POST` | `/nl2sql/generate` | Context-aware NL-to-SQL generation (retrieval + prompt generation only) |
 | `POST` | `/query` | NL → SQL → execute → explain |
 | `POST` | `/chat` | Chat-oriented query path |
 | `POST` | `/query/stream` | SSE streaming (SQL or column chat modes) |
@@ -508,9 +532,23 @@ Axios attaches Clerk tokens when a token getter is registered (`setTokenGetter` 
 From `Backend/backend` (with venv active):
 
 ```bash
+# 1. Ingest, Schema, and API contracts
 python test_csv_ingest.py
 python test_schema.py
 python test_api_contracts.py
+
+# 2. SQLGlot AST validation & security checks
+python test_sql_validator.py
+
+# 3. Semantic metadata & FAISS vector indexing
+python test_semantic_metadata.py
+python test_semantic_embeddings.py
+python test_dataset_lifecycle.py
+python test_dataset_independence.py
+
+# 4. Grounded NL-to-SQL generation & bounded self-healing execution
+python test_nl2sql.py
+python test_nl2sql_execution.py
 ```
 
 Repo root also has `smoke-test.js` / `smoke-test.cjs` for lightweight checks.
@@ -550,7 +588,7 @@ Manual checklist:
 | Auth UI | Clerk React (+ themes) |
 | API | FastAPI, Uvicorn, Pydantic |
 | Data | SQLite, Pandas, SQLAlchemy (deps), PyMySQL / psycopg2 available |
-| ML / NLP deps | sentence-transformers, umap-learn (for advanced profiling paths) |
+| ML / NLP & Validation | sentence-transformers (`all-MiniLM-L6-v2`), FAISS-cpu (`IndexFlatIP`), SQLGlot (AST parsing & safety), NumPy |
 | LLM | Ollama + `qwen3.5:4b` (configurable) |
 | Reports | jsPDF / reportlab |
 
