@@ -1,95 +1,680 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-08-20T05:01:50.273978+00:00",
+  "generated_at": "2026-09-24T04:20:13.185447+00:00",
   "generator": "semantic_metadata.py",
   "model": "deterministic_fallback",
   "database_file": "database.sqlite",
   "database_fingerprint": {
-    "mtime": 1787202110.2539785,
-    "size_bytes": 12288,
-    "table_count": 1,
+    "mtime": 1790222348.4342918,
+    "size_bytes": 188416,
+    "table_count": 5,
     "tables": [
-      "students"
+      "Employees",
+      "categories",
+      "customers",
+      "order_details",
+      "products"
     ]
   },
-  "table_count": 1,
+  "table_count": 5,
   "tables": {
-    "students": {
+    "Employees": {
       "observed": {
-        "table_name": "students",
-        "row_count": 2,
-        "column_count": 3,
+        "table_name": "Employees",
+        "row_count": 9,
+        "column_count": 18,
         "columns": {
-          "student_id": {
-            "name": "student_id",
+          "EmployeeID": {
+            "name": "EmployeeID",
             "type": "INTEGER",
             "nullable": true,
             "is_pk": true,
             "is_fk": false,
             "null_percentage": 0.0,
             "uniqueness": 100.0,
-            "unique_count": 2,
+            "unique_count": 9,
             "sample_values": [
-              "101",
-              "102"
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
             ],
             "top_values": [
               {
-                "value": "101",
+                "value": "1",
                 "count": 1
               },
               {
-                "value": "102",
+                "value": "2",
+                "count": 1
+              },
+              {
+                "value": "3",
+                "count": 1
+              },
+              {
+                "value": "4",
+                "count": 1
+              },
+              {
+                "value": "5",
                 "count": 1
               }
             ],
             "fk_reference": null
           },
-          "first_name": {
-            "name": "first_name",
+          "LastName": {
+            "name": "LastName",
             "type": "TEXT",
             "nullable": true,
             "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
             "uniqueness": 100.0,
-            "unique_count": 2,
+            "unique_count": 9,
             "sample_values": [
-              "Maya",
-              "Liam"
+              "Davolio",
+              "Fuller",
+              "Leverling",
+              "Peacock",
+              "Buchanan"
             ],
             "top_values": [
               {
-                "value": "Maya",
+                "value": "Suyama",
                 "count": 1
               },
               {
-                "value": "Liam",
+                "value": "Peacock",
+                "count": 1
+              },
+              {
+                "value": "Leverling",
+                "count": 1
+              },
+              {
+                "value": "King",
+                "count": 1
+              },
+              {
+                "value": "Fuller",
                 "count": 1
               }
             ],
             "fk_reference": null
           },
-          "gpa": {
-            "name": "gpa",
-            "type": "FLOAT",
+          "FirstName": {
+            "name": "FirstName",
+            "type": "TEXT",
             "nullable": true,
             "is_pk": false,
             "is_fk": false,
             "null_percentage": 0.0,
             "uniqueness": 100.0,
-            "unique_count": 2,
+            "unique_count": 9,
             "sample_values": [
-              "3.9",
-              "3.8"
+              "Nancy",
+              "Andrew",
+              "Janet",
+              "Margaret",
+              "Steven"
             ],
             "top_values": [
               {
-                "value": "3.9",
+                "value": "Steven",
                 "count": 1
               },
               {
-                "value": "3.8",
+                "value": "Robert",
+                "count": 1
+              },
+              {
+                "value": "Nancy",
+                "count": 1
+              },
+              {
+                "value": "Michael",
+                "count": 1
+              },
+              {
+                "value": "Margaret",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Title": {
+            "name": "Title",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 44.4,
+            "unique_count": 4,
+            "sample_values": [
+              "Sales Representative",
+              "Vice President, Sales",
+              "Sales Representative",
+              "Sales Representative",
+              "Sales Manager"
+            ],
+            "top_values": [
+              {
+                "value": "Sales Representative",
+                "count": 6
+              },
+              {
+                "value": "Vice President, Sales",
+                "count": 1
+              },
+              {
+                "value": "Sales Manager",
+                "count": 1
+              },
+              {
+                "value": "Inside Sales Coordinator",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "TitleOfCourtesy": {
+            "name": "TitleOfCourtesy",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 44.4,
+            "unique_count": 4,
+            "sample_values": [
+              "Ms.",
+              "Dr.",
+              "Ms.",
+              "Mrs.",
+              "Mr."
+            ],
+            "top_values": [
+              {
+                "value": "Ms.",
+                "count": 4
+              },
+              {
+                "value": "Mr.",
+                "count": 3
+              },
+              {
+                "value": "Mrs.",
+                "count": 1
+              },
+              {
+                "value": "Dr.",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "BirthDate": {
+            "name": "BirthDate",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 9,
+            "sample_values": [
+              "08-12-1948",
+              "19-02-1952",
+              "30-08-1963",
+              "19-09-1937",
+              "04-03-1955"
+            ],
+            "top_values": [
+              {
+                "value": "30-08-1963",
+                "count": 1
+              },
+              {
+                "value": "29-05-1960",
+                "count": 1
+              },
+              {
+                "value": "27-01-1966",
+                "count": 1
+              },
+              {
+                "value": "19-09-1937",
+                "count": 1
+              },
+              {
+                "value": "19-02-1952",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "HireDate": {
+            "name": "HireDate",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 88.9,
+            "unique_count": 8,
+            "sample_values": [
+              "01-05-1992",
+              "14-08-1992",
+              "01-04-1992",
+              "03-05-1993",
+              "17-10-1993"
+            ],
+            "top_values": [
+              {
+                "value": "17-10-1993",
+                "count": 2
+              },
+              {
+                "value": "15-11-1994",
+                "count": 1
+              },
+              {
+                "value": "14-08-1992",
+                "count": 1
+              },
+              {
+                "value": "05-03-1994",
+                "count": 1
+              },
+              {
+                "value": "03-05-1993",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Address": {
+            "name": "Address",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 9,
+            "sample_values": [
+              "507 - 20th Ave. E.\\nApt. 2A",
+              "908 W. Capital Way",
+              "722 Moss Bay Blvd.",
+              "4110 Old Redmond Rd.",
+              "14 Garrett Hill"
+            ],
+            "top_values": [
+              {
+                "value": "Edgeham Hollow\\nWinchester Way",
+                "count": 1
+              },
+              {
+                "value": "Coventry House\\nMiner Rd.",
+                "count": 1
+              },
+              {
+                "value": "908 W. Capital Way",
+                "count": 1
+              },
+              {
+                "value": "722 Moss Bay Blvd.",
+                "count": 1
+              },
+              {
+                "value": "7 Houndstooth Rd.",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "City": {
+            "name": "City",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 55.6,
+            "unique_count": 5,
+            "sample_values": [
+              "Seattle",
+              "Tacoma",
+              "Kirkland",
+              "Redmond",
+              "London"
+            ],
+            "top_values": [
+              {
+                "value": "London",
+                "count": 4
+              },
+              {
+                "value": "Seattle",
+                "count": 2
+              },
+              {
+                "value": "Tacoma",
+                "count": 1
+              },
+              {
+                "value": "Redmond",
+                "count": 1
+              },
+              {
+                "value": "Kirkland",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Region": {
+            "name": "Region",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 44.4,
+            "uniqueness": 11.1,
+            "unique_count": 1,
+            "sample_values": [
+              "WA",
+              "WA",
+              "WA",
+              "WA",
+              "WA"
+            ],
+            "top_values": [
+              {
+                "value": "WA",
+                "count": 5
+              }
+            ],
+            "fk_reference": null
+          },
+          "PostalCode": {
+            "name": "PostalCode",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 9,
+            "sample_values": [
+              "98122",
+              "98401",
+              "98033",
+              "98052",
+              "SW1 8JR"
+            ],
+            "top_values": [
+              {
+                "value": "WG2 7LT",
+                "count": 1
+              },
+              {
+                "value": "SW1 8JR",
+                "count": 1
+              },
+              {
+                "value": "RG1 9SP",
+                "count": 1
+              },
+              {
+                "value": "EC2 7JR",
+                "count": 1
+              },
+              {
+                "value": "98401",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Country": {
+            "name": "Country",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 22.2,
+            "unique_count": 2,
+            "sample_values": [
+              "USA",
+              "USA",
+              "USA",
+              "USA",
+              "UK"
+            ],
+            "top_values": [
+              {
+                "value": "USA",
+                "count": 5
+              },
+              {
+                "value": "UK",
+                "count": 4
+              }
+            ],
+            "fk_reference": null
+          },
+          "HomePhone": {
+            "name": "HomePhone",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 9,
+            "sample_values": [
+              "(206) 555-9857",
+              "(206) 555-9482",
+              "(206) 555-3412",
+              "(206) 555-8122",
+              "(71) 555-4848"
+            ],
+            "top_values": [
+              {
+                "value": "(71) 555-7773",
+                "count": 1
+              },
+              {
+                "value": "(71) 555-5598",
+                "count": 1
+              },
+              {
+                "value": "(71) 555-4848",
+                "count": 1
+              },
+              {
+                "value": "(71) 555-4444",
+                "count": 1
+              },
+              {
+                "value": "(206) 555-9857",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Extension": {
+            "name": "Extension",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 9,
+            "sample_values": [
+              "5467",
+              "3457",
+              "3355",
+              "5176",
+              "3453"
+            ],
+            "top_values": [
+              {
+                "value": "5467",
+                "count": 1
+              },
+              {
+                "value": "5176",
+                "count": 1
+              },
+              {
+                "value": "3457",
+                "count": 1
+              },
+              {
+                "value": "3453",
+                "count": 1
+              },
+              {
+                "value": "3355",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "Photo": {
+            "name": "Photo",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 11.1,
+            "unique_count": 1,
+            "sample_values": [
+              "\\x",
+              "\\x",
+              "\\x",
+              "\\x",
+              "\\x"
+            ],
+            "top_values": [
+              {
+                "value": "\\x",
+                "count": 9
+              }
+            ],
+            "fk_reference": null
+          },
+          "Notes": {
+            "name": "Notes",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 9,
+            "sample_values": [
+              "Education includes a BA in psychology from Colorado State University in 1970. She also completed \"The Art of the Cold...",
+              "Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 19...",
+              "Janet has a BS degree in chemistry from Boston College (1984). She has also completed a certificate program in food r...",
+              "Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culi...",
+              "Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976. Upon joining the company ..."
+            ],
+            "top_values": [
+              {
+                "value": "Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976. Upon joining the company ...",
+                "count": 1
+              },
+              {
+                "value": "Robert King served in the Peace Corps and traveled extensively before completing his degree in English at the Univers...",
+                "count": 1
+              },
+              {
+                "value": "Michael is a graduate of Sussex University (MA, economics, 1983) and the University of California at Los Angeles (MBA...",
+                "count": 1
+              },
+              {
+                "value": "Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culi...",
+                "count": 1
+              },
+              {
+                "value": "Laura received a BA in psychology from the University of Washington. She has also completed a course in business Fren...",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "ReportsTo": {
+            "name": "ReportsTo",
+            "type": "FLOAT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 11.1,
+            "uniqueness": 22.2,
+            "unique_count": 2,
+            "sample_values": [
+              "2.0",
+              "2.0",
+              "2.0",
+              "2.0",
+              "5.0"
+            ],
+            "top_values": [
+              {
+                "value": "2.0",
+                "count": 5
+              },
+              {
+                "value": "5.0",
+                "count": 3
+              }
+            ],
+            "fk_reference": null
+          },
+          "PhotoPath": {
+            "name": "PhotoPath",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 55.6,
+            "unique_count": 5,
+            "sample_values": [
+              "http://accweb/emmployees/davolio.bmp",
+              "http://accweb/emmployees/fuller.bmp",
+              "http://accweb/emmployees/leverling.bmp",
+              "http://accweb/emmployees/peacock.bmp",
+              "http://accweb/emmployees/buchanan.bmp"
+            ],
+            "top_values": [
+              {
+                "value": "http://accweb/emmployees/davolio.bmp",
+                "count": 5
+              },
+              {
+                "value": "http://accweb/emmployees/peacock.bmp",
+                "count": 1
+              },
+              {
+                "value": "http://accweb/emmployees/leverling.bmp",
+                "count": 1
+              },
+              {
+                "value": "http://accweb/emmployees/fuller.bmp",
+                "count": 1
+              },
+              {
+                "value": "http://accweb/emmployees/buchanan.bmp",
                 "count": 1
               }
             ],
@@ -97,6 +682,773 @@
           }
         },
         "relationships": [],
+        "quality": {
+          "health_score": 69,
+          "completeness": 97,
+          "freshness": 0,
+          "freshness_latest_date": "1993-10-17",
+          "consistency": 100,
+          "orphan_issues": []
+        },
+        "statistics": {
+          "numeric_stats": [
+            {
+              "column": "EmployeeID",
+              "mean": 5.0,
+              "median": 5.0,
+              "std": 2.74,
+              "variance": 7.5,
+              "min": 1.0,
+              "max": 9.0,
+              "q1": 3.0,
+              "q3": 7.0,
+              "iqr": 4.0,
+              "skewness": 0.0,
+              "kurtosis": -1.2,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "Extension",
+              "mean": 2733.0,
+              "median": 3355.0,
+              "std": 1958.43,
+              "variance": 3835449.5,
+              "min": 428.0,
+              "max": 5467.0,
+              "q1": 465.0,
+              "q3": 3457.0,
+              "iqr": 2992.0,
+              "skewness": 0.0,
+              "kurtosis": -1.4,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "ReportsTo",
+              "mean": 3.12,
+              "median": 2.0,
+              "std": 1.55,
+              "variance": 2.41,
+              "min": 2.0,
+              "max": 5.0,
+              "q1": 2.0,
+              "q3": 5.0,
+              "iqr": 3.0,
+              "skewness": 0.64,
+              "kurtosis": -2.24,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            }
+          ],
+          "categorical_stats": [
+            {
+              "column": "LastName",
+              "cardinality": 9,
+              "top_values": [
+                {
+                  "value": "Davolio",
+                  "count": 1
+                },
+                {
+                  "value": "Fuller",
+                  "count": 1
+                },
+                {
+                  "value": "Leverling",
+                  "count": 1
+                },
+                {
+                  "value": "Peacock",
+                  "count": 1
+                },
+                {
+                  "value": "Buchanan",
+                  "count": 1
+                }
+              ],
+              "entropy": 3.17
+            },
+            {
+              "column": "FirstName",
+              "cardinality": 9,
+              "top_values": [
+                {
+                  "value": "Nancy",
+                  "count": 1
+                },
+                {
+                  "value": "Andrew",
+                  "count": 1
+                },
+                {
+                  "value": "Janet",
+                  "count": 1
+                },
+                {
+                  "value": "Margaret",
+                  "count": 1
+                },
+                {
+                  "value": "Steven",
+                  "count": 1
+                }
+              ],
+              "entropy": 3.17
+            },
+            {
+              "column": "Title",
+              "cardinality": 4,
+              "top_values": [
+                {
+                  "value": "Sales Representative",
+                  "count": 6
+                },
+                {
+                  "value": "Vice President, Sales",
+                  "count": 1
+                },
+                {
+                  "value": "Sales Manager",
+                  "count": 1
+                },
+                {
+                  "value": "Inside Sales Coordinator",
+                  "count": 1
+                }
+              ],
+              "entropy": 1.45
+            },
+            {
+              "column": "TitleOfCourtesy",
+              "cardinality": 4,
+              "top_values": [
+                {
+                  "value": "Ms.",
+                  "count": 4
+                },
+                {
+                  "value": "Mr.",
+                  "count": 3
+                },
+                {
+                  "value": "Dr.",
+                  "count": 1
+                },
+                {
+                  "value": "Mrs.",
+                  "count": 1
+                }
+              ],
+              "entropy": 1.75
+            },
+            {
+              "column": "BirthDate",
+              "cardinality": 9,
+              "top_values": [
+                {
+                  "value": "08-12-1948",
+                  "count": 1
+                },
+                {
+                  "value": "19-02-1952",
+                  "count": 1
+                },
+                {
+                  "value": "30-08-1963",
+                  "count": 1
+                },
+                {
+                  "value": "19-09-1937",
+                  "count": 1
+                },
+                {
+                  "value": "04-03-1955",
+                  "count": 1
+                }
+              ],
+              "entropy": 3.17
+            },
+            {
+              "column": "HireDate",
+              "cardinality": 8,
+              "top_values": [
+                {
+                  "value": "17-10-1993",
+                  "count": 2
+                },
+                {
+                  "value": "01-05-1992",
+                  "count": 1
+                },
+                {
+                  "value": "14-08-1992",
+                  "count": 1
+                },
+                {
+                  "value": "01-04-1992",
+                  "count": 1
+                },
+                {
+                  "value": "03-05-1993",
+                  "count": 1
+                }
+              ],
+              "entropy": 2.95
+            },
+            {
+              "column": "Address",
+              "cardinality": 9,
+              "top_values": [
+                {
+                  "value": "507 - 20th Ave. E.\\nApt. 2A",
+                  "count": 1
+                },
+                {
+                  "value": "908 W. Capital Way",
+                  "count": 1
+                },
+                {
+                  "value": "722 Moss Bay Blvd.",
+                  "count": 1
+                },
+                {
+                  "value": "4110 Old Redmond Rd.",
+                  "count": 1
+                },
+                {
+                  "value": "14 Garrett Hill",
+                  "count": 1
+                }
+              ],
+              "entropy": 3.17
+            },
+            {
+              "column": "City",
+              "cardinality": 5,
+              "top_values": [
+                {
+                  "value": "London",
+                  "count": 4
+                },
+                {
+                  "value": "Seattle",
+                  "count": 2
+                },
+                {
+                  "value": "Tacoma",
+                  "count": 1
+                },
+                {
+                  "value": "Kirkland",
+                  "count": 1
+                },
+                {
+                  "value": "Redmond",
+                  "count": 1
+                }
+              ],
+              "entropy": 2.06
+            },
+            {
+              "column": "Region",
+              "cardinality": 1,
+              "top_values": [
+                {
+                  "value": "WA",
+                  "count": 5
+                }
+              ],
+              "entropy": -0.0
+            },
+            {
+              "column": "PostalCode",
+              "cardinality": 9,
+              "top_values": [
+                {
+                  "value": "98122",
+                  "count": 1
+                },
+                {
+                  "value": "98401",
+                  "count": 1
+                },
+                {
+                  "value": "98033",
+                  "count": 1
+                },
+                {
+                  "value": "98052",
+                  "count": 1
+                },
+                {
+                  "value": "SW1 8JR",
+                  "count": 1
+                }
+              ],
+              "entropy": 3.17
+            },
+            {
+              "column": "Country",
+              "cardinality": 2,
+              "top_values": [
+                {
+                  "value": "USA",
+                  "count": 5
+                },
+                {
+                  "value": "UK",
+                  "count": 4
+                }
+              ],
+              "entropy": 0.99
+            },
+            {
+              "column": "HomePhone",
+              "cardinality": 9,
+              "top_values": [
+                {
+                  "value": "(206) 555-9857",
+                  "count": 1
+                },
+                {
+                  "value": "(206) 555-9482",
+                  "count": 1
+                },
+                {
+                  "value": "(206) 555-3412",
+                  "count": 1
+                },
+                {
+                  "value": "(206) 555-8122",
+                  "count": 1
+                },
+                {
+                  "value": "(71) 555-4848",
+                  "count": 1
+                }
+              ],
+              "entropy": 3.17
+            },
+            {
+              "column": "Photo",
+              "cardinality": 1,
+              "top_values": [
+                {
+                  "value": "\\x",
+                  "count": 9
+                }
+              ],
+              "entropy": -0.0
+            },
+            {
+              "column": "Notes",
+              "cardinality": 9,
+              "top_values": [
+                {
+                  "value": "Education includes a BA in psychology from Colorado State University in 1970. She also completed \"The Art of the Cold Call.\" Nancy is a member of Toastmasters International.",
+                  "count": 1
+                },
+                {
+                  "value": "Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 1981. He is fluent in French and Italian and reads German. He joined the company as a sales representative, was promoted to sales manager in January 1992 and to vice president of sales in March 1993. Andrew is a member of the Sales Management Roundtable, the Seattle Chamber of Commerce, and the Pacific Rim Importers Association.",
+                  "count": 1
+                },
+                {
+                  "value": "Janet has a BS degree in chemistry from Boston College (1984). She has also completed a certificate program in food retailing management. Janet was hired as a sales associate in 1991 and promoted to sales representative in February 1992.",
+                  "count": 1
+                },
+                {
+                  "value": "Margaret holds a BA in English literature from Concordia College (1958) and an MA from the American Institute of Culinary Arts (1966). She was assigned to the London office temporarily from July through November 1992.",
+                  "count": 1
+                },
+                {
+                  "value": "Steven Buchanan graduated from St. Andrews University, Scotland, with a BSC degree in 1976. Upon joining the company as a sales representative in 1992, he spent 6 months in an orientation program at the Seattle office and then returned to his permanent post in London. He was promoted to sales manager in March 1993. Mr. Buchanan has completed the courses \"Successful Telemarketing\" and \"International Sales Management.\" He is fluent in French.",
+                  "count": 1
+                }
+              ],
+              "entropy": 3.17
+            },
+            {
+              "column": "PhotoPath",
+              "cardinality": 5,
+              "top_values": [
+                {
+                  "value": "http://accweb/emmployees/davolio.bmp",
+                  "count": 5
+                },
+                {
+                  "value": "http://accweb/emmployees/fuller.bmp",
+                  "count": 1
+                },
+                {
+                  "value": "http://accweb/emmployees/leverling.bmp",
+                  "count": 1
+                },
+                {
+                  "value": "http://accweb/emmployees/peacock.bmp",
+                  "count": 1
+                },
+                {
+                  "value": "http://accweb/emmployees/buchanan.bmp",
+                  "count": 1
+                }
+              ],
+              "entropy": 1.88
+            }
+          ],
+          "date_stats": [],
+          "correlation_pairs": [
+            {
+              "col_a": "Extension",
+              "col_b": "ReportsTo",
+              "r": -0.88
+            },
+            {
+              "col_a": "EmployeeID",
+              "col_b": "Extension",
+              "r": -0.79
+            },
+            {
+              "col_a": "EmployeeID",
+              "col_b": "ReportsTo",
+              "r": 0.61
+            }
+          ]
+        }
+      },
+      "generated": {
+        "table_description": "Employees contains 9 records across 18 columns (keyed by EmployeeID ).",
+        "business_domain": "general_analytics",
+        "semantic_aliases": [
+          "Employees",
+          "employees",
+          "Employee"
+        ],
+        "columns": {
+          "EmployeeID": {
+            "description": "EmployeeID stores INTEGER data representing the EmployeeID (e.g. 1, 2, 3).",
+            "semantic_aliases": [
+              "EmployeeID",
+              "employeeid"
+            ],
+            "business_role": "primary_key"
+          },
+          "LastName": {
+            "description": "LastName stores TEXT data representing the LastName (e.g. Davolio, Fuller, Leverling).",
+            "semantic_aliases": [
+              "LastName",
+              "lastname"
+            ],
+            "business_role": "dimension"
+          },
+          "FirstName": {
+            "description": "FirstName stores TEXT data representing the FirstName (e.g. Nancy, Andrew, Janet).",
+            "semantic_aliases": [
+              "FirstName",
+              "firstname"
+            ],
+            "business_role": "dimension"
+          },
+          "Title": {
+            "description": "Title stores TEXT data representing the Title (e.g. Sales Representative, Vice President, Sales, Sales Representative).",
+            "semantic_aliases": [
+              "Title",
+              "title"
+            ],
+            "business_role": "dimension"
+          },
+          "TitleOfCourtesy": {
+            "description": "TitleOfCourtesy stores TEXT data representing the TitleOfCourtesy (e.g. Ms., Dr., Ms.).",
+            "semantic_aliases": [
+              "TitleOfCourtesy",
+              "titleofcourtesy"
+            ],
+            "business_role": "dimension"
+          },
+          "BirthDate": {
+            "description": "BirthDate stores TEXT data representing the BirthDate (e.g. 08-12-1948, 19-02-1952, 30-08-1963).",
+            "semantic_aliases": [
+              "BirthDate",
+              "birthdate"
+            ],
+            "business_role": "timestamp"
+          },
+          "HireDate": {
+            "description": "HireDate stores TEXT data representing the HireDate (e.g. 01-05-1992, 14-08-1992, 01-04-1992).",
+            "semantic_aliases": [
+              "HireDate",
+              "hiredate"
+            ],
+            "business_role": "timestamp"
+          },
+          "Address": {
+            "description": "Address stores TEXT data representing the Address (e.g. 507 - 20th Ave. E.\\nApt. 2A, 908 W. Capital Way, 722 Moss Bay Blvd.).",
+            "semantic_aliases": [
+              "Address",
+              "address"
+            ],
+            "business_role": "attribute"
+          },
+          "City": {
+            "description": "City stores TEXT data representing the City (e.g. Seattle, Tacoma, Kirkland).",
+            "semantic_aliases": [
+              "City",
+              "city"
+            ],
+            "business_role": "dimension"
+          },
+          "Region": {
+            "description": "Region stores TEXT data representing the Region (e.g. WA, WA, WA).",
+            "semantic_aliases": [
+              "Region",
+              "region"
+            ],
+            "business_role": "dimension"
+          },
+          "PostalCode": {
+            "description": "PostalCode stores TEXT data representing the PostalCode (e.g. 98122, 98401, 98033).",
+            "semantic_aliases": [
+              "PostalCode",
+              "postalcode"
+            ],
+            "business_role": "attribute"
+          },
+          "Country": {
+            "description": "Country stores TEXT data representing the Country (e.g. USA, USA, USA).",
+            "semantic_aliases": [
+              "Country",
+              "country"
+            ],
+            "business_role": "measure"
+          },
+          "HomePhone": {
+            "description": "HomePhone stores TEXT data representing the HomePhone (e.g. (206) 555-9857, (206) 555-9482, (206) 555-3412).",
+            "semantic_aliases": [
+              "HomePhone",
+              "homephone"
+            ],
+            "business_role": "attribute"
+          },
+          "Extension": {
+            "description": "Extension stores INTEGER data representing the Extension (e.g. 5467, 3457, 3355).",
+            "semantic_aliases": [
+              "Extension",
+              "extension"
+            ],
+            "business_role": "measure"
+          },
+          "Photo": {
+            "description": "Photo stores TEXT data representing the Photo (e.g. \\x, \\x, \\x).",
+            "semantic_aliases": [
+              "Photo",
+              "photo"
+            ],
+            "business_role": "attribute"
+          },
+          "Notes": {
+            "description": "Notes stores TEXT data representing the Notes (e.g. Education includes a BA in psychology from Colorado State University in 1970. She also completed \"The Art of the Cold..., Andrew received his BTS commercial in 1974 and a Ph.D. in international marketing from the University of Dallas in 19..., Janet has a BS degree in chemistry from Boston College (1984). She has also completed a certificate program in food r...).",
+            "semantic_aliases": [
+              "Notes",
+              "notes"
+            ],
+            "business_role": "attribute"
+          },
+          "ReportsTo": {
+            "description": "ReportsTo stores FLOAT data representing the ReportsTo (e.g. 2.0, 2.0, 2.0).",
+            "semantic_aliases": [
+              "ReportsTo",
+              "reportsto"
+            ],
+            "business_role": "measure"
+          },
+          "PhotoPath": {
+            "description": "PhotoPath stores TEXT data representing the PhotoPath (e.g. http://accweb/emmployees/davolio.bmp, http://accweb/emmployees/fuller.bmp, http://accweb/emmployees/leverling.bmp).",
+            "semantic_aliases": [
+              "PhotoPath",
+              "photopath"
+            ],
+            "business_role": "attribute"
+          }
+        },
+        "common_questions": [
+          "How many records are in Employees?",
+          "What is the distribution of EmployeeID in Employees?",
+          "Find details for a specific EmployeeID in Employees"
+        ],
+        "generated_at": "2026-09-24T04:20:13.031428+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
+      }
+    },
+    "categories": {
+      "observed": {
+        "table_name": "categories",
+        "row_count": 8,
+        "column_count": 4,
+        "columns": {
+          "categoryID": {
+            "name": "categoryID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 8,
+            "sample_values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "top_values": [
+              {
+                "value": "1",
+                "count": 1
+              },
+              {
+                "value": "2",
+                "count": 1
+              },
+              {
+                "value": "3",
+                "count": 1
+              },
+              {
+                "value": "4",
+                "count": 1
+              },
+              {
+                "value": "5",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "categoryName": {
+            "name": "categoryName",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 8,
+            "sample_values": [
+              "Beverages",
+              "Condiments",
+              "Confections",
+              "Dairy Products",
+              "Grains/Cereals"
+            ],
+            "top_values": [
+              {
+                "value": "Seafood",
+                "count": 1
+              },
+              {
+                "value": "Produce",
+                "count": 1
+              },
+              {
+                "value": "Meat/Poultry",
+                "count": 1
+              },
+              {
+                "value": "Grains/Cereals",
+                "count": 1
+              },
+              {
+                "value": "Dairy Products",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "description": {
+            "name": "description",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 8,
+            "sample_values": [
+              "Soft drinks, coffees, teas, beers, and ales",
+              "Sweet and savory sauces, relishes, spreads, and seasonings",
+              "Desserts, candies, and sweet breads",
+              "Cheeses",
+              "Breads, crackers, pasta, and cereal"
+            ],
+            "top_values": [
+              {
+                "value": "Sweet and savory sauces, relishes, spreads, and seasonings",
+                "count": 1
+              },
+              {
+                "value": "Soft drinks, coffees, teas, beers, and ales",
+                "count": 1
+              },
+              {
+                "value": "Seaweed and fish",
+                "count": 1
+              },
+              {
+                "value": "Prepared meats",
+                "count": 1
+              },
+              {
+                "value": "Dried fruit and bean curd",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "picture": {
+            "name": "picture",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 12.5,
+            "unique_count": 1,
+            "sample_values": [
+              "0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000...",
+              "0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000...",
+              "0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000...",
+              "0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000...",
+              "0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000..."
+            ],
+            "top_values": [
+              {
+                "value": "0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000...",
+                "count": 8
+              }
+            ],
+            "fk_reference": null
+          }
+        },
+        "relationships": [
+          {
+            "id": "products.categoryID->categories.categoryID",
+            "source": "products",
+            "target": "categories",
+            "source_table": "products",
+            "target_table": "categories",
+            "source_col": "categoryID",
+            "target_col": "categoryID",
+            "source_display": "products",
+            "target_display": "categories",
+            "label": "categoryID",
+            "type": "inferred",
+            "confidence": 0.97,
+            "cardinality": "one_to_many",
+            "inference_method": "intelligent_reference_subset"
+          }
+        ],
         "quality": {
           "health_score": 100,
           "completeness": 100,
@@ -108,110 +1460,2176 @@
         "statistics": {
           "numeric_stats": [
             {
-              "column": "student_id",
-              "mean": 101.5,
-              "median": 101.5,
-              "std": 0.71,
-              "variance": 0.5,
-              "min": 101.0,
-              "max": 102.0,
-              "q1": 101.25,
-              "q3": 101.75,
-              "iqr": 0.5,
-              "skewness": null,
-              "kurtosis": null,
-              "iqr_outlier_count": 0,
-              "zscore_outlier_count": 0
-            },
-            {
-              "column": "gpa",
-              "mean": 3.85,
-              "median": 3.85,
-              "std": 0.07,
-              "variance": 0.01,
-              "min": 3.8,
-              "max": 3.9,
-              "q1": 3.82,
-              "q3": 3.88,
-              "iqr": 0.05,
-              "skewness": null,
-              "kurtosis": null,
+              "column": "categoryID",
+              "mean": 4.5,
+              "median": 4.5,
+              "std": 2.45,
+              "variance": 6.0,
+              "min": 1.0,
+              "max": 8.0,
+              "q1": 2.75,
+              "q3": 6.25,
+              "iqr": 3.5,
+              "skewness": 0.0,
+              "kurtosis": -1.2,
               "iqr_outlier_count": 0,
               "zscore_outlier_count": 0
             }
           ],
           "categorical_stats": [
             {
-              "column": "first_name",
-              "cardinality": 2,
+              "column": "categoryName",
+              "cardinality": 8,
               "top_values": [
                 {
-                  "value": "Maya",
+                  "value": "Beverages",
                   "count": 1
                 },
                 {
-                  "value": "Liam",
+                  "value": "Condiments",
+                  "count": 1
+                },
+                {
+                  "value": "Confections",
+                  "count": 1
+                },
+                {
+                  "value": "Dairy Products",
+                  "count": 1
+                },
+                {
+                  "value": "Grains/Cereals",
                   "count": 1
                 }
               ],
-              "entropy": 1.0
+              "entropy": 3.0
+            },
+            {
+              "column": "description",
+              "cardinality": 8,
+              "top_values": [
+                {
+                  "value": "Soft drinks, coffees, teas, beers, and ales",
+                  "count": 1
+                },
+                {
+                  "value": "Sweet and savory sauces, relishes, spreads, and seasonings",
+                  "count": 1
+                },
+                {
+                  "value": "Desserts, candies, and sweet breads",
+                  "count": 1
+                },
+                {
+                  "value": "Cheeses",
+                  "count": 1
+                },
+                {
+                  "value": "Breads, crackers, pasta, and cereal",
+                  "count": 1
+                }
+              ],
+              "entropy": 3.0
+            },
+            {
+              "column": "picture",
+              "cardinality": 1,
+              "top_values": [
+                {
+                  "value": "0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000000504272757368000000000000000000A0290000424D98290000000000005600000028000000AC00000078000000010004000000000000000000880B0000880B0000080000",
+                  "count": 8
+                }
+              ],
+              "entropy": -0.0
+            }
+          ],
+          "date_stats": [],
+          "correlation_pairs": []
+        }
+      },
+      "generated": {
+        "table_description": "categories contains 8 records across 4 columns (keyed by categoryID ).",
+        "business_domain": "general_analytics",
+        "semantic_aliases": [
+          "categories",
+          "categorie"
+        ],
+        "columns": {
+          "categoryID": {
+            "description": "categoryID stores INTEGER data representing the categoryID (e.g. 1, 2, 3).",
+            "semantic_aliases": [
+              "categoryID",
+              "categoryid"
+            ],
+            "business_role": "primary_key"
+          },
+          "categoryName": {
+            "description": "categoryName stores TEXT data representing the categoryName (e.g. Beverages, Condiments, Confections).",
+            "semantic_aliases": [
+              "categoryName",
+              "categoryname"
+            ],
+            "business_role": "dimension"
+          },
+          "description": {
+            "description": "description stores TEXT data representing the description (e.g. Soft drinks, coffees, teas, beers, and ales, Sweet and savory sauces, relishes, spreads, and seasonings, Desserts, candies, and sweet breads).",
+            "semantic_aliases": [
+              "description"
+            ],
+            "business_role": "text_content"
+          },
+          "picture": {
+            "description": "picture stores TEXT data representing the picture (e.g. 0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000..., 0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000..., 0x151C2F00020000000D000E0014002100FFFFFFFF4269746D617020496D616765005061696E742E5069637475726500010500000200000007000...).",
+            "semantic_aliases": [
+              "picture"
+            ],
+            "business_role": "attribute"
+          }
+        },
+        "common_questions": [
+          "How many records are in categories?",
+          "What is the distribution of categoryID in categories?",
+          "Find details for a specific categoryID in categories"
+        ],
+        "generated_at": "2026-09-24T04:20:13.046427+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
+      }
+    },
+    "customers": {
+      "observed": {
+        "table_name": "customers",
+        "row_count": 91,
+        "column_count": 11,
+        "columns": {
+          "customerID": {
+            "name": "customerID",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 91,
+            "sample_values": [
+              "ALFKI",
+              "ANATR",
+              "ANTON",
+              "AROUT",
+              "BERGS"
+            ],
+            "top_values": [
+              {
+                "value": "ALFKI",
+                "count": 1
+              },
+              {
+                "value": "ANATR",
+                "count": 1
+              },
+              {
+                "value": "ANTON",
+                "count": 1
+              },
+              {
+                "value": "AROUT",
+                "count": 1
+              },
+              {
+                "value": "BERGS",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "companyName": {
+            "name": "companyName",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 91,
+            "sample_values": [
+              "Alfreds Futterkiste",
+              "Ana Trujillo Emparedados y helados",
+              "Antonio Moreno Taquería",
+              "Around the Horn",
+              "Berglunds snabbköp"
+            ],
+            "top_values": [
+              {
+                "value": "Wolski  Zajazd",
+                "count": 1
+              },
+              {
+                "value": "Wilman Kala",
+                "count": 1
+              },
+              {
+                "value": "White Clover Markets",
+                "count": 1
+              },
+              {
+                "value": "Wellington Importadora",
+                "count": 1
+              },
+              {
+                "value": "Wartian Herkku",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "contactName": {
+            "name": "contactName",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 91,
+            "sample_values": [
+              "Maria Anders",
+              "Ana Trujillo",
+              "Antonio Moreno",
+              "Thomas Hardy",
+              "Christina Berglund"
+            ],
+            "top_values": [
+              {
+                "value": "Zbyszek Piestrzeniewicz",
+                "count": 1
+              },
+              {
+                "value": "Yvonne Moncada",
+                "count": 1
+              },
+              {
+                "value": "Yoshi Tannamuri",
+                "count": 1
+              },
+              {
+                "value": "Yoshi Latimer",
+                "count": 1
+              },
+              {
+                "value": "Yang Wang",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "contactTitle": {
+            "name": "contactTitle",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 13.2,
+            "unique_count": 12,
+            "sample_values": [
+              "Sales Representative",
+              "Owner",
+              "Owner",
+              "Sales Representative",
+              "Order Administrator"
+            ],
+            "top_values": [
+              {
+                "value": "Sales Representative",
+                "count": 17
+              },
+              {
+                "value": "Owner",
+                "count": 17
+              },
+              {
+                "value": "Marketing Manager",
+                "count": 12
+              },
+              {
+                "value": "Sales Manager",
+                "count": 11
+              },
+              {
+                "value": "Accounting Manager",
+                "count": 10
+              }
+            ],
+            "fk_reference": null
+          },
+          "address": {
+            "name": "address",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 91,
+            "sample_values": [
+              "Obere Str. 57",
+              "Avda. de la Constitución 2222",
+              "Mataderos  2312",
+              "120 Hanover Sq.",
+              "Berguvsvägen  8"
+            ],
+            "top_values": [
+              {
+                "value": "Åkergatan 24",
+                "count": 1
+              },
+              {
+                "value": "ul. Filtrowa 68",
+                "count": 1
+              },
+              {
+                "value": "Walserweg 21",
+                "count": 1
+              },
+              {
+                "value": "Vinbæltet 34",
+                "count": 1
+              },
+              {
+                "value": "Via Monte Bianco 34",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "city": {
+            "name": "city",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 75.8,
+            "unique_count": 69,
+            "sample_values": [
+              "Berlin",
+              "México D.F.",
+              "México D.F.",
+              "London",
+              "Luleå"
+            ],
+            "top_values": [
+              {
+                "value": "London",
+                "count": 6
+              },
+              {
+                "value": "México D.F.",
+                "count": 5
+              },
+              {
+                "value": "Sao Paulo",
+                "count": 4
+              },
+              {
+                "value": "Rio de Janeiro",
+                "count": 3
+              },
+              {
+                "value": "Madrid",
+                "count": 3
+              }
+            ],
+            "fk_reference": null
+          },
+          "region": {
+            "name": "region",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 65.9,
+            "uniqueness": 19.8,
+            "unique_count": 18,
+            "sample_values": [
+              "BC",
+              "SP",
+              "SP",
+              "SP",
+              "OR"
+            ],
+            "top_values": [
+              {
+                "value": "SP",
+                "count": 6
+              },
+              {
+                "value": "OR",
+                "count": 4
+              },
+              {
+                "value": "WA",
+                "count": 3
+              },
+              {
+                "value": "RJ",
+                "count": 3
+              },
+              {
+                "value": "BC",
+                "count": 2
+              }
+            ],
+            "fk_reference": null
+          },
+          "postalCode": {
+            "name": "postalCode",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 1.1,
+            "uniqueness": 93.4,
+            "unique_count": 85,
+            "sample_values": [
+              "12209",
+              "5021",
+              "5023",
+              "WA1 1DP",
+              "S-958 22"
+            ],
+            "top_values": [
+              {
+                "value": "1010",
+                "count": 3
+              },
+              {
+                "value": "5033",
+                "count": 2
+              },
+              {
+                "value": "5022",
+                "count": 2
+              },
+              {
+                "value": "44000",
+                "count": 2
+              },
+              {
+                "value": "WX3 6FW",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "country": {
+            "name": "country",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 23.1,
+            "unique_count": 21,
+            "sample_values": [
+              "Germany",
+              "Mexico",
+              "Mexico",
+              "UK",
+              "Sweden"
+            ],
+            "top_values": [
+              {
+                "value": "USA",
+                "count": 13
+              },
+              {
+                "value": "Germany",
+                "count": 11
+              },
+              {
+                "value": "France",
+                "count": 11
+              },
+              {
+                "value": "Brazil",
+                "count": 9
+              },
+              {
+                "value": "UK",
+                "count": 7
+              }
+            ],
+            "fk_reference": null
+          },
+          "phone": {
+            "name": "phone",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 91,
+            "sample_values": [
+              "030-0074321",
+              "(5) 555-4729",
+              "(5) 555-3932",
+              "(171) 555-7788",
+              "0921-12 34 65"
+            ],
+            "top_values": [
+              {
+                "value": "981-443655",
+                "count": 1
+              },
+              {
+                "value": "91.24.45.40",
+                "count": 1
+              },
+              {
+                "value": "90-224 8858",
+                "count": 1
+              },
+              {
+                "value": "88.60.15.31",
+                "count": 1
+              },
+              {
+                "value": "86 21 32 43",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "fax": {
+            "name": "fax",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 24.2,
+            "uniqueness": 75.8,
+            "unique_count": 69,
+            "sample_values": [
+              "030-0076545",
+              "(5) 555-3745",
+              "(171) 555-6750",
+              "0921-12 34 67",
+              "0621-08924"
+            ],
+            "top_values": [
+              {
+                "value": "981-443655",
+                "count": 1
+              },
+              {
+                "value": "91.24.45.41",
+                "count": 1
+              },
+              {
+                "value": "90-224 8858",
+                "count": 1
+              },
+              {
+                "value": "88.60.15.32",
+                "count": 1
+              },
+              {
+                "value": "86 22 33 44",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          }
+        },
+        "relationships": [],
+        "quality": {
+          "health_score": 96,
+          "completeness": 92,
+          "freshness": null,
+          "freshness_latest_date": null,
+          "consistency": 100,
+          "orphan_issues": []
+        },
+        "statistics": {
+          "numeric_stats": [],
+          "categorical_stats": [
+            {
+              "column": "customerID",
+              "cardinality": 91,
+              "top_values": [
+                {
+                  "value": "ALFKI",
+                  "count": 1
+                },
+                {
+                  "value": "ROMEY",
+                  "count": 1
+                },
+                {
+                  "value": "RICAR",
+                  "count": 1
+                },
+                {
+                  "value": "REGGC",
+                  "count": 1
+                },
+                {
+                  "value": "RATTC",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.51
+            },
+            {
+              "column": "companyName",
+              "cardinality": 91,
+              "top_values": [
+                {
+                  "value": "Alfreds Futterkiste",
+                  "count": 1
+                },
+                {
+                  "value": "Romero y tomillo",
+                  "count": 1
+                },
+                {
+                  "value": "Ricardo Adocicados",
+                  "count": 1
+                },
+                {
+                  "value": "Reggiani Caseifici",
+                  "count": 1
+                },
+                {
+                  "value": "Rattlesnake Canyon Grocery",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.51
+            },
+            {
+              "column": "contactName",
+              "cardinality": 91,
+              "top_values": [
+                {
+                  "value": "Maria Anders",
+                  "count": 1
+                },
+                {
+                  "value": "Alejandra Camino",
+                  "count": 1
+                },
+                {
+                  "value": "Janete Limeira",
+                  "count": 1
+                },
+                {
+                  "value": "Maurizio Moroni",
+                  "count": 1
+                },
+                {
+                  "value": "Paula Wilson",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.51
+            },
+            {
+              "column": "contactTitle",
+              "cardinality": 12,
+              "top_values": [
+                {
+                  "value": "Sales Representative",
+                  "count": 17
+                },
+                {
+                  "value": "Owner",
+                  "count": 17
+                },
+                {
+                  "value": "Marketing Manager",
+                  "count": 12
+                },
+                {
+                  "value": "Sales Manager",
+                  "count": 11
+                },
+                {
+                  "value": "Accounting Manager",
+                  "count": 10
+                }
+              ],
+              "entropy": 3.17
+            },
+            {
+              "column": "address",
+              "cardinality": 91,
+              "top_values": [
+                {
+                  "value": "Obere Str. 57",
+                  "count": 1
+                },
+                {
+                  "value": "Gran Vía, 1",
+                  "count": 1
+                },
+                {
+                  "value": "Av. Copacabana, 267",
+                  "count": 1
+                },
+                {
+                  "value": "Strada Provinciale 124",
+                  "count": 1
+                },
+                {
+                  "value": "2817 Milton Dr.",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.51
+            },
+            {
+              "column": "city",
+              "cardinality": 69,
+              "top_values": [
+                {
+                  "value": "London",
+                  "count": 6
+                },
+                {
+                  "value": "México D.F.",
+                  "count": 5
+                },
+                {
+                  "value": "Sao Paulo",
+                  "count": 4
+                },
+                {
+                  "value": "Buenos Aires",
+                  "count": 3
+                },
+                {
+                  "value": "Rio de Janeiro",
+                  "count": 3
+                }
+              ],
+              "entropy": 5.88
+            },
+            {
+              "column": "region",
+              "cardinality": 18,
+              "top_values": [
+                {
+                  "value": "SP",
+                  "count": 6
+                },
+                {
+                  "value": "OR",
+                  "count": 4
+                },
+                {
+                  "value": "RJ",
+                  "count": 3
+                },
+                {
+                  "value": "WA",
+                  "count": 3
+                },
+                {
+                  "value": "BC",
+                  "count": 2
+                }
+              ],
+              "entropy": 3.82
+            },
+            {
+              "column": "postalCode",
+              "cardinality": 85,
+              "top_values": [
+                {
+                  "value": "1010",
+                  "count": 3
+                },
+                {
+                  "value": "5022",
+                  "count": 2
+                },
+                {
+                  "value": "44000",
+                  "count": 2
+                },
+                {
+                  "value": "5033",
+                  "count": 2
+                },
+                {
+                  "value": "1203",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.37
+            },
+            {
+              "column": "country",
+              "cardinality": 21,
+              "top_values": [
+                {
+                  "value": "USA",
+                  "count": 13
+                },
+                {
+                  "value": "Germany",
+                  "count": 11
+                },
+                {
+                  "value": "France",
+                  "count": 11
+                },
+                {
+                  "value": "Brazil",
+                  "count": 9
+                },
+                {
+                  "value": "UK",
+                  "count": 7
+                }
+              ],
+              "entropy": 3.96
+            },
+            {
+              "column": "phone",
+              "cardinality": 91,
+              "top_values": [
+                {
+                  "value": "030-0074321",
+                  "count": 1
+                },
+                {
+                  "value": "(91) 745 6200",
+                  "count": 1
+                },
+                {
+                  "value": "(21) 555-3412",
+                  "count": 1
+                },
+                {
+                  "value": "0522-556721",
+                  "count": 1
+                },
+                {
+                  "value": "(505) 555-5939",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.51
+            },
+            {
+              "column": "fax",
+              "cardinality": 69,
+              "top_values": [
+                {
+                  "value": "030-0076545",
+                  "count": 1
+                },
+                {
+                  "value": "(5) 545-3745",
+                  "count": 1
+                },
+                {
+                  "value": "(91) 745 6210",
+                  "count": 1
+                },
+                {
+                  "value": "0522-556722",
+                  "count": 1
+                },
+                {
+                  "value": "(505) 555-3620",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.11
+            }
+          ],
+          "date_stats": [],
+          "correlation_pairs": []
+        }
+      },
+      "generated": {
+        "table_description": "customers contains 91 records across 11 columns (keyed by customerID ).",
+        "business_domain": "user_management",
+        "semantic_aliases": [
+          "customers",
+          "customer"
+        ],
+        "columns": {
+          "customerID": {
+            "description": "customerID stores TEXT data representing the customerID (e.g. ALFKI, ANATR, ANTON).",
+            "semantic_aliases": [
+              "customerID",
+              "customerid"
+            ],
+            "business_role": "primary_key"
+          },
+          "companyName": {
+            "description": "companyName stores TEXT data representing the companyName (e.g. Alfreds Futterkiste, Ana Trujillo Emparedados y helados, Antonio Moreno Taquería).",
+            "semantic_aliases": [
+              "companyName",
+              "companyname"
+            ],
+            "business_role": "dimension"
+          },
+          "contactName": {
+            "description": "contactName stores TEXT data representing the contactName (e.g. Maria Anders, Ana Trujillo, Antonio Moreno).",
+            "semantic_aliases": [
+              "contactName",
+              "contactname"
+            ],
+            "business_role": "dimension"
+          },
+          "contactTitle": {
+            "description": "contactTitle stores TEXT data representing the contactTitle (e.g. Sales Representative, Owner, Owner).",
+            "semantic_aliases": [
+              "contactTitle",
+              "contacttitle"
+            ],
+            "business_role": "dimension"
+          },
+          "address": {
+            "description": "address stores TEXT data representing the address (e.g. Obere Str. 57, Avda. de la Constitución 2222, Mataderos  2312).",
+            "semantic_aliases": [
+              "address"
+            ],
+            "business_role": "attribute"
+          },
+          "city": {
+            "description": "city stores TEXT data representing the city (e.g. Berlin, México D.F., México D.F.).",
+            "semantic_aliases": [
+              "city"
+            ],
+            "business_role": "dimension"
+          },
+          "region": {
+            "description": "region stores TEXT data representing the region (e.g. BC, SP, SP).",
+            "semantic_aliases": [
+              "region"
+            ],
+            "business_role": "dimension"
+          },
+          "postalCode": {
+            "description": "postalCode stores TEXT data representing the postalCode (e.g. 12209, 5021, 5023).",
+            "semantic_aliases": [
+              "postalCode",
+              "postalcode"
+            ],
+            "business_role": "attribute"
+          },
+          "country": {
+            "description": "country stores TEXT data representing the country (e.g. Germany, Mexico, Mexico).",
+            "semantic_aliases": [
+              "country"
+            ],
+            "business_role": "measure"
+          },
+          "phone": {
+            "description": "phone stores TEXT data representing the phone (e.g. 030-0074321, (5) 555-4729, (5) 555-3932).",
+            "semantic_aliases": [
+              "phone"
+            ],
+            "business_role": "attribute"
+          },
+          "fax": {
+            "description": "fax stores TEXT data representing the fax (e.g. 030-0076545, (5) 555-3745, (171) 555-6750).",
+            "semantic_aliases": [
+              "fax"
+            ],
+            "business_role": "attribute"
+          }
+        },
+        "common_questions": [
+          "How many records are in customers?",
+          "What is the distribution of customerID in customers?",
+          "Find details for a specific customerID in customers"
+        ],
+        "generated_at": "2026-09-24T04:20:13.078424+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
+      }
+    },
+    "order_details": {
+      "observed": {
+        "table_name": "order_details",
+        "row_count": 2155,
+        "column_count": 5,
+        "columns": {
+          "orderID": {
+            "name": "orderID",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 38.5,
+            "unique_count": 830,
+            "sample_values": [
+              "10,248",
+              "10,248",
+              "10,248",
+              "10,249",
+              "10,249"
+            ],
+            "top_values": [
+              {
+                "value": "11,077",
+                "count": 25
+              },
+              {
+                "value": "10,657",
+                "count": 6
+              },
+              {
+                "value": "10,847",
+                "count": 6
+              },
+              {
+                "value": "10,979",
+                "count": 6
+              },
+              {
+                "value": "10,273",
+                "count": 5
+              }
+            ],
+            "fk_reference": null
+          },
+          "productID": {
+            "name": "productID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": true,
+            "null_percentage": 0.0,
+            "uniqueness": 3.6,
+            "unique_count": 77,
+            "sample_values": [
+              "1",
+              "1",
+              "1",
+              "1",
+              "1"
+            ],
+            "top_values": [
+              {
+                "value": "59",
+                "count": 54
+              },
+              {
+                "value": "24",
+                "count": 51
+              },
+              {
+                "value": "31",
+                "count": 51
+              },
+              {
+                "value": "60",
+                "count": 51
+              },
+              {
+                "value": "56",
+                "count": 50
+              }
+            ],
+            "fk_reference": "products.productID"
+          },
+          "unitPrice": {
+            "name": "unitPrice",
+            "type": "FLOAT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 5.4,
+            "unique_count": 116,
+            "sample_values": [
+              "14.0",
+              "9.8",
+              "34.8",
+              "18.6",
+              "42.4"
+            ],
+            "top_values": [
+              {
+                "value": "18.0",
+                "count": 102
+              },
+              {
+                "value": "10.0",
+                "count": 71
+              },
+              {
+                "value": "14.0",
+                "count": 56
+              },
+              {
+                "value": "12.5",
+                "count": 55
+              },
+              {
+                "value": "19.0",
+                "count": 53
+              }
+            ],
+            "fk_reference": null
+          },
+          "quantity": {
+            "name": "quantity",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 2.6,
+            "unique_count": 55,
+            "sample_values": [
+              "12",
+              "10",
+              "5",
+              "9",
+              "40"
+            ],
+            "top_values": [
+              {
+                "value": "20",
+                "count": 252
+              },
+              {
+                "value": "30",
+                "count": 194
+              },
+              {
+                "value": "10",
+                "count": 181
+              },
+              {
+                "value": "15",
+                "count": 169
+              },
+              {
+                "value": "40",
+                "count": 113
+              }
+            ],
+            "fk_reference": null
+          },
+          "discount": {
+            "name": "discount",
+            "type": "FLOAT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 0.5,
+            "unique_count": 11,
+            "sample_values": [
+              "0.0",
+              "0.0",
+              "0.0",
+              "0.0",
+              "0.0"
+            ],
+            "top_values": [
+              {
+                "value": "0.0",
+                "count": 1317
+              },
+              {
+                "value": "0.05",
+                "count": 185
+              },
+              {
+                "value": "0.1",
+                "count": 173
+              },
+              {
+                "value": "0.2",
+                "count": 161
+              },
+              {
+                "value": "0.15",
+                "count": 157
+              }
+            ],
+            "fk_reference": null
+          }
+        },
+        "relationships": [
+          {
+            "id": "order_details.productID->products.productID",
+            "source": "order_details",
+            "target": "products",
+            "source_table": "order_details",
+            "target_table": "products",
+            "source_col": "productID",
+            "target_col": "productID",
+            "source_display": "order_details",
+            "target_display": "products",
+            "label": "productID",
+            "type": "inferred",
+            "confidence": 0.97,
+            "cardinality": "one_to_many",
+            "inference_method": "intelligent_reference_subset"
+          }
+        ],
+        "quality": {
+          "health_score": 100,
+          "completeness": 100,
+          "freshness": null,
+          "freshness_latest_date": null,
+          "consistency": 100,
+          "orphan_issues": []
+        },
+        "statistics": {
+          "numeric_stats": [
+            {
+              "column": "productID",
+              "mean": 40.79,
+              "median": 41.0,
+              "std": 22.16,
+              "variance": 491.02,
+              "min": 1.0,
+              "max": 77.0,
+              "q1": 22.0,
+              "q3": 60.0,
+              "iqr": 38.0,
+              "skewness": -0.08,
+              "kurtosis": -1.18,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "unitPrice",
+              "mean": 26.22,
+              "median": 18.4,
+              "std": 29.83,
+              "variance": 889.67,
+              "min": 2.0,
+              "max": 263.5,
+              "q1": 12.0,
+              "q3": 32.0,
+              "iqr": 20.0,
+              "skewness": 5.1,
+              "kurtosis": 33.86,
+              "iqr_outlier_count": 98,
+              "zscore_outlier_count": 46
+            },
+            {
+              "column": "quantity",
+              "mean": 23.81,
+              "median": 20.0,
+              "std": 19.02,
+              "variance": 361.84,
+              "min": 1.0,
+              "max": 130.0,
+              "q1": 10.0,
+              "q3": 30.0,
+              "iqr": 20.0,
+              "skewness": 1.78,
+              "kurtosis": 4.6,
+              "iqr_outlier_count": 87,
+              "zscore_outlier_count": 30
+            },
+            {
+              "column": "discount",
+              "mean": 0.06,
+              "median": 0.0,
+              "std": 0.08,
+              "variance": 0.01,
+              "min": 0.0,
+              "max": 0.25,
+              "q1": 0.0,
+              "q3": 0.1,
+              "iqr": 0.1,
+              "skewness": 1.21,
+              "kurtosis": -0.01,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            }
+          ],
+          "categorical_stats": [
+            {
+              "column": "orderID",
+              "cardinality": 830,
+              "top_values": [
+                {
+                  "value": "11,077 ",
+                  "count": 25
+                },
+                {
+                  "value": "10,657 ",
+                  "count": 6
+                },
+                {
+                  "value": "10,847 ",
+                  "count": 6
+                },
+                {
+                  "value": "10,979 ",
+                  "count": 6
+                },
+                {
+                  "value": "10,553 ",
+                  "count": 5
+                }
+              ],
+              "entropy": 9.55
             }
           ],
           "date_stats": [],
           "correlation_pairs": [
             {
-              "col_a": "student_id",
-              "col_b": "gpa",
-              "r": -1.0
+              "col_a": "quantity",
+              "col_b": "discount",
+              "r": 0.13
+            },
+            {
+              "col_a": "productID",
+              "col_b": "discount",
+              "r": -0.04
+            },
+            {
+              "col_a": "productID",
+              "col_b": "unitPrice",
+              "r": -0.02
+            },
+            {
+              "col_a": "productID",
+              "col_b": "quantity",
+              "r": 0.01
+            },
+            {
+              "col_a": "unitPrice",
+              "col_b": "discount",
+              "r": -0.01
             }
           ]
         }
       },
       "generated": {
-        "table_description": "students contains 2 records across 3 columns (keyed by student_id ).",
-        "business_domain": "general_analytics",
+        "table_description": "order_details contains 2,155 records across 5 columns (keyed by orderID, productID with foreign links via productID).",
+        "business_domain": "e-commerce",
         "semantic_aliases": [
-          "students",
-          "student"
+          "order details",
+          "order_details",
+          "order_detail"
         ],
         "columns": {
-          "student_id": {
-            "description": "student_id stores INTEGER data representing the student id (e.g. 101, 102).",
+          "orderID": {
+            "description": "orderID stores TEXT data representing the orderID (e.g. 10,248, 10,248, 10,248).",
             "semantic_aliases": [
-              "student id",
-              "student_id"
+              "orderID",
+              "orderid"
             ],
             "business_role": "primary_key"
           },
-          "first_name": {
-            "description": "first_name stores TEXT data representing the first name (e.g. Maya, Liam).",
+          "productID": {
+            "description": "productID stores INTEGER data representing the productID (e.g. 1, 1, 1).",
             "semantic_aliases": [
-              "first name",
-              "first_name"
+              "productID",
+              "productid"
             ],
-            "business_role": "dimension"
+            "business_role": "primary_key"
           },
-          "gpa": {
-            "description": "gpa stores FLOAT data representing the gpa (e.g. 3.9, 3.8).",
+          "unitPrice": {
+            "description": "unitPrice stores FLOAT data representing the unitPrice (e.g. 14.0, 9.8, 34.8).",
             "semantic_aliases": [
-              "gpa"
+              "unitPrice",
+              "unitprice"
+            ],
+            "business_role": "measure"
+          },
+          "quantity": {
+            "description": "quantity stores INTEGER data representing the quantity (e.g. 12, 10, 5).",
+            "semantic_aliases": [
+              "quantity"
+            ],
+            "business_role": "measure"
+          },
+          "discount": {
+            "description": "discount stores FLOAT data representing the discount (e.g. 0.0, 0.0, 0.0).",
+            "semantic_aliases": [
+              "discount"
             ],
             "business_role": "measure"
           }
         },
         "common_questions": [
-          "How many records are in students?",
-          "What is the distribution of student_id in students?",
-          "Find details for a specific student_id in students"
+          "How many records are in order_details?",
+          "What is the distribution of orderID in order_details?",
+          "Find details for a specific orderID in order_details"
         ],
-        "generated_at": "2026-08-20T05:01:50.272978+00:00",
+        "generated_at": "2026-09-24T04:20:13.130322+00:00",
+        "model": "deterministic_fallback",
+        "source": "fallback"
+      }
+    },
+    "products": {
+      "observed": {
+        "table_name": "products",
+        "row_count": 77,
+        "column_count": 10,
+        "columns": {
+          "productID": {
+            "name": "productID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": true,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 77,
+            "sample_values": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "top_values": [
+              {
+                "value": "1",
+                "count": 1
+              },
+              {
+                "value": "2",
+                "count": 1
+              },
+              {
+                "value": "3",
+                "count": 1
+              },
+              {
+                "value": "4",
+                "count": 1
+              },
+              {
+                "value": "5",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "productName": {
+            "name": "productName",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 100.0,
+            "unique_count": 77,
+            "sample_values": [
+              "Chai",
+              "Chang",
+              "Aniseed Syrup",
+              "Chef Anton's Cajun Seasoning",
+              "Chef Anton's Gumbo Mix"
+            ],
+            "top_values": [
+              {
+                "value": "Zaanse koeken",
+                "count": 1
+              },
+              {
+                "value": "Wimmers gute Semmelknödel",
+                "count": 1
+              },
+              {
+                "value": "Vegie-spread",
+                "count": 1
+              },
+              {
+                "value": "Valkoinen suklaa",
+                "count": 1
+              },
+              {
+                "value": "Uncle Bob's Organic Dried Pears",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "supplierID": {
+            "name": "supplierID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 37.7,
+            "unique_count": 29,
+            "sample_values": [
+              "1",
+              "1",
+              "1",
+              "2",
+              "2"
+            ],
+            "top_values": [
+              {
+                "value": "12",
+                "count": 5
+              },
+              {
+                "value": "7",
+                "count": 5
+              },
+              {
+                "value": "8",
+                "count": 4
+              },
+              {
+                "value": "2",
+                "count": 4
+              },
+              {
+                "value": "24",
+                "count": 3
+              }
+            ],
+            "fk_reference": null
+          },
+          "categoryID": {
+            "name": "categoryID",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": true,
+            "null_percentage": 0.0,
+            "uniqueness": 10.4,
+            "unique_count": 8,
+            "sample_values": [
+              "1",
+              "1",
+              "1",
+              "1",
+              "1"
+            ],
+            "top_values": [
+              {
+                "value": "3",
+                "count": 13
+              },
+              {
+                "value": "1",
+                "count": 12
+              },
+              {
+                "value": "2",
+                "count": 12
+              },
+              {
+                "value": "8",
+                "count": 12
+              },
+              {
+                "value": "4",
+                "count": 10
+              }
+            ],
+            "fk_reference": "categories.categoryID"
+          },
+          "quantityPerUnit": {
+            "name": "quantityPerUnit",
+            "type": "TEXT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 90.9,
+            "unique_count": 70,
+            "sample_values": [
+              "10 boxes x 20 bags",
+              "24 - 12 oz bottles",
+              "12 - 550 ml bottles",
+              "48 - 6 oz jars",
+              "36 boxes"
+            ],
+            "top_values": [
+              {
+                "value": "24 - 12 oz bottles",
+                "count": 4
+              },
+              {
+                "value": "5 kg pkg.",
+                "count": 2
+              },
+              {
+                "value": "24 - 250 g pkgs.",
+                "count": 2
+              },
+              {
+                "value": "24 - 200 g pkgs.",
+                "count": 2
+              },
+              {
+                "value": "10 - 500 g pkgs.",
+                "count": 2
+              }
+            ],
+            "fk_reference": null
+          },
+          "unitPrice": {
+            "name": "unitPrice",
+            "type": "FLOAT",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 80.5,
+            "unique_count": 62,
+            "sample_values": [
+              "18.0",
+              "19.0",
+              "10.0",
+              "22.0",
+              "21.35"
+            ],
+            "top_values": [
+              {
+                "value": "18.0",
+                "count": 4
+              },
+              {
+                "value": "14.0",
+                "count": 4
+              },
+              {
+                "value": "10.0",
+                "count": 3
+              },
+              {
+                "value": "43.9",
+                "count": 2
+              },
+              {
+                "value": "38.0",
+                "count": 2
+              }
+            ],
+            "fk_reference": null
+          },
+          "unitsInStock": {
+            "name": "unitsInStock",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 66.2,
+            "unique_count": 51,
+            "sample_values": [
+              "39",
+              "17",
+              "13",
+              "53",
+              "0"
+            ],
+            "top_values": [
+              {
+                "value": "0",
+                "count": 5
+              },
+              {
+                "value": "26",
+                "count": 4
+              },
+              {
+                "value": "17",
+                "count": 4
+              },
+              {
+                "value": "15",
+                "count": 4
+              },
+              {
+                "value": "20",
+                "count": 3
+              }
+            ],
+            "fk_reference": null
+          },
+          "unitsOnOrder": {
+            "name": "unitsOnOrder",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 13.0,
+            "unique_count": 10,
+            "sample_values": [
+              "0",
+              "40",
+              "70",
+              "0",
+              "0"
+            ],
+            "top_values": [
+              {
+                "value": "0",
+                "count": 60
+              },
+              {
+                "value": "70",
+                "count": 4
+              },
+              {
+                "value": "10",
+                "count": 4
+              },
+              {
+                "value": "40",
+                "count": 3
+              },
+              {
+                "value": "100",
+                "count": 1
+              }
+            ],
+            "fk_reference": null
+          },
+          "reorderLevel": {
+            "name": "reorderLevel",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 9.1,
+            "unique_count": 7,
+            "sample_values": [
+              "10",
+              "25",
+              "25",
+              "0",
+              "0"
+            ],
+            "top_values": [
+              {
+                "value": "0",
+                "count": 24
+              },
+              {
+                "value": "25",
+                "count": 12
+              },
+              {
+                "value": "15",
+                "count": 10
+              },
+              {
+                "value": "30",
+                "count": 8
+              },
+              {
+                "value": "20",
+                "count": 8
+              }
+            ],
+            "fk_reference": null
+          },
+          "discontinued": {
+            "name": "discontinued",
+            "type": "INTEGER",
+            "nullable": true,
+            "is_pk": false,
+            "is_fk": false,
+            "null_percentage": 0.0,
+            "uniqueness": 2.6,
+            "unique_count": 2,
+            "sample_values": [
+              "0",
+              "0",
+              "0",
+              "0",
+              "1"
+            ],
+            "top_values": [
+              {
+                "value": "0",
+                "count": 69
+              },
+              {
+                "value": "1",
+                "count": 8
+              }
+            ],
+            "fk_reference": null
+          }
+        },
+        "relationships": [
+          {
+            "id": "products.categoryID->categories.categoryID",
+            "source": "products",
+            "target": "categories",
+            "source_table": "products",
+            "target_table": "categories",
+            "source_col": "categoryID",
+            "target_col": "categoryID",
+            "source_display": "products",
+            "target_display": "categories",
+            "label": "categoryID",
+            "type": "inferred",
+            "confidence": 0.97,
+            "cardinality": "one_to_many",
+            "inference_method": "intelligent_reference_subset"
+          },
+          {
+            "id": "order_details.productID->products.productID",
+            "source": "order_details",
+            "target": "products",
+            "source_table": "order_details",
+            "target_table": "products",
+            "source_col": "productID",
+            "target_col": "productID",
+            "source_display": "order_details",
+            "target_display": "products",
+            "label": "productID",
+            "type": "inferred",
+            "confidence": 0.97,
+            "cardinality": "one_to_many",
+            "inference_method": "intelligent_reference_subset"
+          }
+        ],
+        "quality": {
+          "health_score": 100,
+          "completeness": 100,
+          "freshness": null,
+          "freshness_latest_date": null,
+          "consistency": 100,
+          "orphan_issues": []
+        },
+        "statistics": {
+          "numeric_stats": [
+            {
+              "column": "productID",
+              "mean": 39.0,
+              "median": 39.0,
+              "std": 22.37,
+              "variance": 500.5,
+              "min": 1.0,
+              "max": 77.0,
+              "q1": 20.0,
+              "q3": 58.0,
+              "iqr": 38.0,
+              "skewness": 0.0,
+              "kurtosis": -1.2,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "supplierID",
+              "mean": 13.65,
+              "median": 13.0,
+              "std": 8.22,
+              "variance": 67.57,
+              "min": 1.0,
+              "max": 29.0,
+              "q1": 7.0,
+              "q3": 20.0,
+              "iqr": 13.0,
+              "skewness": 0.18,
+              "kurtosis": -1.13,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "categoryID",
+              "mean": 4.12,
+              "median": 4.0,
+              "std": 2.4,
+              "variance": 5.74,
+              "min": 1.0,
+              "max": 8.0,
+              "q1": 2.0,
+              "q3": 6.0,
+              "iqr": 4.0,
+              "skewness": 0.37,
+              "kurtosis": -1.15,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "unitPrice",
+              "mean": 28.87,
+              "median": 19.5,
+              "std": 33.82,
+              "variance": 1143.46,
+              "min": 2.5,
+              "max": 263.5,
+              "q1": 13.25,
+              "q3": 33.25,
+              "iqr": 20.0,
+              "skewness": 4.94,
+              "kurtosis": 31.15,
+              "iqr_outlier_count": 4,
+              "zscore_outlier_count": 1
+            },
+            {
+              "column": "unitsInStock",
+              "mean": 40.51,
+              "median": 26.0,
+              "std": 36.15,
+              "variance": 1306.62,
+              "min": 0.0,
+              "max": 125.0,
+              "q1": 15.0,
+              "q3": 61.0,
+              "iqr": 46.0,
+              "skewness": 1.03,
+              "kurtosis": -0.13,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "unitsOnOrder",
+              "mean": 10.13,
+              "median": 0.0,
+              "std": 23.14,
+              "variance": 535.51,
+              "min": 0.0,
+              "max": 100.0,
+              "q1": 0.0,
+              "q3": 0.0,
+              "iqr": 0.0,
+              "skewness": 2.33,
+              "kurtosis": 4.44,
+              "iqr_outlier_count": 17,
+              "zscore_outlier_count": 2
+            },
+            {
+              "column": "reorderLevel",
+              "mean": 12.47,
+              "median": 10.0,
+              "std": 10.93,
+              "variance": 119.49,
+              "min": 0.0,
+              "max": 30.0,
+              "q1": 0.0,
+              "q3": 25.0,
+              "iqr": 25.0,
+              "skewness": 0.21,
+              "kurtosis": -1.44,
+              "iqr_outlier_count": 0,
+              "zscore_outlier_count": 0
+            },
+            {
+              "column": "discontinued",
+              "mean": 0.1,
+              "median": 0.0,
+              "std": 0.31,
+              "variance": 0.09,
+              "min": 0.0,
+              "max": 1.0,
+              "q1": 0.0,
+              "q3": 0.0,
+              "iqr": 0.0,
+              "skewness": 2.65,
+              "kurtosis": 5.15,
+              "iqr_outlier_count": 8,
+              "zscore_outlier_count": 0
+            }
+          ],
+          "categorical_stats": [
+            {
+              "column": "productName",
+              "cardinality": 77,
+              "top_values": [
+                {
+                  "value": "Chai",
+                  "count": 1
+                },
+                {
+                  "value": "Valkoinen suklaa",
+                  "count": 1
+                },
+                {
+                  "value": "Ravioli Angelo",
+                  "count": 1
+                },
+                {
+                  "value": "Gnocchi di nonna Alice",
+                  "count": 1
+                },
+                {
+                  "value": "Pâté chinois",
+                  "count": 1
+                }
+              ],
+              "entropy": 6.27
+            },
+            {
+              "column": "quantityPerUnit",
+              "cardinality": 70,
+              "top_values": [
+                {
+                  "value": "24 - 12 oz bottles",
+                  "count": 4
+                },
+                {
+                  "value": "10 - 500 g pkgs.",
+                  "count": 2
+                },
+                {
+                  "value": "24 - 200 g pkgs.",
+                  "count": 2
+                },
+                {
+                  "value": "5 kg pkg.",
+                  "count": 2
+                },
+                {
+                  "value": "24 - 250 g pkgs.",
+                  "count": 2
+                }
+              ],
+              "entropy": 6.06
+            }
+          ],
+          "date_stats": [],
+          "correlation_pairs": [
+            {
+              "col_a": "productID",
+              "col_b": "supplierID",
+              "r": 0.58
+            },
+            {
+              "col_a": "reorderLevel",
+              "col_b": "discontinued",
+              "r": -0.39
+            },
+            {
+              "col_a": "unitsInStock",
+              "col_b": "unitsOnOrder",
+              "r": -0.37
+            },
+            {
+              "col_a": "unitsOnOrder",
+              "col_b": "reorderLevel",
+              "r": 0.36
+            },
+            {
+              "col_a": "unitsInStock",
+              "col_b": "discontinued",
+              "r": -0.26
+            }
+          ]
+        }
+      },
+      "generated": {
+        "table_description": "products contains 77 records across 10 columns (keyed by productID with foreign links via categoryID).",
+        "business_domain": "e-commerce",
+        "semantic_aliases": [
+          "products",
+          "product"
+        ],
+        "columns": {
+          "productID": {
+            "description": "productID stores INTEGER data representing the productID (e.g. 1, 2, 3).",
+            "semantic_aliases": [
+              "productID",
+              "productid"
+            ],
+            "business_role": "primary_key"
+          },
+          "productName": {
+            "description": "productName stores TEXT data representing the productName (e.g. Chai, Chang, Aniseed Syrup).",
+            "semantic_aliases": [
+              "productName",
+              "productname"
+            ],
+            "business_role": "dimension"
+          },
+          "supplierID": {
+            "description": "supplierID stores INTEGER data representing the supplierID (e.g. 1, 1, 1).",
+            "semantic_aliases": [
+              "supplierID",
+              "supplierid"
+            ],
+            "business_role": "identifier"
+          },
+          "categoryID": {
+            "description": "categoryID stores INTEGER data representing the categoryID (e.g. 1, 1, 1).",
+            "semantic_aliases": [
+              "categoryID",
+              "categoryid"
+            ],
+            "business_role": "foreign_key"
+          },
+          "quantityPerUnit": {
+            "description": "quantityPerUnit stores TEXT data representing the quantityPerUnit (e.g. 10 boxes x 20 bags, 24 - 12 oz bottles, 12 - 550 ml bottles).",
+            "semantic_aliases": [
+              "quantityPerUnit",
+              "quantityperunit"
+            ],
+            "business_role": "dimension"
+          },
+          "unitPrice": {
+            "description": "unitPrice stores FLOAT data representing the unitPrice (e.g. 18.0, 19.0, 10.0).",
+            "semantic_aliases": [
+              "unitPrice",
+              "unitprice"
+            ],
+            "business_role": "measure"
+          },
+          "unitsInStock": {
+            "description": "unitsInStock stores INTEGER data representing the unitsInStock (e.g. 39, 17, 13).",
+            "semantic_aliases": [
+              "unitsInStock",
+              "unitsinstock"
+            ],
+            "business_role": "measure"
+          },
+          "unitsOnOrder": {
+            "description": "unitsOnOrder stores INTEGER data representing the unitsOnOrder (e.g. 0, 40, 70).",
+            "semantic_aliases": [
+              "unitsOnOrder",
+              "unitsonorder"
+            ],
+            "business_role": "measure"
+          },
+          "reorderLevel": {
+            "description": "reorderLevel stores INTEGER data representing the reorderLevel (e.g. 10, 25, 25).",
+            "semantic_aliases": [
+              "reorderLevel",
+              "reorderlevel"
+            ],
+            "business_role": "measure"
+          },
+          "discontinued": {
+            "description": "discontinued stores INTEGER data representing the discontinued (e.g. 0, 0, 0).",
+            "semantic_aliases": [
+              "discontinued"
+            ],
+            "business_role": "measure"
+          }
+        },
+        "common_questions": [
+          "How many records are in products?",
+          "What is the distribution of productID in products?",
+          "Find details for a specific productID in products"
+        ],
+        "generated_at": "2026-09-24T04:20:13.184456+00:00",
         "model": "deterministic_fallback",
         "source": "fallback"
       }
     }
   },
   "diagnostics": {
-    "duration_seconds": 0.03,
+    "duration_seconds": 0.34,
     "use_llm": false,
     "errors": {}
   }

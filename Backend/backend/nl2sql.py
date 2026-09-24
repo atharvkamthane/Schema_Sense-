@@ -338,7 +338,12 @@ def generate_sql(
         try:
             raw_response = llm.ask_llm(prompt, task="sql")
         except Exception as e:
-            raise RuntimeError(f"LLM generation failed: {str(e)}") from e
+            err_str = str(e)
+            if any(k in err_str.lower() for k in ["10061", "connection refused", "failed to establish a new connection", "max retries exceeded"]):
+                raise RuntimeError(f"LLM generation failed: Cannot connect to Ollama at {llm.OLLAMA_URL}. Please ensure Ollama is running ('ollama serve') and model '{llm.MODEL_NAME}' is available.") from e
+            elif "404" in err_str or "not found" in err_str.lower():
+                raise RuntimeError(f"LLM generation failed: Ollama model '{llm.MODEL_NAME}' was not found. Please run 'ollama pull {llm.MODEL_NAME}'.") from e
+            raise RuntimeError(f"LLM generation failed: {err_str}") from e
     else:
         # Mock/deterministic fallback for testing without live LLM
         first_table = context_summary["tables"][0] if context_summary.get("tables") else "sqlite_master"
@@ -456,18 +461,38 @@ def query(
             task_type = "fix_sql"
 
         # Call LLM
+        llm_error = None
         if use_llm:
             try:
                 raw_response = llm.ask_llm(prompt, task=task_type)
             except Exception as e:
                 raw_response = ""
-                last_error = f"LLM generation failed: {str(e)}"
+                err_str = str(e)
+                if any(k in err_str.lower() for k in ["10061", "connection refused", "failed to establish a new connection", "max retries exceeded"]):
+                    llm_error = f"Cannot connect to Ollama at {llm.OLLAMA_URL}. Please ensure Ollama is running ('ollama serve') and model '{llm.MODEL_NAME}' is available."
+                elif "404" in err_str or "not found" in err_str.lower():
+                    llm_error = f"Ollama model '{llm.MODEL_NAME}' was not found. Please run 'ollama pull {llm.MODEL_NAME}'."
+                else:
+                    llm_error = f"LLM generation failed: {err_str}"
+                last_error = llm_error
         else:
             first_table = context_summary["tables"][0] if context_summary.get("tables") else "sqlite_master"
             raw_response = json.dumps({
                 "sql": f"SELECT COUNT(*) FROM {first_table};",
                 "reasoning": f"Count records in {first_table}"
             })
+
+        if llm_error:
+            attempt_record = {
+                "attempt": attempt_idx,
+                "sql": "",
+                "validation": {"valid": False, "errors": [{"code": "LLM_ERROR", "message": llm_error}]},
+                "execution": None,
+            }
+            attempts.append(attempt_record)
+            if "Cannot connect to Ollama" in llm_error or "not found" in llm_error:
+                break
+            continue
 
         candidate_sql = parse_sql_response(raw_response)
 

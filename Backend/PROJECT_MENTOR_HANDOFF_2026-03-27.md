@@ -1,7 +1,7 @@
 # SchemaSense AI - Mentor Handoff (Mar 27, 2026)
 
 ## 1) Executive Summary
-SchemaSense AI is a hackathon project (VIT Code Apex 2.0, Track 2 - AI Agents, Problem 2.1 Data Dictionary Agent) that ingests tabular data, builds schema intelligence, profiles quality, and supports NL-to-SQL querying through a local LLM (qwen3.5:4b on Ollama).
+SchemaSense AI is an autonomous AI agent system that ingests tabular data, builds schema intelligence, profiles quality, and supports NL-to-SQL querying through a local LLM (qwen3.5:4b on Ollama).
 
 This handoff summarizes:
 - Current architecture (backend + frontend)

@@ -255,7 +255,7 @@ export default function UploadScreen({ onContinue }) {
             transition={{ duration: 0.3 }}
           >
             <span className="font-mono text-xs tracking-[0.07em] text-[var(--accent-bright)]">
-              VIT Code Apex 2.0 - Track 2 · Data Dictionary Agent
+              Autonomous AI Data Dictionary &amp; Schema Intelligence Agent
             </span>
           </motion.div>
 

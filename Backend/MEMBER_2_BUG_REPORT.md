@@ -133,7 +133,7 @@ return {
 
 ### Test 1: Database Exists and Contains Real Data ✓
 ```
-Database found at: c:\Users\Atharv\Desktop\CodeapexT1\backend\database.sqlite
+Database found at: Backend/backend/database.sqlite
 Number of tables: 9
 Tables: ['oltr_orders', 'oltr_order_items', 'oltr_customers', 'oltr_sellers', 
          'oltr_products', 'oltr_categories', 'oltr_payments', 'oltr_order_reviews', 

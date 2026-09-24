@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles,
@@ -17,8 +17,10 @@ import {
   Info,
 } from 'lucide-react';
 import { nl2sqlQuery } from '../api/api';
+import { useAppStore } from '../store/useAppStore';
+import { useVisualizationStore } from '../store/useVisualizationStore';
 
-const SAMPLE_QUERIES = [
+const DEFAULT_SAMPLE_QUERIES = [
   'How many surveys are there?',
   'How many survey responses are there?',
   'Which questions received the most answers?',
@@ -27,6 +29,8 @@ const SAMPLE_QUERIES = [
 ];
 
 export default function SemanticNL2SQLPanel({ compact = false }) {
+  const schema = useAppStore((s) => s.schema);
+  const vizTables = useVisualizationStore((s) => s.tables);
   const [question, setQuestion] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -34,6 +38,30 @@ export default function SemanticNL2SQLPanel({ compact = false }) {
   const [copied, setCopied] = useState(false);
   const [showCorrection, setShowCorrection] = useState(true);
   const [showRetrieval, setShowRetrieval] = useState(false);
+
+  const sampleQueries = useMemo(() => {
+    const tableList = (schema?.tables || vizTables || [])
+      .map((t) => (typeof t === 'string' ? t : t?.name || t?.table_name || t?.id))
+      .filter(Boolean);
+
+    if (!tableList || tableList.length === 0) {
+      return DEFAULT_SAMPLE_QUERIES;
+    }
+
+    const uniqueTables = [...new Set(tableList)];
+    const queries = [];
+    const t0 = uniqueTables[0];
+    queries.push(`How many ${t0} are there?`);
+    queries.push(`Show top 5 records from ${t0}`);
+    if (uniqueTables.length > 1) {
+      const t1 = uniqueTables[1];
+      queries.push(`How many records in ${t1}?`);
+      queries.push(`Show relationship between ${t0} and ${t1}`);
+    } else {
+      queries.push(`What are the key statistics for ${t0}?`);
+    }
+    return queries;
+  }, [schema, vizTables]);
 
   async function handleSubmit(queryToRun) {
     const q = (typeof queryToRun === 'string' ? queryToRun : question).trim();
@@ -102,7 +130,7 @@ export default function SemanticNL2SQLPanel({ compact = false }) {
         {/* Suggested Queries */}
         <div className="flex items-center gap-1.5 flex-wrap mt-3">
           <span className="text-[11px] font-medium text-[var(--text-muted)] mr-1">Examples:</span>
-          {SAMPLE_QUERIES.map((sample) => (
+          {sampleQueries.map((sample) => (
             <button
               key={sample}
               onClick={() => {
@@ -178,7 +206,12 @@ export default function SemanticNL2SQLPanel({ compact = false }) {
           <AlertTriangle size={18} className="flex-shrink-0 mt-0.5" />
           <div className="flex-1">
             <p className="font-semibold text-xs uppercase tracking-wider mb-0.5">Query Error</p>
-            <p className="text-xs leading-relaxed">{error}</p>
+            <p className="text-xs leading-relaxed whitespace-pre-line">{error}</p>
+            {(error.toLowerCase().includes('ollama') || error.toLowerCase().includes('connection')) && (
+              <div className="mt-2.5 p-2 rounded bg-black/40 border border-white/10 text-xs font-mono text-[var(--text-secondary)]">
+                Troubleshooting: Run <span className="text-emerald-400 font-bold">ollama serve</span> and ensure <span className="text-emerald-400 font-bold">ollama pull qwen3.5:4b</span> is complete.
+              </div>
+            )}
           </div>
         </Motion.div>
       )}

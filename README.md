@@ -2,7 +2,7 @@
 
 **Local-first Data Dictionary Agent** — ingest CSV / SQLite / ZIP datasets, auto-build a data dictionary, infer relationships, score data quality, explore schema in 2D/3D, and ask natural-language questions that become SQL via a local Ollama LLM (`qwen3.5:4b` by default).
 
-Originally built for VIT Code Apex 2.0 (Track 2 — AI Agents, Problem 2.1). Stack: **React + Vite frontend**, **FastAPI backend**, **SQLite** working database, **Ollama** for local inference, optional **Clerk** auth.
+Stack: **React + Vite frontend**, **FastAPI backend**, **SQLite** working database, **Ollama** for local inference, optional **Clerk** auth.
 
 ---
 
@@ -401,7 +401,7 @@ Interactive docs (FastAPI): http://127.0.0.1:8000/docs
 | `POST` | `/column-chat` | Column-scoped Q&A |
 | `POST` | `/table-reasoning` | Table-level reasoning |
 
-CORS is open (`allow_origins=["*"]`) for hackathon / local use. Responses also set `ngrok-skip-browser-warning` for tunnel compatibility.
+CORS is open (`allow_origins=["*"]`) for local / development use. Responses also set `ngrok-skip-browser-warning` for tunnel compatibility.
 
 ---
 
@@ -494,7 +494,7 @@ Axios attaches Clerk tokens when a token getter is registered (`setTokenGetter` 
 
 - Run from `Backend/backend` so relative paths (`database.sqlite`, `uploads/`) resolve
 - Expose with ngrok / reverse proxy if the UI is hosted remotely
-- Keep CORS / secrets tighter for real production (current defaults are hackathon-friendly)
+- Keep CORS / secrets tighter for real production (current defaults are development-friendly)
 
 ### Optional folders
 
@@ -558,4 +558,4 @@ Manual checklist:
 
 ## License / notes
 
-Hackathon-origin project; see `Backend/self-hosted-ai-starter-kit/LICENSE` for that submodule’s license. Treat uploaded datasets as sensitive — by design, SchemaSense keeps inference **local** via Ollama so row data does not need to leave your machine for NL→SQL.
+See `Backend/self-hosted-ai-starter-kit/LICENSE` for that submodule’s license. Treat uploaded datasets as sensitive — by design, SchemaSense keeps inference **local** via Ollama so row data does not need to leave your machine for NL→SQL.

@@ -1,4 +1,4 @@
-﻿import { useMemo, useRef, useEffect } from "react"
+import { useMemo, useRef, useEffect, useState } from "react"
 import ForceGraph3D from "react-force-graph-3d"
 import * as THREE from "three"
 import { useVisualizationStore } from "../store/useVisualizationStore"
@@ -21,7 +21,35 @@ function getQualityColor(score) {
 }
 
 export default function DBViz3D({ miniMode = false }) {
+  const containerRef = useRef(null)
   const fgRef = useRef(null)
+  const [dimensions, setDimensions] = useState(() => ({
+    width: typeof window !== "undefined" ? (miniMode ? 350 : Math.max(window.innerWidth - 64, 400)) : 800,
+    height: typeof window !== "undefined" ? (miniMode ? 270 : Math.max(window.innerHeight - 56, 400)) : 600,
+  }))
+
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const updateSize = () => {
+      if (containerRef.current) {
+        const { clientWidth, clientHeight } = containerRef.current
+        if (clientWidth > 0 && clientHeight > 0) {
+          setDimensions({ width: clientWidth, height: clientHeight })
+        }
+      }
+    }
+
+    updateSize()
+    const observer = new ResizeObserver(updateSize)
+    observer.observe(containerRef.current)
+    window.addEventListener("resize", updateSize)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("resize", updateSize)
+    }
+  }, [])
   const { tables, relationships, setSelectedNode, selectedNode, visualMode, queriedTables } = useVisualizationStore()
 
   const graphData = useMemo(() => {
@@ -138,8 +166,10 @@ export default function DBViz3D({ miniMode = false }) {
   const particleCount = miniMode ? 0 : graphData.links.length > 36 ? 1 : 3
 
   return (
-    <div className="absolute inset-0">
+    <div ref={containerRef} className="absolute inset-0 w-full h-full overflow-hidden">
       <ForceGraph3D
+        width={dimensions.width}
+        height={dimensions.height}
         ref={fgRef}
         graphData={graphData}
         backgroundColor="rgba(0,0,0,0)"

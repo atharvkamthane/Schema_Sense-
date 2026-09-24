@@ -143,8 +143,8 @@ export default function Visualization3D() {
   }, [viewMode, visualMode, setVisualMode])
 
   return (
-    <div className="h-screen overflow-hidden bg-[var(--bg-base)]">
-      <header className="flex h-[76px] items-center justify-between border-b border-[var(--border-default)] px-6">
+    <div className="flex flex-col h-screen w-full overflow-hidden bg-[var(--bg-base)]">
+      <header className="shrink-0 flex h-14 items-center justify-between border-b border-[var(--border-default)] px-6">
         <div>
           <div className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
             <span>SchemaSense AI</span>
@@ -161,7 +161,7 @@ export default function Visualization3D() {
         </div>
       </header>
 
-      <div className="relative h-[calc(100vh-76px)] overflow-hidden">
+      <div className="relative flex-1 w-full h-full overflow-hidden">
       <div className="absolute left-3 top-3 z-20 flex flex-wrap items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-surface)]/95 p-2 shadow-[var(--shadow-md)] backdrop-blur">
         <button
           onClick={() => setViewMode("3d")}

@@ -1,13 +1,14 @@
-"""Test CSV ingestion functionality"""
+import os
 import sys
-sys.path.insert(0, r'c:\Users\Atharv\Desktop\CodeapexT1\backend')
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
 
 import pandas as pd
-import os
 import ingest_handler
 
 # Create a test CSV
-test_csv_path = r"c:\Users\Atharv\Desktop\CodeapexT1\backend\test_data.csv"
+test_csv_path = os.path.join(BASE_DIR, "test_data.csv")
 test_data = pd.DataFrame({
     "customer_id": ["cust001", "cust002", "cust003"],
     "name": ["Alice", "Bob", "Charlie"],
